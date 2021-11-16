@@ -19,7 +19,7 @@ import logging
 
 class DataAccess:
 
-    def __init__(self, ticker, source, access_config, logger_name=None):
+    def __init__(self, ticker, source, access_config, access_userdata, logger_name=None):
         """
         """
 
@@ -29,7 +29,8 @@ class DataAccess:
         self.ticker = ticker
         self.ticker_name = ""
         self.source = source
-        self.access_config = access_config[self.source]["access_data"]
+        self.access_config = access_config
+        self.__access_userdata = access_userdata
         
         """----------------------------------------------------------
             Defines the logger to output the information and also
@@ -47,10 +48,11 @@ class DataAccess:
             Makes the access
         ----------------------------------------------------------"""
         if self.source == "AlphaVantage":
-            self.__access_alphavantage(access_config=self.access_config)
+            self.__access_alphavantage(access_config=self.access_config
+                                       access_userdata=self.__access_userdata)
 
 
-    def __access_alphavantage(self, access_config, period="", start="", end="", config=None):
+    def __access_alphavantage(self, access_config, access_userdata, period="", start="", end="", config=None):
 
         url = access_config["URL_TIMESERIES_DAILY"]
         r = requests.get(url)
