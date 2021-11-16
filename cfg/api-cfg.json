@@ -1,0 +1,30 @@
+{
+    "logging": {
+        "log_results": true,
+        "disp_results": true,
+        "disp_data": false,
+        "display_length_head": 15,
+        "display_length_tail": 15
+    },
+    "paths": {
+        "path_logger": "log/log.log",
+        "path_watchlist_json": "config/watchlist.json",
+        "path_operations_json": "config/operations.json",
+        "path_wallet_json": "config/wallet.json",
+        "path_analysis_folder": "analysis/"
+    },
+    "operation": {
+        "simulation_mode": true,
+        "max_data_length": 360
+    },
+    "data_source": {
+        "name": "AlphaVantage",
+        "AlphaVantage": {
+            "access_data": {
+                "URL_TIMESERIES_DAILY": "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=[STOCK]&outputsize=full&apikey=[APIKEY]"
+            }
+        },
+        "YahooFinance": {},
+        "Quandl": {}
+    }
+}
