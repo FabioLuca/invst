@@ -1,37 +1,57 @@
-# import sys
-# import pathlib
-
-# source_path = pathlib.Path.cwd().resolve().parents[0] / "src"
-# print(str(source_path))
-# sys.path.append(source_path)
+"""
+Module for access of
+"""
 import logging
+from pathlib import Path
 from lib.config import Config
-
-# import data_access
 from data_access import DataAccess
 
+LOGGER_NAME = "invst"
 
 if __name__ == "__main__":
 
-    config = Config(filename="../cfg/api-cfg.json")
-
+    # --------------------------------------------------------------------------
+    #   Defines the logger configuration
+    # --------------------------------------------------------------------------
     logging.basicConfig(
         # filename=self.config.path_logger,
         filemode="a",
         datefmt="%Y.%m.%d %I:%M:%S %p",
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-        level=logging.DEBUG,
+        level=logging.INFO,
     )
 
-    # logging.basicConfig(level=logging.DEBUG)
-    logger = logging.getLogger("invst")
+    # --------------------------------------------------------------------------
+    #   Start the logger and add a few message to mark the start of the
+    #   execution
+    # --------------------------------------------------------------------------
+    logger = logging.getLogger(LOGGER_NAME)
+    logger.info("")
+    logger.info("============================= NEW RUN =============================")
 
-    # print(config.json_data)
+    # --------------------------------------------------------------------------
+    #   Defines the location of the files with configurations
+    # --------------------------------------------------------------------------
+    config_access_file = Path.cwd().resolve() / "cfg" / "api-cfg.json"
+    config_access_userdata_file = Path.cwd().resolve() / "cfg" / "api-cfg-access.json"
 
-    data_access = DataAccess(
-        ticker="BTC",
-        source=config.data_source,
-        access_config=config.access_data[config.data_source]["access_data"],
-        logger_name="invst",
+    # --------------------------------------------------------------------------
+    #   Load the configuration
+    # --------------------------------------------------------------------------
+    config = Config(logger_name=LOGGER_NAME)
+    config_dictionary = config.load_config(filename=config_access_file)
+
+    config_access_userdata = config.load_config(filename=config_access_userdata_file)
+
+    # --------------------------------------------------------------------------
+    #   Instantiate a ticker
+    # --------------------------------------------------------------------------
+    google = DataAccess(
+        ticker="GOOG",
+        source=config.data_source_name,
+        access_config=config.data_source_access_data,
+        access_userdata=config.data_source_user_data,
+        logger_name=LOGGER_NAME,
     )
 
+    btc_values = google.update_values(type_series="TIMESERIES", period="DAILY")
