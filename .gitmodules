@@ -1,4 +1,4 @@
 [submodule "invst-const"]
-	path = invst-const
+	path = src/lib/invst-const
 	url = https://github.com/FabioLuca/invst-const.git
 	branch = master
