@@ -1,5 +1,9 @@
+"""Modulo abc krgr
+
+rgrgregegrg
+
+Docstring
 """
-Docstring"""
 from datetime import datetime
 import inspect
 import json
@@ -7,9 +11,7 @@ import logging
 import requests
 import pandas as pd
 import matplotlib.dates as mdates
-
 import src.lib.invst_const.constants as C
-
 
 class DataAccess:
     """Summary of class here.
@@ -42,7 +44,11 @@ class DataAccess:
     def __init__(
         self, ticker, source, access_config, access_userdata, logger_name=None
     ):
-        """ """
+        """metodo paa
+        
+        asasdfvr
+        vfvfvfv
+        """
 
         # ----------------------------------------------------------------------
         #   Defines the parameters of the class
@@ -78,7 +84,7 @@ class DataAccess:
     def update_values(
         self, type_series="TIMESERIES", period="DAILY", adjusted=True, start="", end=""
     ):
-        """
+        """funao paa dnew.nfw
         type_series: TIMESERIES
         period: DAILY
         """
