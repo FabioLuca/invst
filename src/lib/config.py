@@ -4,27 +4,7 @@
 import json
 import logging
 import inspect
-
-DEBUG = 1
-INFO = 2
-WARNING = 3
-ERROR = 4
-CRITICAL = 5
-
-SUCCESS = 1
-FAIL = 2
-NEUTRAL = 3
-
-HOLD = 0
-BUY = 1
-SELL = -1
-UNKNOWN = 2
-
-ADD = 1
-UPDATE = 2
-
-ERROR_BUY = 9999
-ERROR_SELL = -9999
+import src.lib.invst_const.constants as C
 
 
 class Config:
@@ -92,8 +72,8 @@ class Config:
 
             if self.data_source_name is None:
                 result = None
-                flag = FAIL
-                level = ERROR
+                flag = C.FAIL
+                level = C.ERROR
                 message = "No source of data was define for %s" % (
                     inspect.currentframe().f_code.co_name
                 )
@@ -109,8 +89,8 @@ class Config:
             ]["user_data"]
 
         result = None
-        flag = SUCCESS
-        level = INFO
+        flag = C.SUCCESS
+        level = C.INFO
         message = "Successful loading of the file %s" % (filename)
         if self.__logger is not None:
             self.__logger.info(message)
