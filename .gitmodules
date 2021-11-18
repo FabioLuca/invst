@@ -1,0 +1,3 @@
+[submodule "src/lib/invst_const"]
+	path = src/lib/invst_const
+	url = git@github.com:FabioLuca/invst-const.git
