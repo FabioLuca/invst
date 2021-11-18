@@ -1,12 +1,5 @@
 """
 Docstring"""
-# import lib.constants as Const
-# import lib.json_manager as JsonMgr
-# import lib.log_manager as LogMgr
-# import lib.config as Config
-# import lib.timestamp as TimeStamp
-# import quandl as Quandl
-# import pandas_datareader as PandasDataReader
 from datetime import datetime
 import inspect
 import json
@@ -15,26 +8,7 @@ import requests
 import pandas as pd
 import matplotlib.dates as mdates
 
-DEBUG = 1
-INFO = 2
-WARNING = 3
-ERROR = 4
-CRITICAL = 5
-
-SUCCESS = 1
-FAIL = 2
-NEUTRAL = 3
-
-HOLD = 0
-BUY = 1
-SELL = -1
-UNKNOWN = 2
-
-ADD = 1
-UPDATE = 2
-
-ERROR_BUY = 9999
-ERROR_SELL = -9999
+import src.lib.invst_const.constants as C
 
 
 class DataAccess:
@@ -43,8 +17,7 @@ class DataAccess:
     def __init__(
         self, ticker, source, access_config, access_userdata, logger_name=None
     ):
-        """
-        """
+        """ """
 
         # ----------------------------------------------------------------------
         #   Defines the parameters of the class
@@ -88,8 +61,8 @@ class DataAccess:
         #   Verify the inputs, if they are valid, otherwise return an error
         # ----------------------------------------------------------------------
         result = None
-        flag = FAIL
-        level = ERROR
+        flag = C.FAIL
+        level = C.ERROR
 
         if type_series not in ["TIMESERIES"]:
             message = "Invalid input for 'type_series' in %s for ticker %s" % (
@@ -128,7 +101,7 @@ class DataAccess:
             # ------------------------------------------------------------------
             self.data_json, flag, level, message = self.__access_alphavantage()
 
-            if flag != SUCCESS:
+            if flag != C.SUCCESS:
                 if self.__logger is not None:
                     self.__logger.error(message)
                 return result, flag, level, message
@@ -143,21 +116,21 @@ class DataAccess:
                 message,
             ) = self.__dict_to_pandas_alphavantage()
 
-            if flag != SUCCESS:
+            if flag != C.SUCCESS:
                 if self.__logger is not None:
                     self.__logger.error(message)
                 return result, flag, level, message
 
-            else:
-                flag = SUCCESS
-                level = INFO
+            elif flag == C.SUCCESS:
+                flag = C.SUCCESS
+                level = C.INFO
                 message = (
                     "Successful fetch of dataframe from AlphaVantage for ticker %s"
                     % (self.ticker)
                 )
                 if self.__logger is not None:
                     self.__logger.info(message)
-                return result, flag, level, message
+                return self.data_pandas, flag, level, message
 
     def __access_alphavantage(self):
 
@@ -178,8 +151,8 @@ class DataAccess:
             url = self.access_config["URL_TIMESERIES_DAILY"]
         else:
             result = None
-            flag = FAIL
-            level = ERROR
+            flag = C.FAIL
+            level = C.ERROR
             message = "No configuration match for %s for ticker %s" % (
                 inspect.currentframe().f_code.co_name,
                 self.ticker,
@@ -191,7 +164,10 @@ class DataAccess:
         # ----------------------------------------------------------------------
         #   Replaces the keywords by final values
         # ----------------------------------------------------------------------
-        url = url.replace("[APIKEY]", self.__access_userdata["APIKEY"],)
+        url = url.replace(
+            "[APIKEY]",
+            self.__access_userdata["APIKEY"],
+        )
         url = url.replace("[TICKER]", self.ticker)
 
         # ----------------------------------------------------------------------
@@ -212,8 +188,8 @@ class DataAccess:
             # ------------------------------------------------------------------
             if str(response)[0:8] == "{'Note':":
                 result = response
-                flag = FAIL
-                level = ERROR
+                flag = C.FAIL
+                level = C.ERROR
                 message = (
                     "Positive response but with improper content due to the fast access to API: "
                     + str(self.ticker)
@@ -223,8 +199,8 @@ class DataAccess:
                 return result, flag, level, message
             else:
                 result = response
-                flag = SUCCESS
-                level = INFO
+                flag = C.SUCCESS
+                level = C.INFO
                 message = "Positive response for ticker from AlphaVantage: " + str(
                     self.ticker
                 )
@@ -234,8 +210,8 @@ class DataAccess:
 
         else:
             result = json.loads(r.text)
-            flag = FAIL
-            level = ERROR
+            flag = C.FAIL
+            level = C.ERROR
             message = "Negative response for ticker from AlphaVantage: " + str(
                 self.ticker
             )
@@ -383,8 +359,8 @@ class DataAccess:
         #   Return
         # ----------------------------------------------------------------------
         result = data_output
-        flag = SUCCESS
-        level = INFO
+        flag = C.SUCCESS
+        level = C.INFO
         message = "Data for AlphaVantage converted from DICT to Pandas DataFrame"
         if self.__logger is not None:
             self.__logger.info(message)
