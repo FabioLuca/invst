@@ -21,7 +21,8 @@
         "name": "AlphaVantage",
         "AlphaVantage": {
             "access_data": {
-                "URL_TIMESERIES_DAILY": "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=[STOCK]&outputsize=full&apikey=[APIKEY]"
+                "URL_TIMESERIES_DAILY": "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=[TICKER]&outputsize=full&apikey=[APIKEY]",
+                "URL_TIMESERIES_DAILY_ADJUSTED": "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=[TICKER]&outputsize=full&apikey=[APIKEY]"
             }
         },
         "YahooFinance": {},
