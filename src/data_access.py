@@ -12,8 +12,33 @@ import src.lib.invst_const.constants as C
 
 
 class DataAccess:
-    """Class docstring"""
+    """Summary of class here.
 
+    Longer class information....
+    Longer class information....
+
+    Attributes:
+        ticker: A string with the acronym of the ticker.
+        ticker_name: A string with the full name of the ticker.
+        source: A string with the reference to the source of the data,
+            for example, AlphaVantage.
+        access_config: A dictionary with the configuration for access
+            the API specified by 'source'.
+        access_userdata: A dictionary with the configuration for the
+            user access the API specified by 'source', for example,
+            the API key.
+
+        type_series = None
+        period = None
+        adjusted = None
+        start = None
+        end = None
+
+        data_json = A dictionary which stores the results of the fetch
+            of the OHLC data for the given ticker.
+        data_pandas = A pandas dataframe which stores the results of
+            the fetch of the OHLC data for the given ticker.
+    """
     def __init__(
         self, ticker, source, access_config, access_userdata, logger_name=None
     ):
