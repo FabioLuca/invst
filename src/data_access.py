@@ -1,45 +1,92 @@
-"""Modulo abc krgr
+"""Ticker data fetch for AlphaVantage."""
 
-rgrgregegrg
-
-Docstring
-"""
 from datetime import datetime
-import inspect
 import json
 import logging
 import requests
 import pandas as pd
 import matplotlib.dates as mdates
-import src.lib.invst_const.constants as C
+from .lib.invst_const import constants as C
+from .lib import messages as M
 
 class DataAccess:
-    """Summary of class here.
+    """Data Access class.
 
     Longer class information....
     Longer class information....
 
-    Attributes:
-        ticker: A string with the acronym of the ticker.
-        ticker_name: A string with the full name of the ticker.
-        source: A string with the reference to the source of the data,
+    Attributes
+    ----------
+        ticker: `string`
+            A string with the acronym of the ticker to be fetched.
+            This value must match to the API expectation.
+        ticker_name: `string`
+            A string with the full name of the ticker.
+        source: `string`
+            A string with the reference to the source of the data,
             for example, AlphaVantage.
-        access_config: A dictionary with the configuration for access
+        access_config: `dictionary`
+            A dictionary with the configuration for access
             the API specified by 'source'.
-        access_userdata: A dictionary with the configuration for the
+
+            note::
+            Charmeleon and Charizard are fire-type Pokémon, but Mega Charizard X and
+            Gigantamax Charizard are also Flying Pokémon, while Mega Charizard Y is a
+            Dragon-type Pokémon.
+
+        access_userdata: `dictionary`
+            A dictionary with the configuration for the
             user access the API specified by 'source', for example,
             the API key.
+        type_series: None
+        period: None
+        adjusted: None
+        start: None
+        end: None
 
-        type_series = None
-        period = None
-        adjusted = None
-        start = None
-        end = None
-
-        data_json = A dictionary which stores the results of the fetch
+        data_json: A dictionary which stores the results of the fetch
             of the OHLC data for the given ticker.
-        data_pandas = A pandas dataframe which stores the results of
+        data_pandas: A pandas dataframe which stores the results of
             the fetch of the OHLC data for the given ticker.
+
+    Methods
+    -------
+    search(key: `Any`)
+        Look for a node based on the given key.
+    insert(key: `Any`, data: `Any`)
+        Insert a (key, data) pair into a binary tree.
+    delete(key: `Any`)
+        Delete a node based on the given key from the binary tree.
+    get_leftmost(node: `AVLNode`)
+        Return the node whose key is the smallest from the given subtree.
+    get_rightmost(node: `AVLNode`)
+        Return the node whose key is the biggest from the given subtree.
+    get_successor(node: `AVLNode`)
+        Return the successor node in the in-order order.
+    get_predecessor(node: `AVLNode`)
+        Return the predecessor node in the in-order order.
+    get_height(node: `Optional[AVLNode]`)
+        Return the height of the given node.
+
+    Note
+    ----
+
+       Charmeleon and Charizard are fire-type Pokémon, but Mega Charizard X and
+       Gigantamax Charizard are also Flying Pokémon, while Mega Charizard Y is a
+       Dragon-type Pokémon.
+
+    Examples
+    --------
+    >>> from trees.binary_trees import avl_tree
+    >>> tree = avl_tree.AVLTree()
+    >>> tree.insert(key=23, data="23")
+
+    .. note::
+
+       Charmeleon and Charizard are fire-type Pokémon, but Mega Charizard X and
+       Gigantamax Charizard are also Flying Pokémon, while Mega Charizard Y is a
+       Dragon-type Pokémon.
+
     """
     def __init__(
         self, ticker, source, access_config, access_userdata, logger_name=None
@@ -87,28 +134,53 @@ class DataAccess:
         """funao paa dnew.nfw
         type_series: TIMESERIES
         period: DAILY
+
+        Note
+        ----
+        Do not include the `self` parameter in the ``Parameters`` section.
+
+        Parameters
+        ----------
+            type_series: string, optional
+                The first parameter.
+            period: string, optional
+                The second parameter.
+            adjusted: bool, optional
+                The second parameter.
+            start: datetime, optional
+                The second parameter.
+            end: datetime, optional
+                The end date for the time series to be fetched.
+
+        Returns
+        -------
+            The return value. True for success, False otherwise.
+
+        Examples
+        --------
+        An input example for using this method: To retrieve the complete time series
+        (from first historical data, up to today) from AlphaVantage, where it entry in the series represents the OHLC data for
+        a day, the inputs are::
+
+            napoleon_include_special_with_doc = True
+
+
+
         """
         # ----------------------------------------------------------------------
         #   Verify the inputs, if they are valid, otherwise return an error
         # ----------------------------------------------------------------------
         result = None
-        flag = C.FAIL
-        level = C.ERROR
+        flag, level, message = M.get_status("General_Error")
 
         if type_series not in ["TIMESERIES"]:
-            message = "Invalid input for 'type_series' in %s for ticker %s" % (
-                inspect.currentframe().f_code.co_name,
-                self.ticker,
-            )
+            flag, level, message = M.get_status("API_ParamCheck_TypeSeries", (self.ticker))
             if self.__logger is not None:
                 self.__logger.error(message)
             return result, flag, level, message
 
         if period not in ["DAILY"]:
-            message = "Invalid input for 'period' in %s for ticker %s" % (
-                inspect.currentframe().f_code.co_name,
-                self.ticker,
-            )
+            flag, level, message = M.get_status("API_ParamCheck_Period", (self.ticker))
             if self.__logger is not None:
                 self.__logger.error(message)
             return result, flag, level, message
@@ -133,8 +205,8 @@ class DataAccess:
             self.data_json, flag, level, message = self.__access_alphavantage()
 
             if flag != C.SUCCESS:
-                if self.__logger is not None:
-                    self.__logger.error(message)
+                # if self.__logger is not None:
+                #     self.__logger.error(message)
                 return result, flag, level, message
 
             # ------------------------------------------------------------------
@@ -153,17 +225,14 @@ class DataAccess:
                 return result, flag, level, message
 
             elif flag == C.SUCCESS:
-                flag = C.SUCCESS
-                level = C.INFO
-                message = (
-                    "Successful fetch of dataframe from AlphaVantage for ticker %s"
-                    % (self.ticker)
-                )
+                result = self.data_pandas
+                flag, level, message = M.get_status("Fetch_Convert_Success", (self.ticker,))
                 if self.__logger is not None:
                     self.__logger.info(message)
-                return self.data_pandas, flag, level, message
+                return result, flag, level, message
 
     def __access_alphavantage(self):
+        """Acesso para AlphaVantage"""
 
         # ----------------------------------------------------------------------
         #   Builds up the API path
@@ -182,12 +251,7 @@ class DataAccess:
             url = self.access_config["URL_TIMESERIES_DAILY"]
         else:
             result = None
-            flag = C.FAIL
-            level = C.ERROR
-            message = "No configuration match for %s for ticker %s" % (
-                inspect.currentframe().f_code.co_name,
-                self.ticker,
-            )
+            flag, level, message = M.get_status("API_ParamCheck_General", (self.ticker))
             if self.__logger is not None:
                 self.__logger.error(message)
             return result, flag, level, message
@@ -209,6 +273,12 @@ class DataAccess:
 
         if r.status_code == 200:
 
+            if str(response)[0:17] == "{'Error Message':":
+                result = response
+                flag, level, message = M.get_status("API_200_Msg_Err")
+                if self.__logger is not None:
+                    self.__logger.error(message)
+
             # ------------------------------------------------------------------
             #   The API for AlphaVantage has a limit os accesses for a given
             #   time. If it is to fast, the response is positive, but with an
@@ -217,40 +287,28 @@ class DataAccess:
             #   calls per day. ...". So to identify if an message was returned,
             #   just check the first value.
             # ------------------------------------------------------------------
-            if str(response)[0:8] == "{'Note':":
+            elif str(response)[0:8] == "{'Note':":
                 result = response
-                flag = C.FAIL
-                level = C.ERROR
-                message = (
-                    "Positive response but with improper content due to the fast access to API: "
-                    + str(self.ticker)
-                )
+                flag, level, message = M.get_status("API_200_Content_Err")
                 if self.__logger is not None:
                     self.__logger.info(message)
-                return result, flag, level, message
             else:
                 result = response
-                flag = C.SUCCESS
-                level = C.INFO
-                message = "Positive response for ticker from AlphaVantage: " + str(
-                    self.ticker
-                )
+                flag, level, message = M.get_status("API_200_Success")
                 if self.__logger is not None:
                     self.__logger.info(message)
-                return result, flag, level, message
+
+            return result, flag, level, message
 
         else:
             result = json.loads(r.text)
-            flag = C.FAIL
-            level = C.ERROR
-            message = "Negative response for ticker from AlphaVantage: " + str(
-                self.ticker
-            )
+            flag, level, message = M.get_status("API_Neg_Response", (self.ticker))
             if self.__logger is not None:
                 self.__logger.info(message)
             return result, flag, level, message
 
     def __dict_to_pandas_alphavantage(self):
+        """Convert from dictionary to pandas"""
 
         # ----------------------------------------------------------------------
         #   Reorganize the disctionaries and split them.
@@ -390,9 +448,7 @@ class DataAccess:
         #   Return
         # ----------------------------------------------------------------------
         result = data_output
-        flag = C.SUCCESS
-        level = C.INFO
-        message = "Data for AlphaVantage converted from DICT to Pandas DataFrame"
+        flag, level, message = M.get_status("Convertion_Success")
         if self.__logger is not None:
             self.__logger.info(message)
 
