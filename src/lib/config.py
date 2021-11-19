@@ -1,10 +1,14 @@
-"""-----------------------------------------------------------------------------
+"""
+-----------------------------------------------------------------------------
     MODULE CONFIG
------------------------------------------------------------------------------"""
+-----------------------------------------------------------------------------
+"""
+
 import json
 import logging
 import inspect
-import src.lib.invst_const.constants as C
+#import src.lib.invst_const.constants as C
+from .invst_const import constants as C
 
 
 class Config:
