@@ -45,9 +45,22 @@ if __name__ == "__main__":
     config_access_userdata = config.load_config(filename=config_access_userdata_file)
 
     # --------------------------------------------------------------------------
-    #   Instantiate a ticker
+    #   Examples of a wrong call, for GOOG2 which doesn't exists and for GOOG
+    #   for Google.
     # --------------------------------------------------------------------------
-    google = DataAccess(
+    goog2 = DataAccess(
+        ticker="GOOG2",
+        source=config.data_source_name,
+        access_config=config.data_source_access_data,
+        access_userdata=config.data_source_user_data,
+        logger_name=LOGGER_NAME,
+    )
+
+    goog2_values, flag, level, message = goog2.update_values(
+        type_series="TIMESERIES", period="DAILY"
+    )
+
+    goog = DataAccess(
         ticker="GOOG",
         source=config.data_source_name,
         access_config=config.data_source_access_data,
@@ -55,8 +68,8 @@ if __name__ == "__main__":
         logger_name=LOGGER_NAME,
     )
 
-    btc_values, flag, level, message = google.update_values(
+    goog_values, flag, level, message = goog.update_values(
         type_series="TIMESERIES", period="DAILY"
     )
 
-    print(btc_values)
+    print(goog_values)
