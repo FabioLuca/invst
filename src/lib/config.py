@@ -1,19 +1,39 @@
-"""
------------------------------------------------------------------------------
-    MODULE CONFIG
------------------------------------------------------------------------------
+"""Module for managing configurations which are stored in Json files.
 """
 
 import json
 import logging
 import inspect
-#import src.lib.invst_const.constants as C
+from . import messages as M
 from .invst_const import constants as C
 
 
 class Config:
     """Loads the designated configuration file and parses the content into
-    blocks of information (sub-dictionaries)"""
+    blocks of information (sub-dictionaries).
+
+    Parameters
+    ----------
+        logger_name: string
+            The name for the logger object. The recommendation is to keep a
+            single name across the application, so pass here the same used in
+            other parts of the application.
+
+    Attributes
+    ----------
+        filename: `pathlib path`
+            File path with the .json file where the configuration is stored. At
+            initialization its content is `None`, and the value is updated
+            after the call of the method `load_config`.
+        json_file: `file object`
+            File object where the configuration is stored. At initialization
+            its content is `None`, and the value is updated after the call of
+            the method `load_config`.
+        json_data: `dictionary`
+            Configuration dictionary. At initialization its content is `None`,
+            and the value is updated after the call of the method `load_config`.
+
+    """
 
     def __init__(self, logger_name=None):
 
@@ -33,15 +53,17 @@ class Config:
         self.__logger_name = logger_name
         self.__logger = None
         if self.__logger_name is not None:
-            self.__logger = logging.getLogger(str(self.__logger_name) + ".config")
+            self.__logger = logging.getLogger(
+                str(self.__logger_name) + ".config")
 
         if self.__logger is not None:
             self.__logger.info("Initializing configuration")
 
     def load_config(self, filename):
 
+        flag, level, message = M.get_status("Config_Load_Config", filename)
         if self.__logger is not None:
-            self.__logger.info("Loading the configuration from %s", filename)
+            self.__logger.info(message)
 
         self.filename = filename
         self.__json_file = None

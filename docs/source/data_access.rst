@@ -1,5 +1,5 @@
-data\_access module
-===================
+Data Access module
+==================
 
 .. automodule:: data_access
    :members:

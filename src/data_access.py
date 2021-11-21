@@ -6,14 +6,24 @@ import logging
 import requests
 import pandas as pd
 import matplotlib.dates as mdates
+
+# ------------------------------------------------------------------------------
+#   Conflicts with the importing: For pytest, the be able to succesful import
+#   the following files, they must be defined as reçatove paths:
+#       from .lib.invst_const import constants as C
+#       from .lib import messages as M
+#   On the other hand, for Sphinx to be able to work with them, it must be
+#   defined as aboslute paths:
+#       from lib.invst_const import constants as C
+#       from lib import messages as M
+# ------------------------------------------------------------------------------
+
 from .lib.invst_const import constants as C
 from .lib import messages as M
 
+
 class DataAccess:
     """Data Access class.
-
-    Longer class information....
-    Longer class information....
 
     Attributes
     ----------
@@ -27,72 +37,79 @@ class DataAccess:
             for example, AlphaVantage.
         access_config: `dictionary`
             A dictionary with the configuration for access
-            the API specified by 'source'.
-
-            note::
-            Charmeleon and Charizard are fire-type Pokémon, but Mega Charizard X and
-            Gigantamax Charizard are also Flying Pokémon, while Mega Charizard Y is a
-            Dragon-type Pokémon.
-
+            the API specified by `source`. See template below.
         access_userdata: `dictionary`
             A dictionary with the configuration for the
-            user access the API specified by 'source', for example,
+            user access the API specified by `source`, for example,
             the API key.
         type_series: None
         period: None
         adjusted: None
         start: None
         end: None
-
-        data_json: A dictionary which stores the results of the fetch
-            of the OHLC data for the given ticker.
-        data_pandas: A pandas dataframe which stores the results of
-            the fetch of the OHLC data for the given ticker.
-
-    Methods
-    -------
-    search(key: `Any`)
-        Look for a node based on the given key.
-    insert(key: `Any`, data: `Any`)
-        Insert a (key, data) pair into a binary tree.
-    delete(key: `Any`)
-        Delete a node based on the given key from the binary tree.
-    get_leftmost(node: `AVLNode`)
-        Return the node whose key is the smallest from the given subtree.
-    get_rightmost(node: `AVLNode`)
-        Return the node whose key is the biggest from the given subtree.
-    get_successor(node: `AVLNode`)
-        Return the successor node in the in-order order.
-    get_predecessor(node: `AVLNode`)
-        Return the predecessor node in the in-order order.
-    get_height(node: `Optional[AVLNode]`)
-        Return the height of the given node.
-
-    Note
-    ----
-
-       Charmeleon and Charizard are fire-type Pokémon, but Mega Charizard X and
-       Gigantamax Charizard are also Flying Pokémon, while Mega Charizard Y is a
-       Dragon-type Pokémon.
+        data_json: `dictionary`
+            A dictionary which stores the results of the fetch of the OHLC
+            data for the given ticker.
+        data_pandas: `Pandas data frame`
+            A pandas dataframe which stores the results of the fetch of the
+            OHLC data for the given ticker.
 
     Examples
     --------
-    >>> from trees.binary_trees import avl_tree
-    >>> tree = avl_tree.AVLTree()
-    >>> tree.insert(key=23, data="23")
 
-    .. note::
+    For the dictionary `access_config`:
 
-       Charmeleon and Charizard are fire-type Pokémon, but Mega Charizard X and
-       Gigantamax Charizard are also Flying Pokémon, while Mega Charizard Y is a
-       Dragon-type Pokémon.
+    .. code-block:: json
+
+        {
+            "data_source": {
+                "AlphaVantage": {
+                    "user_data": {
+                        "APIKEY": "<YOUR API KEY>"
+                    }
+                }
+            }
+        }
+
+    For the dictionary `access_userdata`:
+
+    .. code-block:: json
+
+        {
+            "data_source": {
+                "AlphaVantage": {
+                    "user_data": {
+                        "APIKEY": "<YOUR API KEY>"
+                    }
+                }
+            }
+        }
+
+    For acesing the data and class usage, the example below will fetch all
+    the OHLC data for the Google ticker:
+
+    .. code-block:: python
+
+        google = DataAccess(ticker="GOOG",
+                            source=config.data_source_name,
+                            access_config=config.data_source_access_data,
+                            access_userdata=config.data_source_user_data,
+                            logger_name=LOGGER_NAME,
+                           )
+        google_data = google.update_values(type_series="TIMESERIES",
+                                           period="DAILY",
+                                           adjusted=True,
+                                           start="",
+                                           end=""
+                                          )
 
     """
+
     def __init__(
         self, ticker, source, access_config, access_userdata, logger_name=None
     ):
         """metodo paa
-        
+
         asasdfvr
         vfvfvfv
         """
@@ -121,7 +138,8 @@ class DataAccess:
         self.__logger_name = logger_name
         self.__logger = None
         if self.__logger_name is not None:
-            self.__logger = logging.getLogger(str(self.__logger_name) + ".data_access")
+            self.__logger = logging.getLogger(
+                str(self.__logger_name) + ".data_access")
 
         if self.__logger is not None:
             self.__logger.info(
@@ -131,22 +149,17 @@ class DataAccess:
     def update_values(
         self, type_series="TIMESERIES", period="DAILY", adjusted=True, start="", end=""
     ):
-        """funao paa dnew.nfw
-        type_series: TIMESERIES
-        period: DAILY
-
-        Note
-        ----
-        Do not include the `self` parameter in the ``Parameters`` section.
+        """Updates the OHLC values for given ticker.
 
         Parameters
         ----------
             type_series: string, optional
                 The first parameter.
             period: string, optional
-                The second parameter.
+                Time base of the data: daily, monthly, etc.
             adjusted: bool, optional
-                The second parameter.
+                For True it will return the adjusted closure value, otherwise
+                it returns the regular closure.
             start: datetime, optional
                 The second parameter.
             end: datetime, optional
@@ -154,16 +167,35 @@ class DataAccess:
 
         Returns
         -------
-            The return value. True for success, False otherwise.
+            Pandas dataframe
+                The returned dataframe is composed of the following
+                items (headers):
+
+                    # .  "Date"
+                    # .  "Open"
+                    # .  "High"
+                    # .  "Low"
+                    # .  "Close"
+                    # .  "Close Final"
+                    # .  "Volume"
+                    # .  "Dividend Amount"
+                    # .  "Split Coefficient"
 
         Examples
         --------
-        An input example for using this method: To retrieve the complete time series
-        (from first historical data, up to today) from AlphaVantage, where it entry in the series represents the OHLC data for
-        a day, the inputs are::
+        An input example for using this method: To retrieve the complete time
+        series (from first historical data, up to today) from AlphaVantage,
+        where it entry in the series represents the OHLC data for a day, the
+        inputs are:
 
-            napoleon_include_special_with_doc = True
+        .. code-block:: python
 
+            google_data = google.update_values(type_series="TIMESERIES",
+                                               period="DAILY",
+                                               adjusted=True,
+                                               start="",
+                                               end=""
+                                              )
 
 
         """
@@ -174,13 +206,15 @@ class DataAccess:
         flag, level, message = M.get_status("General_Error")
 
         if type_series not in ["TIMESERIES"]:
-            flag, level, message = M.get_status("API_ParamCheck_TypeSeries", (self.ticker))
+            flag, level, message = M.get_status(
+                "API_ParamCheck_TypeSeries", (self.ticker))
             if self.__logger is not None:
                 self.__logger.error(message)
             return result, flag, level, message
 
         if period not in ["DAILY"]:
-            flag, level, message = M.get_status("API_ParamCheck_Period", (self.ticker))
+            flag, level, message = M.get_status(
+                "API_ParamCheck_Period", (self.ticker))
             if self.__logger is not None:
                 self.__logger.error(message)
             return result, flag, level, message
@@ -226,22 +260,19 @@ class DataAccess:
 
             elif flag == C.SUCCESS:
                 result = self.data_pandas
-                flag, level, message = M.get_status("Fetch_Convert_Success", (self.ticker,))
+                flag, level, message = M.get_status(
+                    "Fetch_Convert_Success", (self.ticker,))
                 if self.__logger is not None:
                     self.__logger.info(message)
                 return result, flag, level, message
 
     def __access_alphavantage(self):
-        """Acesso para AlphaVantage"""
+        """Access the API and verifies for the validity of the response."""
 
         # ----------------------------------------------------------------------
         #   Builds up the API path
         # ----------------------------------------------------------------------
-        if (
-            self.type_series == "TIMESERIES"
-            and self.period == "DAILY"
-            and self.adjusted
-        ):
+        if (self.type_series == "TIMESERIES" and self.period == "DAILY" and self.adjusted):
             url = self.access_config["URL_TIMESERIES_DAILY_ADJUSTED"]
         elif (
             self.type_series == "TIMESERIES"
@@ -251,7 +282,8 @@ class DataAccess:
             url = self.access_config["URL_TIMESERIES_DAILY"]
         else:
             result = None
-            flag, level, message = M.get_status("API_ParamCheck_General", (self.ticker))
+            flag, level, message = M.get_status(
+                "API_ParamCheck_General", (self.ticker))
             if self.__logger is not None:
                 self.__logger.error(message)
             return result, flag, level, message
@@ -302,13 +334,15 @@ class DataAccess:
 
         else:
             result = json.loads(r.text)
-            flag, level, message = M.get_status("API_Neg_Response", (self.ticker))
+            flag, level, message = M.get_status(
+                "API_Neg_Response", (self.ticker))
             if self.__logger is not None:
                 self.__logger.info(message)
             return result, flag, level, message
 
     def __dict_to_pandas_alphavantage(self):
-        """Convert from dictionary to pandas"""
+        """Converts a json data returned from the API into a Pandas dataframe
+        object."""
 
         # ----------------------------------------------------------------------
         #   Reorganize the disctionaries and split them.
@@ -342,7 +376,8 @@ class DataAccess:
             for day in data_content:
                 lista_tempo_str.append(day)
                 lista_tempo_time.append(
-                    datetime(year=int(day[:4]), month=int(day[5:7]), day=int(day[8:]))
+                    datetime(year=int(day[:4]), month=int(
+                        day[5:7]), day=int(day[8:]))
                 )
                 lista_tempo_number.append(
                     mdates.date2num(
@@ -356,7 +391,8 @@ class DataAccess:
                 lista_maximo.append(float(data_content[day]["2. high"]))
                 lista_minimo.append(float(data_content[day]["3. low"]))
                 lista_fechamento.append(float(data_content[day]["4. close"]))
-                lista_fechamento_final.append(float(data_content[day]["4. close"]))
+                lista_fechamento_final.append(
+                    float(data_content[day]["4. close"]))
                 lista_volume.append(float(data_content[day]["5. volume"]))
                 lista_dividend_amount.append(
                     float(data_content[day]["6. dividend amount"])
@@ -369,7 +405,8 @@ class DataAccess:
             for day in data_content:
                 lista_tempo_str.append(day)
                 lista_tempo_time.append(
-                    datetime(year=int(day[:4]), month=int(day[5:7]), day=int(day[8:]))
+                    datetime(year=int(day[:4]), month=int(
+                        day[5:7]), day=int(day[8:]))
                 )
                 lista_tempo_number.append(
                     mdates.date2num(

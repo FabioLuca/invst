@@ -12,9 +12,7 @@
 #
 import os
 import sys
-# sys.path.insert(0, os.path.abspath(os.path.join('..', '..', 'src')))
-sys.path.insert(0, os.path.abspath('../../src'))
-#sys.path.insert(0, os.path.abspath('../..'))
+sys.path.insert(0, os.path.abspath(os.path.join('..', '..', 'src')))
 
 # -- Project information -----------------------------------------------------
 
@@ -29,7 +27,7 @@ release = "0.0.1"
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 # extensions = ["sphinx.ext.napoleon"]
-    # 'rinoh.frontend.sphinx'
+# 'rinoh.frontend.sphinx'
 extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.doctest',
               'sphinx.ext.intersphinx',
@@ -52,9 +50,13 @@ exclude_patterns = []
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster' #"bizstyle" #'alabaster'
+html_theme = 'alabaster'  # "bizstyle" #'alabaster'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+
+# Since there is no _static in this project, and to remove the warning, the
+# template was chnaged to be empty.
+# html_static_path = ['_static'] --> Original
+html_static_path = []

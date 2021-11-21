@@ -7,11 +7,15 @@ Welcome to invst-access's documentation!
 ========================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 4
    :caption: Contents:
 
    modules
 
+General
+=======
+
+.. include:: ../../README.rst
 
 Indices and tables
 ==================

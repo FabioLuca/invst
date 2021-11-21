@@ -1,4 +1,7 @@
+"""Module for centralized management of messages to the user or for logging.
+"""
 
+import pathlib
 from .invst_const import constants as C
 
 MESSAGE = {
@@ -10,12 +13,14 @@ MESSAGE = {
     "API_200_Msg_Err": {
         "Flag": C.FAIL,
         "Level": C.ERROR,
-        "Message": "Positive response but with Error Message. Verify that the ticker and other parameters are valid.",
+        "Message": "Positive response but with Error Message. "
+                   "Verify that the ticker and other parameters are valid.""",
     },
     "API_200_Content_Err": {
         "Flag": C.FAIL,
         "Level": C.ERROR,
-        "Message": "Positive response but with improper content due to the fast access to API."
+        "Message": "Positive response but with improper content due to "
+                   "the fast access to API."
     },
     "API_200_Success": {
         "Flag": C.SUCCESS,
@@ -45,21 +50,56 @@ MESSAGE = {
     "Convertion_Success": {
         "Flag": C.SUCCESS,
         "Level": C.INFO,
-        "Message": "Data for AlphaVantage converted from DICT to Pandas DataFrame."
+        "Message": "Data for AlphaVantage converted from DICT "
+                   "to Pandas DataFrame."
     },
     "Fetch_Convert_Success": {
         "Flag": C.SUCCESS,
         "Level": C.INFO,
-        "Message": "Successful fetch of dataframe from AlphaVantage for ticker %s."
+        "Message": "Successful fetch of dataframe from AlphaVantage "
+                   "for ticker %s."
     },
+    "Config_Load_Config": {
+        "Flag": C.NEUTRAL,
+        "Level": C.INFO,
+        "Message": "Loading the configuration from %s."
+    },
+
+
+
 }
 
+
 def get_status(message_id, param=None):
+    """Gets the content (flag, level and message) for a given ID.
+
+    Note
+    ----
+    There are 3 elements as general abstraction, described below:
+
+    *  **flag**: status of success, neutral or fail. Neutral is intended
+       only for cases where a clear definition of success or fail
+       is not possible.
+    *  **level**:
+    *  **message**: text to be displayed or logged for supporting user.
+
+    Parameters
+    ----------
+        message_id: string
+            Identifies which message from the dictionary to be returned, along
+            with the flag and level information.
+        param: tuple of strings, optional
+            For messages which have parameters to be set (using %s), this
+            parameter will be used in the order passed. In case this
+            parameter is passed as a single string, it will be automatically
+            converted into a tuple (of 1 entry).
+
+    """
 
     message = MESSAGE[message_id]["Message"]
 
-    if isinstance(param, str):
-        param = (param,)
+    if isinstance(param, str) or isinstance(param, pathlib.Path):
+        param = (str(param),)
 
     if param is None and message.count('%s') == 0:
         message = MESSAGE[message_id]["Message"]
