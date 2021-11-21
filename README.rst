@@ -1,3 +1,6 @@
+Overview
+--------
+
 This project goal is to provide a encapsulation for accessing trading values
 history for a given ticker ny using the AlphaVantage API. Although other
 sources are possible, they were not completely implemented here. The output for
