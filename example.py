@@ -1,5 +1,4 @@
-"""
-Module for access of
+"""Example for the use of the invst project.
 """
 import logging
 from pathlib import Path
@@ -28,13 +27,15 @@ if __name__ == "__main__":
     # --------------------------------------------------------------------------
     logger = logging.getLogger(LOGGER_NAME)
     logger.info("")
-    logger.info("============================= NEW RUN =============================")
+    logger.info(
+        "============================= NEW RUN =============================")
 
     # --------------------------------------------------------------------------
     #   Defines the location of the files with configurations
     # --------------------------------------------------------------------------
     config_access_file = Path.cwd().resolve() / "cfg" / "api-cfg.json"
-    config_access_userdata_file = Path.cwd().resolve() / "cfg" / "api-cfg-access.json"
+    config_access_userdata_file = Path.cwd().resolve() / "cfg" / \
+        "api-cfg-access.json"
 
     # --------------------------------------------------------------------------
     #   Load the configuration
@@ -42,7 +43,8 @@ if __name__ == "__main__":
     config = Config(logger_name=LOGGER_NAME)
     config_dictionary = config.load_config(filename=config_access_file)
 
-    config_access_userdata = config.load_config(filename=config_access_userdata_file)
+    config_access_userdata = config.load_config(
+        filename=config_access_userdata_file)
 
     # --------------------------------------------------------------------------
     #   Examples of a wrong call, for GOOG2 which doesn't exists and for GOOG
