@@ -77,6 +77,31 @@ MESSAGE = {
         "Level": C.INFO,
         "Message": "Success on the validation step."
     },
+    "API_Trade_Activate_TAN_Error": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "Failure on the TAN activation step. Erro code: %s. Message: %s"
+    },
+    "API_Trade_Activate_TAN_Success": {
+        "Flag": C.SUCCESS,
+        "Level": C.INFO,
+        "Message": "Success on the TAN activation step."
+    },
+    "API_Trade_Authentication_Error": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "Failure on the authentication."
+    },
+    "API_Trade_Authentication_Success": {
+        "Flag": C.SUCCESS,
+        "Level": C.INFO,
+        "Message": "Success on the authentication."
+    },
+    "API_Trade_No_Active_Session": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "There are no active and valid session."
+    },
     "Convertion_Success": {
         "Flag": C.SUCCESS,
         "Level": C.INFO,
