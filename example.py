@@ -93,3 +93,4 @@ comdirect = Session(source=config.data_source_trade_name,
                     )
 comdirect.connect()
 comdirect.accounts_balance()
+comdirect.revoke_token()

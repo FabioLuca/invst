@@ -50,7 +50,7 @@ MESSAGE = {
     "API_Trade_Oauth_Error": {
         "Flag": C.FAIL,
         "Level": C.ERROR,
-        "Message": "Failure on the authentication."
+        "Message": "Failure on the authentication. Error code: %s. Message: %s"
     },
     "API_Trade_Oauth_Success": {
         "Flag": C.SUCCESS,
@@ -60,7 +60,7 @@ MESSAGE = {
     "API_Trade_Ident_Error": {
         "Flag": C.FAIL,
         "Level": C.ERROR,
-        "Message": "Failure on the identification step."
+        "Message": "Failure on the identification step. Error code: %s. Message: %s"
     },
     "API_Trade_Ident_Success": {
         "Flag": C.SUCCESS,
@@ -70,7 +70,7 @@ MESSAGE = {
     "API_Trade_Validate_Error": {
         "Flag": C.FAIL,
         "Level": C.ERROR,
-        "Message": "Failure on the validation step."
+        "Message": "Failure on the validation step. Error code: %s. Message: %s"
     },
     "API_Trade_Validate_Success": {
         "Flag": C.SUCCESS,
@@ -80,7 +80,7 @@ MESSAGE = {
     "API_Trade_Activate_TAN_Error": {
         "Flag": C.FAIL,
         "Level": C.ERROR,
-        "Message": "Failure on the TAN activation step. Erro code: %s. Message: %s"
+        "Message": "Failure on the TAN activation step. Error code: %s. Message: %s"
     },
     "API_Trade_Activate_TAN_Success": {
         "Flag": C.SUCCESS,
@@ -96,6 +96,16 @@ MESSAGE = {
         "Flag": C.SUCCESS,
         "Level": C.INFO,
         "Message": "Success on the authentication."
+    },
+    "API_Trade_Account_Balance_Error": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "Failure on getting the account balance. Error code: %s. Message: %s"
+    },
+    "API_Trade_Account_Balance_Success": {
+        "Flag": C.SUCCESS,
+        "Level": C.INFO,
+        "Message": "Success on getting the account balance."
     },
     "API_Trade_No_Active_Session": {
         "Flag": C.FAIL,
