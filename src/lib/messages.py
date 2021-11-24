@@ -47,6 +47,36 @@ MESSAGE = {
         "Level": C.ERROR,
         "Message": "Invalid input for 'period' for ticker %s."
     },
+    "API_Trade_Oauth_Error": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "Failure on the authentication."
+    },
+    "API_Trade_Oauth_Success": {
+        "Flag": C.SUCCESS,
+        "Level": C.INFO,
+        "Message": "Success on the authentication."
+    },
+    "API_Trade_Ident_Error": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "Failure on the identification step."
+    },
+    "API_Trade_Ident_Success": {
+        "Flag": C.SUCCESS,
+        "Level": C.INFO,
+        "Message": "Success on the identification step."
+    },
+    "API_Trade_Validate_Error": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "Failure on the validation step."
+    },
+    "API_Trade_Validate_Success": {
+        "Flag": C.SUCCESS,
+        "Level": C.INFO,
+        "Message": "Success on the validation step."
+    },
     "Convertion_Success": {
         "Flag": C.SUCCESS,
         "Level": C.INFO,

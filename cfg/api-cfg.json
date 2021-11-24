@@ -17,15 +17,28 @@
         "simulation_mode": true,
         "max_data_length": 360
     },
-    "data_source": {
-        "name": "AlphaVantage",
-        "AlphaVantage": {
-            "access_data": {
-                "URL_TIMESERIES_DAILY": "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=[TICKER]&outputsize=full&apikey=[APIKEY]",
-                "URL_TIMESERIES_DAILY_ADJUSTED": "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=[TICKER]&outputsize=full&apikey=[APIKEY]"
-            }
+    "api": {
+        "fetching": {
+            "selection": "AlphaVantage",
+            "AlphaVantage": {
+                "access_data": {
+                    "URL_TIMESERIES_DAILY": "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=[TICKER]&outputsize=full&apikey=[APIKEY]",
+                    "URL_TIMESERIES_DAILY_ADJUSTED": "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=[TICKER]&outputsize=full&apikey=[APIKEY]"
+                }
+            },
+            "YahooFinance": {},
+            "Quandl": {}
         },
-        "YahooFinance": {},
-        "Quandl": {}
+        "trading": {
+            "selection": "Comdirect",
+            "Comdirect": {
+                "access_data": {
+                    "url_base": "https://api.comdirect.de/",
+                    "url_oauth_token": "https://api.comdirect.de/oauth/token",
+                    "url_session": "https://api.comdirect.de/api/session/clients/user/v1/sessions",
+                    "url_session_validate": "https://api.comdirect.de/api/session/clients/user/v1/sessions/[IDENTIFIER]/validate"
+                }
+            }
+        }
     }
 }

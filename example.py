@@ -3,6 +3,7 @@
 import logging
 from pathlib import Path
 from src.lib.config import Config
+from src.session import Session
 from src.data_access import DataAccess
 
 
@@ -52,9 +53,9 @@ if __name__ == "__main__":
     # --------------------------------------------------------------------------
     goog2 = DataAccess(
         ticker="GOOG2",
-        source=config.data_source_name,
-        access_config=config.data_source_access_data,
-        access_userdata=config.data_source_user_data,
+        source=config.data_source_fetch_name,
+        access_config=config.data_source_fetch_access_data,
+        access_userdata=config.data_source_fetch_user_data,
         logger_name=LOGGER_NAME,
     )
 
@@ -64,9 +65,9 @@ if __name__ == "__main__":
 
     goog = DataAccess(
         ticker="GOOG",
-        source=config.data_source_name,
-        access_config=config.data_source_access_data,
-        access_userdata=config.data_source_user_data,
+        source=config.data_source_fetch_name,
+        access_config=config.data_source_fetch_access_data,
+        access_userdata=config.data_source_fetch_user_data,
         logger_name=LOGGER_NAME,
     )
 
@@ -75,3 +76,10 @@ if __name__ == "__main__":
     )
 
     print(goog_values)
+
+    comdirect = Session(source=config.data_source_trade_name,
+                        access_config=config.data_source_trade_access_data,
+                        access_userdata=config.data_source_trade_user_data,
+                        logger_name=LOGGER_NAME,
+                        )
+    comdirect.connect()
