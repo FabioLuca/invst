@@ -61,9 +61,21 @@ class Session:
         response_body_json = json.loads(response.text)
         response_headers_json = dict(response.headers)
 
-        print("---- 2.1 --------------------------------------")
-        print(json.dumps(response_body_json, indent=4, sort_keys=True))
-        print(json.dumps(response_headers_json, indent=4, sort_keys=True))
+        if self.__logger is not None:
+            self.__logger.debug("############# 2.1 #############")
+            self.__logger.debug(url)
+            self.__logger.debug("Status code:")
+            self.__logger.debug(response.status_code)
+            self.__logger.debug("Response body:")
+            self.__logger.debug(json.dumps(
+                response_body_json, indent=4, sort_keys=True))
+            self.__logger.debug("Reasponse headers:")
+            self.__logger.debug(json.dumps(
+                response_headers_json, indent=4, sort_keys=True))
+
+        # print("---- 2.1 --------------------------------------")
+        # print(json.dumps(response_body_json, indent=4, sort_keys=True))
+        # print(json.dumps(response_headers_json, indent=4, sort_keys=True))
 
         if response.status_code in [200, 201]:
             self.__access_token = response_body_json["access_token"]
@@ -106,9 +118,21 @@ class Session:
         response_body_json = response_body_json[0]
         response_headers_json = dict(response.headers)
 
-        print("---- 2.2 --------------------------------------")
-        print(json.dumps(response_body_json, indent=4, sort_keys=True))
-        print(json.dumps(response_headers_json, indent=4, sort_keys=True))
+        if self.__logger is not None:
+            self.__logger.debug("############# 2.2 #############")
+            self.__logger.debug(url)
+            self.__logger.debug("Status code:")
+            self.__logger.debug(response.status_code)
+            self.__logger.debug("Response body:")
+            self.__logger.debug(json.dumps(
+                response_body_json, indent=4, sort_keys=True))
+            self.__logger.debug("Reasponse headers:")
+            self.__logger.debug(json.dumps(
+                response_headers_json, indent=4, sort_keys=True))
+
+        # print("---- 2.2 --------------------------------------")
+        # print(json.dumps(response_body_json, indent=4, sort_keys=True))
+        # print(json.dumps(response_headers_json, indent=4, sort_keys=True))
 
         if response.status_code in [200, 201]:
             self.__identifier = response_body_json["identifier"]
@@ -150,9 +174,21 @@ class Session:
         response_body_json = json.loads(response.text)
         response_headers_json = dict(response.headers)
 
-        print("---- 2.3 --------------------------------------")
-        print(json.dumps(response_body_json, indent=4, sort_keys=True))
-        print(json.dumps(response_headers_json, indent=4, sort_keys=True))
+        if self.__logger is not None:
+            self.__logger.debug("############# 2.3 #############")
+            self.__logger.debug(url)
+            self.__logger.debug("Status code:")
+            self.__logger.debug(response.status_code)
+            self.__logger.debug("Response body:")
+            self.__logger.debug(json.dumps(
+                response_body_json, indent=4, sort_keys=True))
+            self.__logger.debug("Reasponse headers:")
+            self.__logger.debug(json.dumps(
+                response_headers_json, indent=4, sort_keys=True))
+
+        # print("---- 2.3 --------------------------------------")
+        # print(json.dumps(response_body_json, indent=4, sort_keys=True))
+        # print(json.dumps(response_headers_json, indent=4, sort_keys=True))
 
         if response.status_code in [200, 201]:
             info = response_headers_json["x-once-authentication-info"]
@@ -200,9 +236,21 @@ class Session:
         response_body_json = json.loads(response.text)
         response_headers_json = dict(response.headers)
 
-        print("---- 2.4 --------------------------------------")
-        print(json.dumps(response_body_json, indent=4, sort_keys=True))
-        print(json.dumps(response_headers_json, indent=4, sort_keys=True))
+        if self.__logger is not None:
+            self.__logger.debug("############# 2.4 #############")
+            self.__logger.debug(url)
+            self.__logger.debug("Status code:")
+            self.__logger.debug(response.status_code)
+            self.__logger.debug("Response body:")
+            self.__logger.debug(json.dumps(
+                response_body_json, indent=4, sort_keys=True))
+            self.__logger.debug("Reasponse headers:")
+            self.__logger.debug(json.dumps(
+                response_headers_json, indent=4, sort_keys=True))
+
+        # print("---- 2.4 --------------------------------------")
+        # print(json.dumps(response_body_json, indent=4, sort_keys=True))
+        # print(json.dumps(response_headers_json, indent=4, sort_keys=True))
 
         time.sleep(8)
 
@@ -222,9 +270,21 @@ class Session:
         response_body_json = json.loads(response.text)
         response_headers_json = dict(response.headers)
 
-        print("---- 2.5 --------------------------------------")
-        print(json.dumps(response_body_json, indent=4, sort_keys=True))
-        print(json.dumps(response_headers_json, indent=4, sort_keys=True))
+        if self.__logger is not None:
+            self.__logger.debug("############# 2.5 #############")
+            self.__logger.debug(url)
+            self.__logger.debug("Status code:")
+            self.__logger.debug(response.status_code)
+            self.__logger.debug("Response body:")
+            self.__logger.debug(json.dumps(
+                response_body_json, indent=4, sort_keys=True))
+            self.__logger.debug("Reasponse headers:")
+            self.__logger.debug(json.dumps(
+                response_headers_json, indent=4, sort_keys=True))
+
+        # print("---- 2.5 --------------------------------------")
+        # print(json.dumps(response_body_json, indent=4, sort_keys=True))
+        # print(json.dumps(response_headers_json, indent=4, sort_keys=True))
 
         return result, flag, level, message
 
