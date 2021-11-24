@@ -74,7 +74,7 @@ class Session:
             self.__logger.debug("Payload: %s" % (json.dumps(
                 payload, indent=4, sort_keys=True)))
             self.__logger.debug("Headers: %s" % (json.dumps(
-                payload, indent=4, sort_keys=True)))
+                headers, indent=4, sort_keys=True)))
             self.__logger.debug("Status code: %s" % (response.status_code))
             self.__logger.debug("Response body: %s" % (json.dumps(
                 response_body_json, indent=4, sort_keys=True)))
@@ -133,7 +133,7 @@ class Session:
             self.__logger.debug("Payload: %s" % (json.dumps(
                 payload, indent=4, sort_keys=True)))
             self.__logger.debug("Headers: %s" % (json.dumps(
-                payload, indent=4, sort_keys=True)))
+                headers, indent=4, sort_keys=True)))
             self.__logger.debug("Status code: %s" % (response.status_code))
             self.__logger.debug("Response body: %s" % (json.dumps(
                 response_body_json, indent=4, sort_keys=True)))
@@ -168,7 +168,7 @@ class Session:
         url = self.__access_config["url_session_validate"]
         url = url.replace("[IDENTIFIER]", self.__identifier)
 
-        self.__request_id = self.get_request_id()
+        #self.__request_id = self.get_request_id()
 
         payload = json.dumps({
             "identifier": f"{self.__identifier}",
@@ -193,7 +193,7 @@ class Session:
             self.__logger.debug("Payload: %s" % (json.dumps(
                 payload, indent=4, sort_keys=True)))
             self.__logger.debug("Headers: %s" % (json.dumps(
-                payload, indent=4, sort_keys=True)))
+                headers, indent=4, sort_keys=True)))
             self.__logger.debug("Status code: %s" % (response.status_code))
             self.__logger.debug("Response body: %s" % (json.dumps(
                 response_body_json, indent=4, sort_keys=True)))
@@ -233,7 +233,7 @@ class Session:
         url = self.__access_config["url_session_tan"]
         url = url.replace("[IDENTIFIER]", self.__identifier)
 
-        self.__request_id = self.get_request_id()
+        #self.__request_id = self.get_request_id()
 
         payload = json.dumps({
             "identifier": f"{self.__identifier}",
@@ -261,7 +261,7 @@ class Session:
             self.__logger.debug("Payload: %s" % (json.dumps(
                 payload, indent=4, sort_keys=True)))
             self.__logger.debug("Headers: %s" % (json.dumps(
-                payload, indent=4, sort_keys=True)))
+                headers, indent=4, sort_keys=True)))
             self.__logger.debug("Status code: %s" % (response.status_code))
             self.__logger.debug("Response body: %s" % (json.dumps(
                 response_body_json, indent=4, sort_keys=True)))
@@ -308,7 +308,7 @@ class Session:
             self.__logger.debug("Payload: %s" % (json.dumps(
                 payload, indent=4, sort_keys=True)))
             self.__logger.debug("Headers: %s" % (json.dumps(
-                payload, indent=4, sort_keys=True)))
+                headers, indent=4, sort_keys=True)))
             self.__logger.debug("Status code: %s" % (response.status_code))
             self.__logger.debug("Response body: %s" % (json.dumps(
                 response_body_json, indent=4, sort_keys=True)))
@@ -318,6 +318,23 @@ class Session:
         # print("---- 2.5 --------------------------------------")
         # print(json.dumps(response_body_json, indent=4, sort_keys=True))
         # print(json.dumps(response_headers_json, indent=4, sort_keys=True))
+
+        if response.status_code in [200, 201]:
+            self.__access_token = response_body_json["access_token"]
+            self.__refresh_token = response_body_json["refresh_token"]
+
+            result = response
+            flag, level, message = M.get_status(
+                "API_Trade_Oauth_2Flow_Success")
+            if self.__logger is not None:
+                self.__logger.info(message)
+        else:
+            result = response
+            flag, level, message = M.get_status("API_Trade_Oauth_2Flow_Error", (str(
+                response.status_code), response_body_json["messages"]["message"]))
+            if self.__logger is not None:
+                self.__logger.error(message)
+            return result, flag, level, message
 
         flag, level, message = M.get_status("API_Trade_Authentication_Success")
         if self.__logger is not None:
@@ -331,8 +348,9 @@ class Session:
         return uuid.uuid4()
 
     def get_request_id(self):
-        return datetime.datetime.now(
-            datetime.timezone.utc).strftime("%Y%m%d%H%M%S%f")
+        time_miliseconds = int(round(time.time() * 1000))
+        time_string = str(time_miliseconds)[-9:]
+        return time_string
 
     def get_challenge_info(self, info):
         authentication_info = json.loads(info)
@@ -380,7 +398,7 @@ class Session:
             self.__logger.debug("Payload: %s" % (json.dumps(
                 payload, indent=4, sort_keys=True)))
             self.__logger.debug("Headers: %s" % (json.dumps(
-                payload, indent=4, sort_keys=True)))
+                headers, indent=4, sort_keys=True)))
             self.__logger.debug("Status code: %s" % (response.status_code))
             self.__logger.debug("Response body: %s" % (json.dumps(
                 response_body_json, indent=4, sort_keys=True)))
@@ -406,7 +424,7 @@ class Session:
         # ----------------------------------------------------------------------
         url = self.__access_config["url_accounts_balance"]
 
-        self.__request_id = self.get_request_id()
+        #self.__request_id = self.get_request_id()
 
         payload = {}
         headers = {
@@ -419,12 +437,6 @@ class Session:
 
         response = requests.request(
             "GET", url, headers=headers, data=payload)
-
-        print("AAAAAAA")
-        print(response.status_code)
-        print(response.text)
-        print(response.headers)
-        print("BBBBBB")
 
         if response.text == "":
             response_body_json = {}
@@ -439,7 +451,7 @@ class Session:
             self.__logger.debug("Payload: %s" % (json.dumps(
                 payload, indent=4, sort_keys=True)))
             self.__logger.debug("Headers: %s" % (json.dumps(
-                payload, indent=4, sort_keys=True)))
+                headers, indent=4, sort_keys=True)))
             self.__logger.debug("Status code: %s" % (response.status_code))
             self.__logger.debug("Response body: %s" % (json.dumps(
                 response_body_json, indent=4, sort_keys=True)))

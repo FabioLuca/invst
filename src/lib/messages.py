@@ -87,6 +87,16 @@ MESSAGE = {
         "Level": C.INFO,
         "Message": "Success on the TAN activation step."
     },
+    "API_Trade_Oauth_2Flow_Error": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "Failure on the Oauth Second Flow step. Error code: %s. Message: %s"
+    },
+    "API_Trade_Oauth_2Flow_Success": {
+        "Flag": C.SUCCESS,
+        "Level": C.INFO,
+        "Message": "Success on the Oauth Second Flow step."
+    },
     "API_Trade_Authentication_Error": {
         "Flag": C.FAIL,
         "Level": C.ERROR,
