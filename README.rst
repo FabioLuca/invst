@@ -1,8 +1,17 @@
 Overview
 --------
 
-This project goal is to provide a encapsulation for accessing trading values
-history for a given ticker ny using the AlphaVantage API. Although other
+This project goal is multiple, and split into difference encapsulations:
+
+#.  Fetch market data series (history)
+#.  Analyze data for taking decisions (hold, buy, sell)
+#.  Execute an order into a broker
+
+Fetch market data series (history)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The first element is to provide a encapsulation for accessing trading values
+history for a given ticker by using the AlphaVantage API. Although other
 sources are possible, they were not completely implemented here. The output for
 a chosen ticker (stock) is a Pandas dataframe containing the open-high-low-close
 values, also known as OHLC. More data is also available in the dataframe, as the
@@ -23,6 +32,10 @@ needs to be replaced by the string provided as API key::
             }
         }
     }
+
+Execute an order into a broker
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 
 Virtual Environment
 -------------------

@@ -42,9 +42,14 @@ class Config:
         self.json_data = None
 
         self.data = None
-        self.data_source_name = None
-        self.data_source_access_data = None
-        self.data_source_user_data = None
+
+        self.data_source_fetch_name = None
+        self.data_source_fetch_access_data = None
+        self.data_source_fetch_user_data = None
+
+        self.data_source_trade_name = None
+        self.data_source_trade_access_data = None
+        self.data_source_trade_user_data = None
 
         # ----------------------------------------------------------------------
         #   Defines the logger to output the information and also
@@ -86,21 +91,36 @@ class Config:
             # for parameter in self.json_data["paths"]:
             #     vars(self)[parameter] = self.json_data["paths"][parameter]
 
-            # ----------------------------------------------------------------------
+            # ------------------------------------------------------------------
             #   Configuration related to the online data sources
-            # ----------------------------------------------------------------------
-            self.data_source_name = self.json_data["data_source"]["name"]
-            self.data_source_access_data = self.json_data["data_source"][
-                self.data_source_name
-            ]["access_data"]
+            # ------------------------------------------------------------------
+            self.data_source_fetch_name = self.json_data[
+                "api"]["fetching"]["selection"]
+            self.data_source_fetch_access_data = self.json_data[
+                "api"]["fetching"][self.data_source_fetch_name]["access_data"]
+            self.data_source_trade_name = self.json_data[
+                "api"]["trading"]["selection"]
+            self.data_source_trade_access_data = self.json_data[
+                "api"]["trading"][self.data_source_trade_name]["access_data"]
 
         elif filename.stem == "api-cfg-access":
 
-            if self.data_source_name is None:
+            if self.data_source_fetch_name is None:
                 result = None
                 flag = C.FAIL
                 level = C.ERROR
-                message = "No source of data was define for %s" % (
+                message = "No source of data was define for fetching %s" % (
+                    inspect.currentframe().f_code.co_name
+                )
+                if self.__logger is not None:
+                    self.__logger.error(message)
+                return result, flag, level, message
+
+            if self.data_source_trade_name is None:
+                result = None
+                flag = C.FAIL
+                level = C.ERROR
+                message = "No source of data was define for trading %s" % (
                     inspect.currentframe().f_code.co_name
                 )
                 if self.__logger is not None:
@@ -110,9 +130,10 @@ class Config:
             # ----------------------------------------------------------------------
             #   Configuration related to the online data sources
             # ----------------------------------------------------------------------
-            self.data_source_user_data = self.json_data["data_source"][
-                self.data_source_name
-            ]["user_data"]
+            self.data_source_fetch_user_data = self.json_data[
+                "api"]["fetching"][self.data_source_fetch_name]["user_data"]
+            self.data_source_trade_user_data = self.json_data[
+                "api"]["trading"][self.data_source_trade_name]["user_data"]
 
         result = None
         flag = C.SUCCESS
