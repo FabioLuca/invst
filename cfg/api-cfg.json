@@ -37,7 +37,8 @@
                     "url_oauth_token": "https://api.comdirect.de/oauth/token",
                     "url_session": "https://api.comdirect.de/api/session/clients/user/v1/sessions",
                     "url_session_validate": "https://api.comdirect.de/api/session/clients/user/v1/sessions/[IDENTIFIER]/validate",
-                    "url_session_tan": "https://api.comdirect.de/api/session/clients/user/v1/sessions/[IDENTIFIER]"
+                    "url_session_tan": "https://api.comdirect.de/api/session/clients/user/v1/sessions/[IDENTIFIER]",
+                    "url_accounts_balance": "https://api.comdirect.de/api/banking/clients/user/v2/accounts/balances"
                 }
             }
         }

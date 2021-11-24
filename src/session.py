@@ -1,4 +1,3 @@
-from .lib import messages as M
 import requests
 import logging
 import json
@@ -6,10 +5,15 @@ import uuid
 import datetime
 import time
 
+from .lib import messages as M
+from .lib.invst_const import constants as C
+
 
 class Session:
 
     def __init__(self, source, access_config, access_userdata, logger_name=None) -> None:
+
+        self.session_connected = False
 
         self.__client_id = access_userdata["client_id"]
         self.__client_secret = access_userdata["client_secret"]
@@ -43,6 +47,8 @@ class Session:
 
     def connect(self):
 
+        flag, level, message = M.get_status("API_Trade_Authentication_Error")
+
         # ----------------------------------------------------------------------
         #   2.1 OAuth2 Resource Owner Password Credentials Flow
         # ----------------------------------------------------------------------
@@ -64,12 +70,18 @@ class Session:
         if self.__logger is not None:
             self.__logger.debug("############# 2.1 #############")
             self.__logger.debug(url)
+            self.__logger.debug("Payload:")
+            self.__logger.debug(json.dumps(
+                payload, indent=4, sort_keys=True))
+            self.__logger.debug("Headers:")
+            self.__logger.debug(json.dumps(
+                payload, indent=4, sort_keys=True))
             self.__logger.debug("Status code:")
             self.__logger.debug(response.status_code)
             self.__logger.debug("Response body:")
             self.__logger.debug(json.dumps(
                 response_body_json, indent=4, sort_keys=True))
-            self.__logger.debug("Reasponse headers:")
+            self.__logger.debug("Response headers:")
             self.__logger.debug(json.dumps(
                 response_headers_json, indent=4, sort_keys=True))
 
@@ -121,12 +133,18 @@ class Session:
         if self.__logger is not None:
             self.__logger.debug("############# 2.2 #############")
             self.__logger.debug(url)
+            self.__logger.debug("Payload:")
+            self.__logger.debug(json.dumps(
+                payload, indent=4, sort_keys=True))
+            self.__logger.debug("Headers:")
+            self.__logger.debug(json.dumps(
+                payload, indent=4, sort_keys=True))
             self.__logger.debug("Status code:")
             self.__logger.debug(response.status_code)
             self.__logger.debug("Response body:")
             self.__logger.debug(json.dumps(
                 response_body_json, indent=4, sort_keys=True))
-            self.__logger.debug("Reasponse headers:")
+            self.__logger.debug("Response headers:")
             self.__logger.debug(json.dumps(
                 response_headers_json, indent=4, sort_keys=True))
 
@@ -157,6 +175,8 @@ class Session:
         url = self.__access_config["url_session_validate"]
         url = url.replace("[IDENTIFIER]", self.__identifier)
 
+        self.__request_id = self.get_request_id()
+
         payload = json.dumps({
             "identifier": f"{self.__identifier}",
             "sessionTanActive": True,
@@ -177,12 +197,18 @@ class Session:
         if self.__logger is not None:
             self.__logger.debug("############# 2.3 #############")
             self.__logger.debug(url)
+            self.__logger.debug("Payload:")
+            self.__logger.debug(json.dumps(
+                payload, indent=4, sort_keys=True))
+            self.__logger.debug("Headers:")
+            self.__logger.debug(json.dumps(
+                payload, indent=4, sort_keys=True))
             self.__logger.debug("Status code:")
             self.__logger.debug(response.status_code)
             self.__logger.debug("Response body:")
             self.__logger.debug(json.dumps(
                 response_body_json, indent=4, sort_keys=True))
-            self.__logger.debug("Reasponse headers:")
+            self.__logger.debug("Response headers:")
             self.__logger.debug(json.dumps(
                 response_headers_json, indent=4, sort_keys=True))
 
@@ -216,6 +242,8 @@ class Session:
         url = self.__access_config["url_session_tan"]
         url = url.replace("[IDENTIFIER]", self.__identifier)
 
+        self.__request_id = self.get_request_id()
+
         payload = json.dumps({
             "identifier": f"{self.__identifier}",
             "sessionTanActive": True,
@@ -239,12 +267,18 @@ class Session:
         if self.__logger is not None:
             self.__logger.debug("############# 2.4 #############")
             self.__logger.debug(url)
+            self.__logger.debug("Payload:")
+            self.__logger.debug(json.dumps(
+                payload, indent=4, sort_keys=True))
+            self.__logger.debug("Headers:")
+            self.__logger.debug(json.dumps(
+                payload, indent=4, sort_keys=True))
             self.__logger.debug("Status code:")
             self.__logger.debug(response.status_code)
             self.__logger.debug("Response body:")
             self.__logger.debug(json.dumps(
                 response_body_json, indent=4, sort_keys=True))
-            self.__logger.debug("Reasponse headers:")
+            self.__logger.debug("Response headers:")
             self.__logger.debug(json.dumps(
                 response_headers_json, indent=4, sort_keys=True))
 
@@ -252,7 +286,21 @@ class Session:
         # print(json.dumps(response_body_json, indent=4, sort_keys=True))
         # print(json.dumps(response_headers_json, indent=4, sort_keys=True))
 
-        time.sleep(8)
+        if response.status_code in [200, 201]:
+            result = response
+            flag, level, message = M.get_status(
+                "API_Trade_Activate_TAN_Success")
+            if self.__logger is not None:
+                self.__logger.info(message)
+        else:
+            result = response
+            flag, level, message = M.get_status(
+                "API_Trade_Activate_TAN_Error", (str(response.status_code), response_body_json["messages"]["message"]))
+            if self.__logger is not None:
+                self.__logger.error(message)
+            return result, flag, level, message
+
+        time.sleep(15)
 
         # ----------------------------------------------------------------------
         #   2.5 OAuth2 CD Secondary-Flow
@@ -273,18 +321,30 @@ class Session:
         if self.__logger is not None:
             self.__logger.debug("############# 2.5 #############")
             self.__logger.debug(url)
+            self.__logger.debug("Payload:")
+            self.__logger.debug(json.dumps(
+                payload, indent=4, sort_keys=True))
+            self.__logger.debug("Headers:")
+            self.__logger.debug(json.dumps(
+                payload, indent=4, sort_keys=True))
             self.__logger.debug("Status code:")
             self.__logger.debug(response.status_code)
             self.__logger.debug("Response body:")
             self.__logger.debug(json.dumps(
                 response_body_json, indent=4, sort_keys=True))
-            self.__logger.debug("Reasponse headers:")
+            self.__logger.debug("Response headers:")
             self.__logger.debug(json.dumps(
                 response_headers_json, indent=4, sort_keys=True))
 
         # print("---- 2.5 --------------------------------------")
         # print(json.dumps(response_body_json, indent=4, sort_keys=True))
         # print(json.dumps(response_headers_json, indent=4, sort_keys=True))
+
+        flag, level, message = M.get_status("API_Trade_Authentication_Success")
+        if self.__logger is not None:
+            self.__logger.info(message)
+
+        self.session_connected = True
 
         return result, flag, level, message
 
@@ -301,3 +361,56 @@ class Session:
         challenge_type = authentication_info["typ"]
 
         return challenge_id, challenge_type, authentication_info
+
+    def accounts_balance(self):
+
+        # ----------------------------------------------------------------------
+        #   Verifies first if there is a valid session. If not, then leaves the
+        #   execution.
+        # ----------------------------------------------------------------------
+        if not self.session_connected:
+            flag, level, message = M.get_status("API_Trade_No_Active_Session")
+            if self.__logger is not None:
+                self.__logger.error(message)
+            return None, flag, level, message
+
+        # ----------------------------------------------------------------------
+        #   Executes the command to the API.
+        # ----------------------------------------------------------------------
+        url = self.__access_config["url_accounts_balance"]
+
+        self.__request_id = self.get_request_id()
+
+        payload = {}
+        headers = {
+            'Accept': 'application/json',
+            'Authorization': f'Bearer {self.__access_token}',
+            'x-http-request-info': f'{{"clientRequestId":{{"sessionId":"{self.__session_id}","requestId":"{self.__request_id}"}}}}',
+            'Content-Type': 'application/json',
+            # 'Cookie': 'qSession=22608551.ce1bae085773e7f8941cb9f'
+        }
+
+        response = requests.request(
+            "GET", url, headers=headers, data=payload)
+
+        response_body_json = json.loads(response.text)
+        response_headers_json = dict(response.headers)
+
+        if self.__logger is not None:
+            self.__logger.debug(
+                "############# Accounts Balance #############")
+            self.__logger.debug(url)
+            self.__logger.debug("Payload:")
+            self.__logger.debug(json.dumps(
+                payload, indent=4, sort_keys=True))
+            self.__logger.debug("Headers:")
+            self.__logger.debug(json.dumps(
+                payload, indent=4, sort_keys=True))
+            self.__logger.debug("Status code:")
+            self.__logger.debug(response.status_code)
+            self.__logger.debug("Response body:")
+            self.__logger.debug(json.dumps(
+                response_body_json, indent=4, sort_keys=True))
+            self.__logger.debug("Response headers:")
+            self.__logger.debug(json.dumps(
+                response_headers_json, indent=4, sort_keys=True))
