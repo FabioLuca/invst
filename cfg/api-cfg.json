@@ -40,7 +40,8 @@
                     "url_session_tan": "https://api.comdirect.de/api/session/clients/user/v1/sessions/[IDENTIFIER]",
                     "url_session_revoke": "https://api.comdirect.de/oauth/revoke",
                     "url_accounts_balance": "https://api.comdirect.de/api/banking/clients/user/v2/accounts/balances",
-                    "url_depots": "https://api.comdirect.de/api/brokerage/clients/user/v3/depots"
+                    "url_depots": "https://api.comdirect.de/api/brokerage/clients/user/v3/depots",
+                    "url_depot_position": "https://api.comdirect.de/api/brokerage/v3/depots/[DEPOT_ID]/positions"
                 }
             }
         }

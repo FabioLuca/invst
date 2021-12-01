@@ -1,7 +1,7 @@
 Overview
 --------
 
-This project goal is multiple, and split into difference encapsulations:
+This project goal is multiple, and split into different elements:
 
 #.  Fetch market data series (history)
 #.  Analyze data for taking decisions (hold, buy, sell)
@@ -40,26 +40,34 @@ Execute an order into a broker
 Virtual Environment
 -------------------
 
-It is recommended to run the project with a Virtual Environment. To do it,
+It is recommended to run the project with a Virtual Environment. To do so,
 first make sure to have the package available in you computer::
 
     pip install virtualenv
+
+This step should be common between Linux and Windows systems.
 
 Once available (succesful install), a virtual environement can be created by
 the following steps:
 
 #.  Go to project root folder
 #.  Run the command below, where `<name_of_virtualenv>` is to be replacd by the
-    name desired, for example: `venv`
-    ::
+    name desired, for example: `venv`. Note that the command for python might
+    change depending on the installation::
      
         python3 -m venv <name_of_virtualenv>
 
+    The commmand above should be similar between Linux and Windows systems.
+
 After creation, the virtual environmnet can be started by the following
 command. Keep in mind that the `<name_of_virtualenv>` is to be replaced by the
-name definied on the previous step::
+name definied on the previous step. for Linux::
 
     source <name_of_virtualenv>/bin/activate
+
+For Windows systems::
+
+    <name_of_virtualenv>/Scripts/activate
 
 Once started, in the terminal it will be indicated that a virtual environment
 is running by a tag `(<name_of_virtualenv>)`.

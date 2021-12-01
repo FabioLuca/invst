@@ -138,3 +138,6 @@ dmypy.json
 !.vscode/extensions.json
 
 logs/
+
+# Any kind of export from the script
+Export*xlsx

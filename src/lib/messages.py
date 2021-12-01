@@ -10,6 +10,11 @@ MESSAGE = {
         "Level": C.ERROR,
         "Message": "General error.",
     },
+    "API_500_Msg_Err": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "General error from the server: 500",
+    },
     "API_200_Msg_Err": {
         "Flag": C.FAIL,
         "Level": C.ERROR,
@@ -116,6 +121,16 @@ MESSAGE = {
         "Flag": C.SUCCESS,
         "Level": C.INFO,
         "Message": "Success on getting the account balance."
+    },
+    "API_Trade_Depots_Error": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "Failure on getting the depots. Error code: %s. Message: %s"
+    },
+    "API_Trade_Depots_Success": {
+        "Flag": C.SUCCESS,
+        "Level": C.INFO,
+        "Message": "Success on getting the depots."
     },
     "API_Trade_No_Active_Session": {
         "Flag": C.FAIL,

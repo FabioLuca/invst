@@ -7,3 +7,5 @@ Sphinx
 rinohtype
 datetime
 uuid
+openpyxl
+xlsxwriter
