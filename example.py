@@ -89,8 +89,7 @@ if __name__ == "__main__":
     # --------------------------------------------------------------------------
     #   Example of accessing a Comdirect account
     # --------------------------------------------------------------------------
-    comdirect = Session(source=config.data_source_trade_name,
-                        access_config=config.data_source_trade_access_data,
+    comdirect = Session(access_config=config.data_source_trade_access_data,
                         access_userdata=config.data_source_trade_user_data,
                         logger_name=LOGGER_NAME,
                         )
