@@ -5,6 +5,7 @@ Source (src)
    :maxdepth: 1
 
    data_access
+   session
 
 Libraries (lib)
 ---------------

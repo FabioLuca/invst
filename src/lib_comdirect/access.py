@@ -7,7 +7,8 @@ class Access:
 
     def connect(self):
 
-        flag, level, message = M.get_status("API_Trade_Authentication_Error")
+        flag, level, message = M.get_status(
+            self.logger_name, "API_Trade_Initialization")
 
         # ----------------------------------------------------------------------
         #   2.1 OAuth2 Resource Owner Password Credentials Flow
@@ -29,33 +30,30 @@ class Access:
         response_body_json = json.loads(response.text)
         response_headers_json = dict(response.headers)
 
-        if self.logger is not None:
-            self.logger.debug("############# 2.1 #############")
-            self.logger.debug("URL: %s", url)
-            self.logger.debug("Payload: %s", json.dumps(
-                payload, indent=4, sort_keys=True))
-            self.logger.debug("Headers: %s", json.dumps(
-                headers, indent=4, sort_keys=True))
-            self.logger.debug("Status code: %s", response.status_code)
-            self.logger.debug("Response body: %s", json.dumps(
-                response_body_json, indent=4, sort_keys=True))
-            self.logger.debug("Response headers: %s", json.dumps(
-                response_headers_json, indent=4, sort_keys=True))
+        self.logger.debug("############# 2.1 #############")
+        self.logger.debug("URL: %s", url)
+        self.logger.debug("Payload: %s", json.dumps(
+            payload, indent=4, sort_keys=True))
+        self.logger.debug("Headers: %s", json.dumps(
+            headers, indent=4, sort_keys=True))
+        self.logger.debug("Status code: %s", response.status_code)
+        self.logger.debug("Response body: %s", json.dumps(
+            response_body_json, indent=4, sort_keys=True))
+        self.logger.debug("Response headers: %s", json.dumps(
+            response_headers_json, indent=4, sort_keys=True))
 
         if response.status_code in [200, 201]:
             self.access_token = response_body_json["access_token"]
             self.refresh_token = response_body_json["refresh_token"]
 
             result = response
-            flag, level, message = M.get_status("API_Trade_Oauth_Success")
-            if self.logger is not None:
-                self.logger.info(message)
+            flag, level, message = M.get_status(
+                self.logger_name, "API_Trade_Oauth_Success")
+
         else:
             result = response
-            flag, level, message = M.get_status("API_Trade_Oauth_Error", (str(
+            flag, level, message = M.get_status(self.logger_name, "API_Trade_Oauth_Error", (str(
                 response.status_code), response_body_json["messages"]["message"]))
-            if self.logger is not None:
-                self.logger.error(message)
             return result, flag, level, message
 
         # ----------------------------------------------------------------------
@@ -85,32 +83,28 @@ class Access:
         response_body_json = response_body_json[0]
         response_headers_json = dict(response.headers)
 
-        if self.logger is not None:
-            self.logger.debug("############# 2.2 #############")
-            self.logger.debug("URL: %s", url)
-            self.logger.debug("Payload: %s", json.dumps(
-                payload, indent=4, sort_keys=True))
-            self.logger.debug("Headers: %s", json.dumps(
-                headers, indent=4, sort_keys=True))
-            self.logger.debug("Status code: %s", response.status_code)
-            self.logger.debug("Response body: %s", json.dumps(
-                response_body_json, indent=4, sort_keys=True))
-            self.logger.debug("Response headers: %s", json.dumps(
-                response_headers_json, indent=4, sort_keys=True))
+        self.logger.debug("############# 2.2 #############")
+        self.logger.debug("URL: %s", url)
+        self.logger.debug("Payload: %s", json.dumps(
+            payload, indent=4, sort_keys=True))
+        self.logger.debug("Headers: %s", json.dumps(
+            headers, indent=4, sort_keys=True))
+        self.logger.debug("Status code: %s", response.status_code)
+        self.logger.debug("Response body: %s", json.dumps(
+            response_body_json, indent=4, sort_keys=True))
+        self.logger.debug("Response headers: %s", json.dumps(
+            response_headers_json, indent=4, sort_keys=True))
 
         if response.status_code in [200, 201]:
             self.identifier = response_body_json["identifier"]
 
             result = response
-            flag, level, message = M.get_status("API_Trade_Ident_Success")
-            if self.logger is not None:
-                self.logger.info(message)
+            flag, level, message = M.get_status(
+                self.logger_name, "API_Trade_Ident_Success")
         else:
             result = response
-            flag, level, message = M.get_status("API_Trade_Ident_Error", (str(
+            flag, level, message = M.get_status(self.logger_name, "API_Trade_Ident_Error", (str(
                 response.status_code), response_body_json["messages"]["message"]))
-            if self.logger is not None:
-                self.logger.error(message)
             return result, flag, level, message
 
         # ----------------------------------------------------------------------
@@ -142,18 +136,17 @@ class Access:
         response_body_json = json.loads(response.text)
         response_headers_json = dict(response.headers)
 
-        if self.logger is not None:
-            self.logger.debug("############# 2.3 #############")
-            self.logger.debug("URL: %s", url)
-            self.logger.debug("Payload: %s", json.dumps(
-                payload, indent=4, sort_keys=True))
-            self.logger.debug("Headers: %s", json.dumps(
-                headers, indent=4, sort_keys=True))
-            self.logger.debug("Status code: %s", response.status_code)
-            self.logger.debug("Response body: %s", json.dumps(
-                response_body_json, indent=4, sort_keys=True))
-            self.logger.debug("Response headers: %s", json.dumps(
-                response_headers_json, indent=4, sort_keys=True))
+        self.logger.debug("############# 2.3 #############")
+        self.logger.debug("URL: %s", url)
+        self.logger.debug("Payload: %s", json.dumps(
+            payload, indent=4, sort_keys=True))
+        self.logger.debug("Headers: %s", json.dumps(
+            headers, indent=4, sort_keys=True))
+        self.logger.debug("Status code: %s", response.status_code)
+        self.logger.debug("Response body: %s", json.dumps(
+            response_body_json, indent=4, sort_keys=True))
+        self.logger.debug("Response headers: %s", json.dumps(
+            response_headers_json, indent=4, sort_keys=True))
 
         if response.status_code in [200, 201]:
             info = response_headers_json["x-once-authentication-info"]
@@ -162,15 +155,13 @@ class Access:
              self.authentication_info) = self.get_challenge_info(info)
 
             result = response
-            flag, level, message = M.get_status("API_Trade_Validate_Success")
-            if self.logger is not None:
-                self.logger.info(message)
+            flag, level, message = M.get_status(
+                self.logger_name, "API_Trade_Validate_Success")
+
         else:
             result = response
-            flag, level, message = M.get_status("API_Trade_Validate_Error", (str(
+            flag, level, message = M.get_status(self.logger_name, "API_Trade_Validate_Error", (str(
                 response.status_code), response_body_json["messages"]["message"]))
-            if self.logger is not None:
-                self.logger.error(message)
             return result, flag, level, message
 
         sec = input('Tap enter after the TAN approval.\n')
@@ -207,18 +198,17 @@ class Access:
         response_body_json = json.loads(response.text)
         response_headers_json = dict(response.headers)
 
-        if self.logger is not None:
-            self.logger.debug("############# 2.4 #############")
-            self.logger.debug("URL: %s", url)
-            self.logger.debug("Payload: %s", json.dumps(
-                payload, indent=4, sort_keys=True))
-            self.logger.debug("Headers: %s", json.dumps(
-                headers, indent=4, sort_keys=True))
-            self.logger.debug("Status code: %s", response.status_code)
-            self.logger.debug("Response body: %s", json.dumps(
-                response_body_json, indent=4, sort_keys=True))
-            self.logger.debug("Response headers: %s", json.dumps(
-                response_headers_json, indent=4, sort_keys=True))
+        self.logger.debug("############# 2.4 #############")
+        self.logger.debug("URL: %s", url)
+        self.logger.debug("Payload: %s", json.dumps(
+            payload, indent=4, sort_keys=True))
+        self.logger.debug("Headers: %s", json.dumps(
+            headers, indent=4, sort_keys=True))
+        self.logger.debug("Status code: %s", response.status_code)
+        self.logger.debug("Response body: %s", json.dumps(
+            response_body_json, indent=4, sort_keys=True))
+        self.logger.debug("Response headers: %s", json.dumps(
+            response_headers_json, indent=4, sort_keys=True))
 
         # print("---- 2.4 --------------------------------------")
         # print(json.dumps(response_body_json, indent=4, sort_keys=True))
@@ -227,19 +217,17 @@ class Access:
         if response.status_code in [200, 201]:
             result = response
             flag, level, message = M.get_status(
-                "API_Trade_Activate_TAN_Success")
-            if self.logger is not None:
-                self.logger.info(message)
+                self.logger_name, "API_Trade_Activate_TAN_Success")
         else:
             result = response
             print(response_body_json)
             flag, level, message = M.get_status(
+                self.logger_name,
                 "API_Trade_Activate_TAN_Error",
                 (str(response.status_code),
-                 str(response_body_json["messages"]["message"])
+                 str(
+                    response_body_json["messages"]["message"])
                  ))
-            if self.logger is not None:
-                self.logger.error(message)
             return result, flag, level, message
 
         # ----------------------------------------------------------------------
@@ -258,18 +246,17 @@ class Access:
         response_body_json = json.loads(response.text)
         response_headers_json = dict(response.headers)
 
-        if self.logger is not None:
-            self.logger.debug("############# 2.5 #############")
-            self.logger.debug("URL: %s", url)
-            self.logger.debug("Payload: %s", json.dumps(
-                payload, indent=4, sort_keys=True))
-            self.logger.debug("Headers: %s", json.dumps(
-                headers, indent=4, sort_keys=True))
-            self.logger.debug("Status code: %s", response.status_code)
-            self.logger.debug("Response body: %s", json.dumps(
-                response_body_json, indent=4, sort_keys=True))
-            self.logger.debug("Response headers: %s", json.dumps(
-                response_headers_json, indent=4, sort_keys=True))
+        self.logger.debug("############# 2.5 #############")
+        self.logger.debug("URL: %s", url)
+        self.logger.debug("Payload: %s", json.dumps(
+            payload, indent=4, sort_keys=True))
+        self.logger.debug("Headers: %s", json.dumps(
+            headers, indent=4, sort_keys=True))
+        self.logger.debug("Status code: %s", response.status_code)
+        self.logger.debug("Response body: %s", json.dumps(
+            response_body_json, indent=4, sort_keys=True))
+        self.logger.debug("Response headers: %s", json.dumps(
+            response_headers_json, indent=4, sort_keys=True))
 
         if response.status_code in [200, 201]:
             self.access_token = response_body_json["access_token"]
@@ -277,20 +264,17 @@ class Access:
 
             result = response
             flag, level, message = M.get_status(
-                "API_Trade_Oauth_2Flow_Success")
-            if self.logger is not None:
-                self.logger.info(message)
+                self.logger_name, "API_Trade_Oauth_2Flow_Success")
+
         else:
             result = response
-            flag, level, message = M.get_status("API_Trade_Oauth_2Flow_Error", (str(
-                response.status_code), response_body_json["messages"]["message"]))
-            if self.logger is not None:
-                self.logger.error(message)
+            flag, level, message = M.get_status(
+                self.logger_name, "API_Trade_Oauth_2Flow_Error", (str(
+                    response.status_code), response_body_json["messages"]["message"]))
             return result, flag, level, message
 
-        flag, level, message = M.get_status("API_Trade_Authentication_Success")
-        if self.logger is not None:
-            self.logger.info(message)
+        flag, level, message = M.get_status(
+            self.logger_name, "API_Trade_Authentication_Success")
 
         self.session_connected = True
 
@@ -305,9 +289,8 @@ class Access:
         #   execution.
         # ----------------------------------------------------------------------
         if not self.session_connected:
-            flag, level, message = M.get_status("API_Trade_No_Active_Session")
-            if self.logger is not None:
-                self.logger.error(message)
+            flag, level, message = M.get_status(
+                self.logger_name, "API_Trade_No_Active_Session")
             return None, flag, level, message
 
         # ----------------------------------------------------------------------
@@ -331,16 +314,15 @@ class Access:
             response_body_json = json.loads(response.text)
         response_headers_json = dict(response.headers)
 
-        if self.logger is not None:
-            self.logger.debug(
-                "############# Revoke Token #############")
-            self.logger.debug("URL: %s", url)
-            self.logger.debug("Payload: %s", json.dumps(
-                payload, indent=4, sort_keys=True))
-            self.logger.debug("Headers: %s", json.dumps(
-                headers, indent=4, sort_keys=True))
-            self.logger.debug("Status code: %s", response.status_code)
-            self.logger.debug("Response body: %s", json.dumps(
-                response_body_json, indent=4, sort_keys=True))
-            self.logger.debug("Response headers: %s", json.dumps(
-                response_headers_json, indent=4, sort_keys=True))
+        self.logger.debug(
+            "############# Revoke Token #############")
+        self.logger.debug("URL: %s", url)
+        self.logger.debug("Payload: %s", json.dumps(
+            payload, indent=4, sort_keys=True))
+        self.logger.debug("Headers: %s", json.dumps(
+            headers, indent=4, sort_keys=True))
+        self.logger.debug("Status code: %s", response.status_code)
+        self.logger.debug("Response body: %s", json.dumps(
+            response_body_json, indent=4, sort_keys=True))
+        self.logger.debug("Response headers: %s", json.dumps(
+            response_headers_json, indent=4, sort_keys=True))

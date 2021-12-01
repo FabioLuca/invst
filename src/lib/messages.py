@@ -1,7 +1,8 @@
-"""Module for centralized management of messages to the user or for logging.
+"""Module for centralized management of messages to the user and logging.
 """
 
 import pathlib
+import logging
 from .invst_const import constants as C
 
 MESSAGE = {
@@ -9,6 +10,11 @@ MESSAGE = {
         "Flag": C.FAIL,
         "Level": C.ERROR,
         "Message": "General error.",
+    },
+    "General_Initialization": {
+        "Flag": C.NEUTRAL,
+        "Level": C.DEBUG,
+        "Message": "Method initialization.",
     },
     "API_500_Msg_Err": {
         "Flag": C.FAIL,
@@ -51,6 +57,11 @@ MESSAGE = {
         "Flag": C.FAIL,
         "Level": C.ERROR,
         "Message": "Invalid input for 'period' for ticker %s."
+    },
+    "API_Trade_Initialization": {
+        "Flag": C.NEUTRAL,
+        "Level": C.DEBUG,
+        "Message": "Initializing method."
     },
     "API_Trade_Oauth_Error": {
         "Flag": C.FAIL,
@@ -154,14 +165,29 @@ MESSAGE = {
         "Level": C.INFO,
         "Message": "Loading the configuration from %s."
     },
-
-
+    "Config_Load_Success": {
+        "Flag": C.SUCCESS,
+        "Level": C.INFO,
+        "Message": "Successful loading the configuration from %s."
+    },
+    "Config_Error_No_Source_Fetching": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "No source of data was define for fetching %s."
+    },
+    "Config_Error_No_Source_Trading": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "No source of data was define for trading %s."
+    },
 
 }
 
 
-def get_status(message_id, param=None):
-    """Gets the content (flag, level and message) for a given ID.
+def get_status(logger_name, message_id, param=None):
+    """Gets the content (flag, level and message) for a given ID and adds an
+    entry to the logger, according to the level of the content. The logger
+    must be passed to the method.
 
     Note
     ----
@@ -170,11 +196,16 @@ def get_status(message_id, param=None):
     *  **flag**: status of success, neutral or fail. Neutral is intended
        only for cases where a clear definition of success or fail
        is not possible.
-    *  **level**:
+    *  **level**: level for the logging: `DEBUG`, `INFO`, `WARNING`, `ERROR`.
+       By default (proposal from `example.py`) the console will display up to
+       `INFO` level, while the log file will store up to `DEBUG` level.
     *  **message**: text to be displayed or logged for supporting user.
 
     Parameters
     ----------
+        logger_name: string
+            Logger name for handling the content. This follows the `logging`
+            library for Python.
         message_id: string
             Identifies which message from the dictionary to be returned, along
             with the flag and level information.
@@ -185,6 +216,8 @@ def get_status(message_id, param=None):
             converted into a tuple (of 1 entry).
 
     """
+
+    logger = logging.getLogger(logger_name)
 
     message = MESSAGE[message_id]["Message"]
 
@@ -197,4 +230,14 @@ def get_status(message_id, param=None):
         message = MESSAGE[message_id]["Message"] % (param)
     else:
         message = "!!!!!ERROR PARSING!!!!!"
+
+    if MESSAGE[message_id]["Level"] == C.DEBUG:
+        logger.debug(message)
+    elif MESSAGE[message_id]["Level"] == C.INFO:
+        logger.info(message)
+    elif MESSAGE[message_id]["Level"] == C.WARNING:
+        logger.warning(message)
+    elif MESSAGE[message_id]["Level"] == C.ERROR:
+        logger.error(message)
+
     return MESSAGE[message_id]["Flag"], MESSAGE[message_id]["Level"], message

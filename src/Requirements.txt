@@ -9,3 +9,5 @@ datetime
 uuid
 openpyxl
 xlsxwriter
+plotly
+dash

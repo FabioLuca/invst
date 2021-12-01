@@ -17,6 +17,16 @@ General
 
 .. include:: ../../README.rst
 
+Use examples
+============
+
+.. include:: example.rst
+
+Automations
+===========
+
+.. include:: report.rst  
+
 Indices and tables
 ==================
 

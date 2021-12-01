@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 import requests
 import pandas as pd
@@ -11,14 +12,15 @@ class Depots:
         """Returns the information for all the depots.
         """
 
+        today_string = datetime.today().strftime('%Y-%m-%d')
+
         # ----------------------------------------------------------------------
         #   Verifies first if there is a valid session. If not, then leaves the
         #   execution.
         # ----------------------------------------------------------------------
         if not self.session_connected:
-            flag, level, message = M.get_status("API_Trade_No_Active_Session")
-            if self.logger is not None:
-                self.logger.error(message)
+            flag, level, message = M.get_status(
+                self.logger_name, "API_Trade_No_Active_Session")
             return None, flag, level, message
 
         # ----------------------------------------------------------------------
@@ -41,9 +43,8 @@ class Depots:
 
         if response.status_code in [500]:
             result = response
-            flag, level, message = M.get_status("API_500_Msg_Err")
-            if self.logger is not None:
-                self.logger.error(message)
+            flag, level, message = M.get_status(
+                self.logger_name, "API_500_Msg_Err")
             return result, flag, level, message
 
         if response.text == "":
@@ -69,17 +70,13 @@ class Depots:
         if response.status_code in [200, 201]:
             result = response
             flag, level, message = M.get_status(
-                "API_Trade_Depots_Success")
-            if self.logger is not None:
-                self.logger.info(message)
+                self.logger_name, "API_Trade_Depots_Success")
         else:
             result = response
             flag, level, message = M.get_status(
-                "API_Trade_Depots_Error",
+                self.logger_name, "API_Trade_Depots_Error",
                 (str(response.status_code),
                  response_body_json["messages"]["message"]))
-            if self.logger is not None:
-                self.logger.error(message)
             return result, flag, level, message
 
         # ----------------------------------------------------------------------
@@ -131,20 +128,23 @@ class Depots:
             ],
         )
 
+        data_output["Date"] = today_string
+
         return data_output, flag, level, message
 
     def get_depot_position(self, depot_id):
         """Returns the position from a depot.
         """
 
+        today_string = datetime.today().strftime('%Y-%m-%d')
+
         # ----------------------------------------------------------------------
         #   Verifies first if there is a valid session. If not, then leaves the
         #   execution.
         # ----------------------------------------------------------------------
         if not self.session_connected:
-            flag, level, message = M.get_status("API_Trade_No_Active_Session")
-            if self.logger is not None:
-                self.logger.error(message)
+            flag, level, message = M.get_status(
+                self.logger_name, "API_Trade_No_Active_Session")
             return None, flag, level, message
 
         # ----------------------------------------------------------------------
@@ -168,9 +168,8 @@ class Depots:
 
         if response.status_code in [500]:
             result = response
-            flag, level, message = M.get_status("API_500_Msg_Err")
-            if self.logger is not None:
-                self.logger.error(message)
+            flag, level, message = M.get_status(
+                self.logger_name, "API_500_Msg_Err")
             return result, flag, level, message
 
         if response.text == "":
@@ -196,23 +195,109 @@ class Depots:
         if response.status_code in [200, 201]:
             result = response
             flag, level, message = M.get_status(
-                "API_Trade_Depots_Success")
-            if self.logger is not None:
-                self.logger.info(message)
+                self.logger_name, "API_Trade_Depots_Success")
         else:
             result = response
             flag, level, message = M.get_status(
-                "API_Trade_Depots_Error",
+                self.logger_name, "API_Trade_Depots_Error",
                 (str(response.status_code),
                  response_body_json["messages"]["message"]))
-            if self.logger is not None:
-                self.logger.error(message)
             return result, flag, level, message
 
         # ----------------------------------------------------------------------
         #   Parse the content from the API into Pandas format
         # ----------------------------------------------------------------------
+        list_depot_position_aggregated_depot_id = []
+        list_depot_position_aggregated_purchase_value_value = []
+        list_depot_position_aggregated_purchase_value_unit = []
+        list_depot_position_aggregated_current_value_value = []
+        list_depot_position_aggregated_current_value_unit = []
+        list_depot_position_aggregated_profit_loss_purchase_absolute_value = []
+        list_depot_position_aggregated_profit_loss_purchase_absolute_unit = []
+        list_depot_position_aggregated_profit_loss_purchase_relative = []
+        list_depot_position_aggregated_profit_loss_prevday_absolute_value = []
+        list_depot_position_aggregated_profit_loss_prevday_absolute_unit = []
+        list_depot_position_aggregated_profit_loss_prevday_relative = []
+
+        depot_item = response_body_json["aggregated"]
+        depot_position_aggregated_depot_id = depot_item["depot"]["depotId"]
+        depot_position_aggregated_purchase_value_value = depot_item["purchaseValue"]["value"]
+        depot_position_aggregated_purchase_value_unit = depot_item["purchaseValue"]["unit"]
+        depot_position_aggregated_current_value_value = depot_item["currentValue"]["value"]
+        depot_position_aggregated_current_value_unit = depot_item["currentValue"]["unit"]
+        depot_position_aggregated_profit_loss_purchase_absolute_value = depot_item[
+            "profitLossPurchaseAbs"]["value"]
+        depot_position_aggregated_profit_loss_purchase_absolute_unit = depot_item[
+            "profitLossPurchaseAbs"]["unit"]
+        depot_position_aggregated_profit_loss_purchase_relative = depot_item[
+            "profitLossPurchaseRel"]
+        depot_position_aggregated_profit_loss_prevday_absolute_value = depot_item[
+            "profitLossPrevDayAbs"]["value"]
+        depot_position_aggregated_profit_loss_prevday_absolute_unit = depot_item[
+            "profitLossPrevDayAbs"]["unit"]
+        depot_position_aggregated_profit_loss_prevday_relative = depot_item[
+            "profitLossPrevDayRel"]
+
+        list_depot_position_aggregated_depot_id.append(
+            depot_position_aggregated_depot_id)
+        list_depot_position_aggregated_purchase_value_value.append(
+            depot_position_aggregated_purchase_value_value)
+        list_depot_position_aggregated_purchase_value_unit.append(
+            depot_position_aggregated_purchase_value_unit)
+        list_depot_position_aggregated_current_value_value.append(
+            depot_position_aggregated_current_value_value)
+        list_depot_position_aggregated_current_value_unit.append(
+            depot_position_aggregated_current_value_unit)
+        list_depot_position_aggregated_profit_loss_purchase_absolute_value.append(
+            depot_position_aggregated_profit_loss_purchase_absolute_value)
+        list_depot_position_aggregated_profit_loss_purchase_absolute_unit.append(
+            depot_position_aggregated_profit_loss_purchase_absolute_unit)
+        list_depot_position_aggregated_profit_loss_purchase_relative.append(
+            depot_position_aggregated_profit_loss_purchase_relative)
+        list_depot_position_aggregated_profit_loss_prevday_absolute_value.append(
+            depot_position_aggregated_profit_loss_prevday_absolute_value)
+        list_depot_position_aggregated_profit_loss_prevday_absolute_unit.append(
+            depot_position_aggregated_profit_loss_prevday_absolute_unit)
+        list_depot_position_aggregated_profit_loss_prevday_relative.append(
+            depot_position_aggregated_profit_loss_prevday_relative)
+
+        zippedList = list(
+            zip(
+                list_depot_position_aggregated_depot_id,
+                list_depot_position_aggregated_purchase_value_value,
+                list_depot_position_aggregated_purchase_value_unit,
+                list_depot_position_aggregated_current_value_value,
+                list_depot_position_aggregated_current_value_unit,
+                list_depot_position_aggregated_profit_loss_purchase_absolute_value,
+                list_depot_position_aggregated_profit_loss_purchase_absolute_unit,
+                list_depot_position_aggregated_profit_loss_purchase_relative,
+                list_depot_position_aggregated_profit_loss_prevday_absolute_value,
+                list_depot_position_aggregated_profit_loss_prevday_absolute_unit,
+                list_depot_position_aggregated_profit_loss_prevday_relative,
+            )
+        )
+
+        data_output_aggregated = pd.DataFrame(
+            zippedList,
+            columns=[
+                "Depot Aggregated ID",
+                "Depot Aggregated Purchase Value",
+                "Depot Aggregated Purchase Value Unit",
+                "Depot Aggregated Current Value",
+                "Depot Aggregated Current Value Unit",
+                "Depot Aggregated Profit/Loss Purchase Absolute Value",
+                "Depot Aggregated Profit/Loss Purchase Absolute Unit",
+                "Depot Aggregated Profit/Loss Purchase Relative",
+                "Depot Aggregated Profit/Loss Previous Day Absolute Value",
+                "Depot Aggregated Profit/Loss Previous Day Absolute Unit",
+                "Depot Aggregated Profit/Loss Previous Day Relative",
+            ],
+        )
+
+        data_output_aggregated["Date"] = today_string
+
         list_depot_position_wkn = []
+        list_depot_position_depot_id = []
         list_depot_position_position_id = []
         list_depot_position_quantity = []
         list_depot_position_available_quantity = []
@@ -237,6 +322,7 @@ class Depots:
 
         for depot_item in response_body_json["values"]:
             depot_position_wkn = depot_item["wkn"]
+            depot_position_depot_id = depot_item["depotId"]
             depot_position_position_id = depot_item["positionId"]
             depot_position_quantity = depot_item["quantity"]["value"]
             depot_position_available_quantity = depot_item["availableQuantity"]["value"]
@@ -264,6 +350,7 @@ class Depots:
             depot_position_profit_loss_prevday_relative = depot_item["profitLossPrevDayRel"]
 
             list_depot_position_wkn.append(depot_position_wkn)
+            list_depot_position_depot_id.append(depot_position_depot_id)
             list_depot_position_position_id.append(depot_position_position_id)
             list_depot_position_quantity.append(depot_position_quantity)
             list_depot_position_available_quantity.append(
@@ -308,6 +395,7 @@ class Depots:
         zippedList = list(
             zip(
                 list_depot_position_wkn,
+                list_depot_position_depot_id,
                 list_depot_position_position_id,
                 list_depot_position_quantity,
                 list_depot_position_available_quantity,
@@ -336,6 +424,7 @@ class Depots:
             zippedList,
             columns=[
                 "WKN",
+                "Depot ID",
                 "Position ID",
                 "Quantity",
                 "Available Quantity",
@@ -360,4 +449,6 @@ class Depots:
             ],
         )
 
-        return data_output, flag, level, message
+        data_output["Date"] = today_string
+
+        return (data_output_aggregated, data_output), flag, level, message

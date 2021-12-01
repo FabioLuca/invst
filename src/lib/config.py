@@ -35,10 +35,10 @@ class Config:
 
     """
 
-    def __init__(self, logger_name=None):
+    def __init__(self, logger_name):
 
         self.filename = None
-        self.__json_file = None
+        self.json_file = None
         self.json_data = None
 
         self.data = None
@@ -55,23 +55,17 @@ class Config:
         #   Defines the logger to output the information and also
         #   add an entry for the start of the class
         # ----------------------------------------------------------------------
-        self.__logger_name = logger_name
-        self.__logger = None
-        if self.__logger_name is not None:
-            self.__logger = logging.getLogger(
-                str(self.__logger_name) + ".config")
-
-        if self.__logger is not None:
-            self.__logger.info("Initializing configuration")
+        self.logger_name = logger_name + ".config"
+        self.logger = logging.getLogger(self.logger_name)
+        self.logger.info("Initializing configuration.")
 
     def load_config(self, filename):
 
-        flag, level, message = M.get_status("Config_Load_Config", filename)
-        if self.__logger is not None:
-            self.__logger.info(message)
+        flag, level, message = M.get_status(
+            self.logger_name, "Config_Load_Config", filename)
 
         self.filename = filename
-        self.__json_file = None
+        self.json_file = None
         self.json_data = None
 
         self.load_config_file()
@@ -107,40 +101,31 @@ class Config:
 
             if self.data_source_fetch_name is None:
                 result = None
-                flag = C.FAIL
-                level = C.ERROR
-                message = "No source of data was define for fetching %s" % (
-                    inspect.currentframe().f_code.co_name
-                )
-                if self.__logger is not None:
-                    self.__logger.error(message)
+                flag, level, message = M.get_status(
+                    self.logger_name,
+                    "Config_Error_No_Source_Fetching",
+                    inspect.currentframe().f_code.co_name)
                 return result, flag, level, message
 
             if self.data_source_trade_name is None:
                 result = None
-                flag = C.FAIL
-                level = C.ERROR
-                message = "No source of data was define for trading %s" % (
-                    inspect.currentframe().f_code.co_name
-                )
-                if self.__logger is not None:
-                    self.__logger.error(message)
+                flag, level, message = M.get_status(
+                    self.logger_name,
+                    "Config_Error_No_Source_Trading",
+                    inspect.currentframe().f_code.co_name)
                 return result, flag, level, message
 
-            # ----------------------------------------------------------------------
+            # ------------------------------------------------------------------
             #   Configuration related to the online data sources
-            # ----------------------------------------------------------------------
+            # ------------------------------------------------------------------
             self.data_source_fetch_user_data = self.json_data[
                 "api"]["fetching"][self.data_source_fetch_name]["user_data"]
             self.data_source_trade_user_data = self.json_data[
                 "api"]["trading"][self.data_source_trade_name]["user_data"]
 
         result = None
-        flag = C.SUCCESS
-        level = C.INFO
-        message = "Successful loading of the file %s" % (filename)
-        if self.__logger is not None:
-            self.__logger.info(message)
+        flag, level, message = M.get_status(
+            self.logger_name, "Config_Load_Success", filename)
         return result, flag, level, message
 
     def get_dictonary(self):
@@ -150,5 +135,5 @@ class Config:
     def load_config_file(self):
         """Loads the Json file where the configuration is stored and returns
         the content in a dictionary format"""
-        with open(self.filename) as self.__json_file:
-            self.json_data = json.load(self.__json_file)
+        with open(self.filename) as self.json_file:
+            self.json_data = json.load(self.json_file)

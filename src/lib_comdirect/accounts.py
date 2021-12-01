@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 import requests
 import pandas as pd
@@ -11,14 +12,15 @@ class Accounts:
         """Returns the balance for all the accounts.
         """
 
+        today_string = datetime.today().strftime('%Y-%m-%d')
+
         # ----------------------------------------------------------------------
         #   Verifies first if there is a valid session. If not, then leaves the
         #   execution.
         # ----------------------------------------------------------------------
         if not self.session_connected:
-            flag, level, message = M.get_status("API_Trade_No_Active_Session")
-            if self.logger is not None:
-                self.logger.error(message)
+            flag, level, message = M.get_status(
+                self.logger_name, "API_Trade_No_Active_Session")
             return None, flag, level, message
 
         # ----------------------------------------------------------------------
@@ -41,9 +43,8 @@ class Accounts:
 
         if response.status_code in [500]:
             result = response
-            flag, level, message = M.get_status("API_500_Msg_Err")
-            if self.logger is not None:
-                self.logger.error(message)
+            flag, level, message = M.get_status(
+                self.logger_name, "API_500_Msg_Err")
             return result, flag, level, message
 
         if response.text == "":
@@ -69,17 +70,13 @@ class Accounts:
         if response.status_code in [200, 201]:
             result = response
             flag, level, message = M.get_status(
-                "API_Trade_Account_Balance_Success")
-            if self.logger is not None:
-                self.logger.info(message)
+                self.logger_name, "API_Trade_Account_Balance_Success")
         else:
             result = response
             flag, level, message = M.get_status(
-                "API_Trade_Account_Balance_Error",
+                self.logger_name, "API_Trade_Account_Balance_Error",
                 (str(response.status_code),
                  response_body_json["messages"]["message"]))
-            if self.logger is not None:
-                self.logger.error(message)
             return result, flag, level, message
 
         # ----------------------------------------------------------------------
@@ -163,5 +160,7 @@ class Accounts:
                 "Balance Euro Unit",
             ],
         )
+
+        data_output["Date"] = today_string
 
         return data_output, flag, level, message

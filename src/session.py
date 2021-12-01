@@ -6,11 +6,12 @@ import time
 from .lib_comdirect.access import Access
 from .lib_comdirect.accounts import Accounts
 from .lib_comdirect.depots import Depots
+from .lib_comdirect.orders import Orders
 
 
-class Session (Access, Accounts, Depots):
+class Session (Access, Accounts, Depots, Orders):
 
-    def __init__(self, access_config, access_userdata, logger_name=None) -> None:
+    def __init__(self, access_config, access_userdata, logger_name) -> None:
 
         self.session_connected = False
 
@@ -34,14 +35,9 @@ class Session (Access, Accounts, Depots):
         #   Defines the logger to output the information and also
         #   add an entry for the start of the class
         # ----------------------------------------------------------------------
-        self.logger_name = logger_name
-        self.logger = None
-        if self.logger_name is not None:
-            self.logger = logging.getLogger(
-                str(self.logger_name) + ".session")
-
-        if self.logger is not None:
-            self.logger.info("Initializing access session.")
+        self.logger_name = logger_name + ".session"
+        self.logger = logging.getLogger(self.logger_name)
+        self.logger.info("Initializing access session.")
 
     def get_session_id(self):
         return uuid.uuid4()

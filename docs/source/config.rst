@@ -1,7 +1,7 @@
 Config module
 =============
 
-.. automodule:: lib.config
+.. automodule:: src.lib.config
    :members:
    :undoc-members:
    :show-inheritance:

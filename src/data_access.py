@@ -62,14 +62,17 @@ class DataAccess:
     .. code-block:: json
 
         {
-            "data_source": {
-                "AlphaVantage": {
-                    "user_data": {
-                        "APIKEY": "<YOUR API KEY>"
+            "api": {
+                "fetching": {
+                    "AlphaVantage": {
+                        "user_data": {
+                            "APIKEY": "<YOUR API KEY>"
+                        }
                     }
                 }
             }
         }
+
 
     For the dictionary `access_userdata`:
 
@@ -106,8 +109,7 @@ class DataAccess:
     """
 
     def __init__(
-        self, ticker, source, access_config, access_userdata, logger_name=None
-    ):
+            self, ticker, source, access_config, access_userdata, logger_name):
         """metodo paa
 
         asasdfvr
@@ -121,7 +123,7 @@ class DataAccess:
         self.ticker_name = ""
         self.source = source
         self.access_config = access_config
-        self.__access_userdata = access_userdata
+        self.access_userdata = access_userdata
 
         self.type_series = None
         self.period = None
@@ -135,16 +137,10 @@ class DataAccess:
         #   Defines the logger to output the information and also
         #   add an entry for the start of the class
         # ----------------------------------------------------------------------
-        self.__logger_name = logger_name
-        self.__logger = None
-        if self.__logger_name is not None:
-            self.__logger = logging.getLogger(
-                str(self.__logger_name) + ".data_access")
-
-        if self.__logger is not None:
-            self.__logger.info(
-                "Initializing ticker %s from %s", self.ticker, self.source
-            )
+        self.logger_name = logger_name + ".data_access"
+        self.logger = logging.getLogger(self.logger_name)
+        self.logger.info("Initializing ticker %s from %s",
+                         self.ticker, self.source)
 
     def update_values(
         self, type_series="TIMESERIES", period="DAILY", adjusted=True, start="", end=""
@@ -171,15 +167,15 @@ class DataAccess:
                 The returned dataframe is composed of the following
                 items (headers):
 
-                    # .  "Date"
-                    # .  "Open"
-                    # .  "High"
-                    # .  "Low"
-                    # .  "Close"
-                    # .  "Close Final"
-                    # .  "Volume"
-                    # .  "Dividend Amount"
-                    # .  "Split Coefficient"
+                #. "Date"
+                #. "Open"
+                #. "High"
+                #. "Low"
+                #. "Close"
+                #. "Close Final"
+                #. "Volume"
+                #. "Dividend Amount"
+                #. "Split Coefficient"
 
         Examples
         --------
@@ -203,20 +199,17 @@ class DataAccess:
         #   Verify the inputs, if they are valid, otherwise return an error
         # ----------------------------------------------------------------------
         result = None
-        flag, level, message = M.get_status("General_Error")
+        flag, level, message = M.get_status(self.logger_name,
+                                            "General_Initialization")
 
         if type_series not in ["TIMESERIES"]:
-            flag, level, message = M.get_status(
-                "API_ParamCheck_TypeSeries", (self.ticker))
-            if self.__logger is not None:
-                self.__logger.error(message)
+            flag, level, message = M.get_status(self.logger_name,
+                                                "API_ParamCheck_TypeSeries", (self.ticker))
             return result, flag, level, message
 
         if period not in ["DAILY"]:
-            flag, level, message = M.get_status(
-                "API_ParamCheck_Period", (self.ticker))
-            if self.__logger is not None:
-                self.__logger.error(message)
+            flag, level, message = M.get_status(self.logger_name,
+                                                "API_ParamCheck_Period", (self.ticker))
             return result, flag, level, message
 
         # ----------------------------------------------------------------------
@@ -236,11 +229,11 @@ class DataAccess:
             # ------------------------------------------------------------------
             #   Fetch the data (json dictionary)
             # ------------------------------------------------------------------
-            self.data_json, flag, level, message = self.__access_alphavantage()
+            self.data_json, flag, level, message = self.access_alphavantage()
 
             if flag != C.SUCCESS:
-                # if self.__logger is not None:
-                #     self.__logger.error(message)
+                # if self.logger is not None:
+                #     self.logger.error(message)
                 return result, flag, level, message
 
             # ------------------------------------------------------------------
@@ -251,22 +244,20 @@ class DataAccess:
                 flag,
                 level,
                 message,
-            ) = self.__dict_to_pandas_alphavantage()
+            ) = self.dict_to_pandas_alphavantage()
 
             if flag != C.SUCCESS:
-                if self.__logger is not None:
-                    self.__logger.error(message)
+                if self.logger is not None:
+                    self.logger.error(message)
                 return result, flag, level, message
 
             elif flag == C.SUCCESS:
                 result = self.data_pandas
-                flag, level, message = M.get_status(
-                    "Fetch_Convert_Success", (self.ticker,))
-                if self.__logger is not None:
-                    self.__logger.info(message)
+                flag, level, message = M.get_status(self.logger_name,
+                                                    "Fetch_Convert_Success", (self.ticker,))
                 return result, flag, level, message
 
-    def __access_alphavantage(self):
+    def access_alphavantage(self):
         """Access the API and verifies for the validity of the response."""
 
         # ----------------------------------------------------------------------
@@ -282,10 +273,8 @@ class DataAccess:
             url = self.access_config["URL_TIMESERIES_DAILY"]
         else:
             result = None
-            flag, level, message = M.get_status(
-                "API_ParamCheck_General", (self.ticker))
-            if self.__logger is not None:
-                self.__logger.error(message)
+            flag, level, message = M.get_status(self.logger_name,
+                                                "API_ParamCheck_General", (self.ticker))
             return result, flag, level, message
 
         # ----------------------------------------------------------------------
@@ -293,7 +282,7 @@ class DataAccess:
         # ----------------------------------------------------------------------
         url = url.replace(
             "[APIKEY]",
-            self.__access_userdata["APIKEY"],
+            self.access_userdata["APIKEY"],
         )
         url = url.replace("[TICKER]", self.ticker)
 
@@ -307,9 +296,8 @@ class DataAccess:
 
             if str(response)[0:17] == "{'Error Message':":
                 result = response
-                flag, level, message = M.get_status("API_200_Msg_Err")
-                if self.__logger is not None:
-                    self.__logger.error(message)
+                flag, level, message = M.get_status(
+                    self.logger_name, "API_200_Msg_Err")
 
             # ------------------------------------------------------------------
             #   The API for AlphaVantage has a limit os accesses for a given
@@ -321,26 +309,23 @@ class DataAccess:
             # ------------------------------------------------------------------
             elif str(response)[0:8] == "{'Note':":
                 result = response
-                flag, level, message = M.get_status("API_200_Content_Err")
-                if self.__logger is not None:
-                    self.__logger.info(message)
+                flag, level, message = M.get_status(
+                    self.logger_name, "API_200_Content_Err")
             else:
                 result = response
-                flag, level, message = M.get_status("API_200_Success")
-                if self.__logger is not None:
-                    self.__logger.info(message)
+                flag, level, message = M.get_status(
+                    self.logger_name, "API_200_Success")
 
             return result, flag, level, message
 
         else:
             result = json.loads(r.text)
-            flag, level, message = M.get_status(
-                "API_Neg_Response", (self.ticker))
-            if self.__logger is not None:
-                self.__logger.info(message)
+            flag, level, message = M.get_status(self.logger_name,
+                                                "API_Neg_Response",
+                                                (self.ticker))
             return result, flag, level, message
 
-    def __dict_to_pandas_alphavantage(self):
+    def dict_to_pandas_alphavantage(self):
         """Converts a json data returned from the API into a Pandas dataframe
         object."""
 
@@ -485,8 +470,7 @@ class DataAccess:
         #   Return
         # ----------------------------------------------------------------------
         result = data_output
-        flag, level, message = M.get_status("Convertion_Success")
-        if self.__logger is not None:
-            self.__logger.info(message)
+        flag, level, message = M.get_status(
+            self.logger_name, "Convertion_Success")
 
         return result, flag, level, message
