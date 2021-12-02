@@ -80,6 +80,14 @@ to be followed::
 The client ID and secret can be obtanined from the Comdirect website. Please
 follow the instructions from their API documentation on how to obtain them.
 
+To do's and future work
+-----------------------
+
+* Fetch the data from tickets besides AlphaVantage, as it only supports stocks.
+  Adding other sources could support ETF's and crypto's for instance.
+* Complete the trading implementation, as the order placement is missing.
+  Currently only the fetching of account and depot information is implemented.
+
 Virtual Environment
 -------------------
 
