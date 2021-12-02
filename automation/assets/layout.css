@@ -132,7 +132,8 @@ body {
   line-height: 1.6;
   font-weight: 400;
   font-family: "Open Sans", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color: rgb(50, 50, 50); }
+  background-color:rgb(40, 40, 40);
+  color: rgb(200, 200, 200); }
 
 
 /* Typography
@@ -324,7 +325,8 @@ th:not(.CalendarDay),
 td:not(.CalendarDay) {
   padding: 12px 15px;
   text-align: left;
-  border-bottom: 1px solid #E1E1E1; }
+  border: 1px solid #00FF00;
+  border-bottom: 1px solid #00E1E1; }
 th:first-child:not(.CalendarDay),
 td:first-child:not(.CalendarDay) {
   padding-left: 0; }
