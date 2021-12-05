@@ -1,25 +1,52 @@
-Source (src)
-============
+Core
+====
+
+.. toctree::
+   :maxdepth: 2
+
+   data_access
+   analysis
+   session
+
+Trading analysis libraries
+==========================
 
 .. toctree::
    :maxdepth: 1
 
-   data_access
-   session
+   preprocessing
+   basic
+   arbitration
+   performance_simulation
 
-Libraries (lib)
----------------
+Trading analysis methods  libraries
+===================================
+
+.. toctree::
+   :maxdepth: 1
+
+   macd
+   macd_advanced
+
+Trader automation libraries
+===========================
+
+.. toctree::
+   :maxdepth: 1
+
+   access
+   accounts
+   depots
+   orders
+
+General libraries
+=================
+
+Test
 
 .. toctree::
    :maxdepth: 1
 
    config
    messages
-
-Constants (invst_const)
-^^^^^^^^^^^^^^^^^^^^^^^
-
-.. toctree::
-   :maxdepth: 1
-
    constants

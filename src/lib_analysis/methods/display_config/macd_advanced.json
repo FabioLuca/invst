@@ -1,0 +1,191 @@
+{
+    "general": {
+        "display_name": "Advanced MACD",
+        "save_name": "Advanced_MACD",
+        "title_font_size": 20,
+        "legend_title_font_size": 12,
+        "count_subplots_rows": 4,
+        "count_subplots_columns": 1,
+        "xaxis_rangeslider_visible": false,
+        "theme": "plotly",
+        "bargap": 0.02,
+        "ohlc_increasing_color": "#95cfa4",
+        "ohlc_decreasing_color": "#d6a19c",
+        "shared_x_axes": true,
+        "vertical_spacing": 0.05,
+        "subplots_rows_heights": [
+            0.4,
+            0.2,
+            0.2,
+            0.2
+        ],
+        "subplots_secondary_y_axis": [
+            true,
+            true,
+            true,
+            true
+        ],
+        "subplots_left_y_axis_titles": [
+            "Close Value (USD)",
+            "MACD Analysis",
+            "Recommendation",
+            "Simulation"
+        ],
+        "subplots_right_y_axis_titles": [
+            "Test 1",
+            "",
+            "Test",
+            ""
+        ],
+        "subplots_x_axis_titles": [
+            " ",
+            " ",
+            " ",
+            "Time"
+        ]
+    },
+    "components": {
+        "Close Final": {
+            "display_name": "Close Final",
+            "show": true,
+            "type": "Line",
+            "color": "#000000",
+            "opacity": 0.5,
+            "width": 1.5,
+            "dash": "solid",
+            "shape": "linear",
+            "subplot_horizontal": 1,
+            "subplot_vertical": 1,
+            "secondary_y": false
+        },
+        "MACD EMA 12": {
+            "display_name": "EMA 12",
+            "show": true,
+            "type": "Line",
+            "color": "#0067bf",
+            "opacity": 1,
+            "width": 1.5,
+            "dash": "solid",
+            "shape": "linear",
+            "subplot_horizontal": 1,
+            "subplot_vertical": 1,
+            "secondary_y": false
+        },
+        "MACD EMA 26": {
+            "display_name": "EMA 26",
+            "show": true,
+            "type": "Line",
+            "color": "#00437d",
+            "opacity": 1,
+            "width": 1.5,
+            "dash": "solid",
+            "shape": "linear",
+            "subplot_horizontal": 1,
+            "subplot_vertical": 1,
+            "secondary_y": false
+        },
+        "MACD Line": {
+            "display_name": "MACD Line",
+            "show": true,
+            "type": "Line",
+            "color": "#ba1116",
+            "opacity": 0.3,
+            "width": 1.5,
+            "dash": "solid",
+            "shape": "linear",
+            "subplot_horizontal": 1,
+            "subplot_vertical": 2,
+            "secondary_y": true
+        },
+        "MACD Signal": {
+            "display_name": "MACD Signal",
+            "show": true,
+            "type": "Line",
+            "color": "#d94565",
+            "opacity": 0.3,
+            "width": 1.5,
+            "dash": "solid",
+            "shape": "linear",
+            "subplot_horizontal": 1,
+            "subplot_vertical": 2,
+            "secondary_y": true
+        },
+        "MACD Histogram": {
+            "display_name": "MACD Histogram",
+            "show": true,
+            "type": "Bar",
+            "color_positive": "#096e22",
+            "color_negative": "#69060b",
+            "opacity": 1,
+            "width": 2,
+            "subplot_horizontal": 1,
+            "subplot_vertical": 2,
+            "secondary_y": false
+        },
+        "MACD Histogram Integral": {
+            "display_name": "MACD Histogram Integral",
+            "show": false,
+            "type": "Line",
+            "color": "#888888",
+            "opacity": 1,
+            "width": 1.5,
+            "dash": "solid",
+            "shape": "linear",
+            "subplot_horizontal": 1,
+            "subplot_vertical": 3,
+            "secondary_y": true
+        },
+        "MACD Recommendation": {
+            "display_name": "MACD Recommendation",
+            "show": true,
+            "type": "Line",
+            "color": "#555555",
+            "opacity": 1,
+            "width": 1.5,
+            "dash": "solid",
+            "shape": "hv",
+            "subplot_horizontal": 1,
+            "subplot_vertical": 3,
+            "secondary_y": false
+        },
+        "MACD Recommended Events": {
+            "display_name": "MACD Recommended Events",
+            "show": true,
+            "type": "Line",
+            "color": "#FF0000",
+            "opacity": 0.2,
+            "width": 1.5,
+            "dash": "solid",
+            "shape": "hv",
+            "subplot_horizontal": 1,
+            "subplot_vertical": 3,
+            "secondary_y": false
+        },
+        "MACD Simulation Reference": {
+            "display_name": "MACD Simulation Reference",
+            "show": true,
+            "type": "Line",
+            "color": "#FF0000",
+            "opacity": 1,
+            "width": 1.5,
+            "dash": "solid",
+            "shape": "linear",
+            "subplot_horizontal": 1,
+            "subplot_vertical": 4,
+            "secondary_y": false
+        },
+        "MACD Simulation": {
+            "display_name": "MACD Simulation",
+            "show": true,
+            "type": "Line",
+            "color": "#000000",
+            "opacity": 1,
+            "width": 1.5,
+            "dash": "solid",
+            "shape": "linear",
+            "subplot_horizontal": 1,
+            "subplot_vertical": 4,
+            "secondary_y": false
+        }
+    }
+}

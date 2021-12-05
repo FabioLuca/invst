@@ -110,11 +110,7 @@ class DataAccess:
 
     def __init__(
             self, ticker, source, access_config, access_userdata, logger_name):
-        """metodo paa
-
-        asasdfvr
-        vfvfvfv
-        """
+        """Initialization method."""
 
         # ----------------------------------------------------------------------
         #   Defines the parameters of the class

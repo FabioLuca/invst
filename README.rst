@@ -43,6 +43,27 @@ needs to be replaced by the string provided as API key::
 
 For this goal, the core implementation is done in the `data_access.py` file.
 
+Analyze data for taking decisions (hold, buy, sell)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The analysis of the data in order to decide on an action to be taken is not
+straight forward, since there are plural methodologies available, on many
+levels of commplexity.
+
+The initial implementation is based on a simple MACD (Moving Average
+Convergence Divergence) method. However the basic framework around is intended
+to cover more general cases. The framework consists of:
+
+#. **Pre-Process data**: Adequate or fix data sets before analysis
+#. **Apply individual methods**: Any possible method of analysis can be applied
+   independent from each other. The target is that each one produces its own
+   action recommendation (buy, sell or hold).
+#. **Arbitration**: Evaluate all the previous recommendations and produces a
+   final recommendation.
+
+As as additional steps towards analysis, each method will produce a graphical
+report to evaluate and also debug the results.
+
 Execute an order into a broker
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -85,6 +106,8 @@ To do's and future work
 
 * Fetch the data from tickets besides AlphaVantage, as it only supports stocks.
   Adding other sources could support ETF's and crypto's for instance.
+* Fetch data from API's which provide more up-to-data data, without bigger
+  delays such as 1-day delay, since it can impact the algorithm decision.
 * Complete the trading implementation, as the order placement is missing.
   Currently only the fetching of account and depot information is implemented.
 

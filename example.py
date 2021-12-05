@@ -19,12 +19,14 @@
 
 """
 import logging
+from sys import exit
 from pathlib import Path
 from datetime import datetime
 import pandas as pd
 from src.lib.config import Config
-from src.session import Session
 from src.data_access import DataAccess
+from src.analysis import Analysis
+from src.session import Session
 
 from src.lib.invst_const import constants as C
 
@@ -88,17 +90,32 @@ if __name__ == "__main__":
         type_series="TIMESERIES", period="DAILY"
     )
 
-    goog = DataAccess(
-        ticker="GOOG",
-        source=config.data_source_fetch_name,
-        access_config=config.data_source_fetch_access_data,
-        access_userdata=config.data_source_fetch_user_data,
-        logger_name=LOGGER_NAME,
-    )
+    goog = DataAccess(ticker="GOOG",
+                      source=config.data_source_fetch_name,
+                      access_config=config.data_source_fetch_access_data,
+                      access_userdata=config.data_source_fetch_user_data,
+                      logger_name=LOGGER_NAME,
+                      )
 
     goog_values, flag, level, message = goog.update_values(
         type_series="TIMESERIES", period="DAILY"
     )
+
+    # --------------------------------------------------------------------------
+    #   Perform analysis of the data.
+    # --------------------------------------------------------------------------
+    goog_analysis = Analysis(symbol="GOOG",
+                             ohlc_data=goog_values,
+                             initial_value=10000,
+                             stopgain=1.4,
+                             stoploss=0.85,
+                             operation_cost=5,
+                             tax_percentage=0.1,
+                             logger_name=LOGGER_NAME,
+                             display_analysis=False,
+                             save_analysis=True)
+    decision = goog_analysis.analyze()
+    exit(0)
 
     # --------------------------------------------------------------------------
     #   Example of accessing a Comdirect account and fetching information.
