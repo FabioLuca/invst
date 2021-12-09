@@ -1,0 +1,374 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Welcome to invst-access’s documentation! &#8212; Invst Access 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Core" href="modules.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="welcome-to-invst-access-s-documentation">
+<h1>Welcome to invst-access’s documentation!<a class="headerlink" href="#welcome-to-invst-access-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Core</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="data_access.html">Data Access module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="analysis.html">Data Analysis module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="session.html">Session module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#trading-analysis">Trading analysis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="preprocessing.html">Pre-Processing module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic.html">Basic module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arbitration.html">Arbitration module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance_simulation.html">Performance Simulation module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#trading-analysis-methods">Trading analysis methods</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="macd.html">MACD module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="macd_advanced.html">MACD Advanced module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rsi_sma.html">RSI SMA module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rsi_ema.html">RSI EMA module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="combined.html">Combined module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#trader-automation">Trader automation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="access.html">Access module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="accounts.html">Accounts module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="depots.html">Depots module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="orders.html">Orders module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#general-libraries">General libraries</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="config.html">Config module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="messages.html">Messages module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="constants.html">Constants module</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="general">
+<h1>General<a class="headerlink" href="#general" title="Permalink to this headline">¶</a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Use this project at your own risk. Authors are not responsible for losses
+due to the trading strategy, or issues due to account access.</p>
+</div>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>This project goal is multiple, and split into different elements:</p>
+<ol class="arabic simple">
+<li><p>Fetch market data series (history)</p></li>
+<li><p>Analyze data for taking decisions (hold, buy, sell)</p></li>
+<li><p>Execute an order into a broker</p></li>
+<li><p>Fetch account status</p></li>
+</ol>
+<section id="fetch-market-data-series-history">
+<h3>Fetch market data series (history)<a class="headerlink" href="#fetch-market-data-series-history" title="Permalink to this headline">¶</a></h3>
+<p>The first element is to provide an encapsulation for accessing trading values
+history for a given ticker by using the AlphaVantage API. Although other
+sources are possible, they were not completely implemented here. The output for
+a chosen ticker (stock) is a Pandas dataframe containing the open-high-low-close
+values, also known as OHLC. More data is also available in the dataframe, as the
+volume and adjusted close values.</p>
+<p>To work with the project an API key to AlphaVantage is necessary. Please follow
+the instructions on their website to acquire one. One available, a file named
+<cite>api-cfg-access.json</cite> need to be placed directly in the <cite>cfg</cite> folder. The
+structure of the Json data follows the template below, where <cite>&lt;YOUR API KEY&gt;</cite>
+needs to be replaced by the string provided as API key:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;api&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;fetching&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;AlphaVantage&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;user_data&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;APIKEY&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;YOUR API KEY&gt;&quot;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>For this goal, the core implementation is done in the <cite>data_access.py</cite> file.</p>
+</section>
+<section id="analyze-data-for-taking-decisions-hold-buy-sell">
+<h3>Analyze data for taking decisions (hold, buy, sell)<a class="headerlink" href="#analyze-data-for-taking-decisions-hold-buy-sell" title="Permalink to this headline">¶</a></h3>
+<p>The analysis of the data in order to decide on an action to be taken is not
+straight forward, since there are plural methodologies available, on many
+levels of commplexity.</p>
+<p>The initial implementation is based on a simple MACD (Moving Average
+Convergence Divergence) method. However the basic framework around is intended
+to cover more general cases. The framework consists of:</p>
+<ol class="arabic simple">
+<li><p><strong>Pre-Process data</strong>: Adequate or fix data sets before analysis</p></li>
+<li><p><strong>Apply individual methods</strong>: Any possible method of analysis can be applied
+independent from each other. The target is that each one produces its own
+action recommendation (buy, sell or hold).</p></li>
+<li><p><strong>Arbitration</strong>: Evaluate all the previous recommendations and produces a
+final recommendation.</p></li>
+</ol>
+<p>As as additional steps towards analysis, each method will produce a graphical
+report to evaluate and also debug the results.</p>
+</section>
+<section id="execute-an-order-into-a-broker">
+<h3>Execute an order into a broker<a class="headerlink" href="#execute-an-order-into-a-broker" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="fetch-account-status">
+<h3>Fetch account status<a class="headerlink" href="#fetch-account-status" title="Permalink to this headline">¶</a></h3>
+<p>As a mean to provide capacity to manage the operation, the Comdirect account
+status is tracked by fetching all the current balances and depots informations
+(values, prices), which are provided as Pandas dataframes and can be stored as
+Micrsoft Excel files, for example, as provided in <cite>example.py</cite>, or stored in
+databases for further analysis (e.g. display evolution in chart).</p>
+<p>In terms of implementation, all the Comdirect API related access and handling
+is done by the <cite>session.py</cite>.</p>
+<p>For access, similar to other cases above, the information must be provided in
+the <cite>api-cfg-access.json</cite> (to be placed in the <cite>cfg</cite> folder). The structure
+to be followed:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;api&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;trading&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;Comdirect&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;user_data&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;client_id&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;YOUR CLIENT ID&gt;&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;client_secret&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;YOUR CLIENT SECRET&gt;&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;account_number&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;YOUR ACCOUNT NUMBER&gt;&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;pin&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;YOUR ACCOUNT PIN&gt;&quot;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The client ID and secret can be obtanined from the Comdirect website. Please
+follow the instructions from their API documentation on how to obtain them.</p>
+</section>
+</section>
+<section id="to-do-s-and-future-work">
+<h2>To do’s and future work<a class="headerlink" href="#to-do-s-and-future-work" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Fetch the data from tickets besides AlphaVantage, as it only supports stocks.
+Adding other sources could support ETF’s and crypto’s for instance.</p></li>
+<li><p>Fetch data from API’s which provide more up-to-data data, without bigger
+delays such as 1-day delay, since it can impact the algorithm decision.</p></li>
+<li><p>Complete the trading implementation, as the order placement is missing.
+Currently only the fetching of account and depot information is implemented.</p></li>
+</ul>
+</section>
+<section id="virtual-environment">
+<h2>Virtual Environment<a class="headerlink" href="#virtual-environment" title="Permalink to this headline">¶</a></h2>
+<p>It is recommended to run the project with a Virtual Environment. To do so,
+first make sure to have the package available in you computer:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">virtualenv</span>
+</pre></div>
+</div>
+<p>This step should be common between Linux and Windows systems.</p>
+<p>Once available (succesful install), a virtual environement can be created by
+the following steps:</p>
+<ol class="arabic">
+<li><p>Go to project root folder</p></li>
+<li><p>Run the command below, where <cite>&lt;name_of_virtualenv&gt;</cite> is to be replacd by the
+name desired, for example: <cite>venv</cite>. Note that the command for python might
+change depending on the installation:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">venv</span> <span class="o">&lt;</span><span class="n">name_of_virtualenv</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>The commmand above should be similar between Linux and Windows systems.</p>
+</li>
+</ol>
+<p>After creation, the virtual environmnet can be started by the following
+command. Keep in mind that the <cite>&lt;name_of_virtualenv&gt;</cite> is to be replaced by the
+name definied on the previous step. for Linux:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="o">&lt;</span><span class="n">name_of_virtualenv</span><span class="o">&gt;/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>
+</pre></div>
+</div>
+<p>For Windows systems:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">name_of_virtualenv</span><span class="o">&gt;/</span><span class="n">Scripts</span><span class="o">/</span><span class="n">activate</span>
+</pre></div>
+</div>
+<p>Once started, in the terminal it will be indicated that a virtual environment
+is running by a tag <cite>(&lt;name_of_virtualenv&gt;)</cite>.</p>
+<p>After started the virtual environement, the necessary packages for this project
+can be installed by the command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">src</span><span class="o">/</span><span class="n">Requirements</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+<p>Later, the environmenet can be deactivate when necessary by the command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">deactivate</span>
+</pre></div>
+</div>
+</section>
+<section id="accessing-the-documentation">
+<h2>Accessing the documentation<a class="headerlink" href="#accessing-the-documentation" title="Permalink to this headline">¶</a></h2>
+<p>The documentation can be generated by using Sphinx. In order to do so, first
+acrivate the virtual environement, and then from the project <cite>docs</cite> folder use
+the command below. This is valid for Linux or Windows when using its terminal:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">html</span>
+</pre></div>
+</div>
+<p>In case of Windows with Powershell, the proper command is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span>\<span class="n">make</span><span class="o">.</span><span class="n">bat</span> <span class="n">html</span>
+</pre></div>
+</div>
+<p>The resulting documentation (<cite>index.html</cite>) is available in the folder
+<cite>docs/build/html</cite>.</p>
+</section>
+<section id="unit-testing">
+<h2>Unit testing<a class="headerlink" href="#unit-testing" title="Permalink to this headline">¶</a></h2>
+<p>Unit test cases are available in the <cite>tests</cite> folder. The tests are based in the
+<cite>pytest</cite> package. To run all the tests, after activating the virtual
+environement, use the command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pytest</span> <span class="n">tests</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>In case to run individual test files, for example <cite>test_access.py</cite>, then use
+the command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pytest</span> <span class="n">tests</span><span class="o">/</span><span class="n">test_access</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="use-examples">
+<h1>Use examples<a class="headerlink" href="#use-examples" title="Permalink to this headline">¶</a></h1>
+<section id="module-example">
+<span id="example-py"></span><h2>example.py<a class="headerlink" href="#module-example" title="Permalink to this headline">¶</a></h2>
+<p>Example for the use of the project. The following steps are taken:</p>
+<ol class="arabic simple">
+<li><p><strong>Create a logger</strong>, so all the steps during the execution are presented,
+either to have information of the current status to the user, or to support
+debugging. By default, the display to the user is done with <cite>info</cite> level,
+whilst the storrage in the log files are done with <cite>debug</cite> level.</p></li>
+<li><p><strong>Load the configurations</strong>, since the project depends on configuration
+input for the access of the API’s, the <cite>.json</cite> files are loaded and the
+content stored in dictionaries to be used by the next steps.</p></li>
+<li><p><strong>Fetch ticker data</strong> from AlphaVantage API. For example purpose, two cases
+are done, first trying to fetch from an invalid ticker (<cite>GOOG2</cite>) and then
+in sequence trying to fetch for a list of valid symbols.</p></li>
+<li><p><strong>Perform analysis</strong> per symbol, producing a result for each one. See the
+documentation for the strategy analysis for more details.</p></li>
+<li><p><strong>Display</strong> on the console an overview of the results.</p></li>
+<li><p><strong>Fetch depot status</strong> from Comdirect account, where for each available
+element in the depot account, its values (e.g. current price, purchase price)
+are returned to be used for performance tracking.</p></li>
+<li><p><strong>Store the results</strong> in Microsoft Excel files, saving a different file per
+day (current date is used in the filename), and each data having a separate
+sheet in the <cite>.xlsx</cite> file.</p></li>
+</ol>
+</section>
+</section>
+<section id="automations">
+<h1>Automations<a class="headerlink" href="#automations" title="Permalink to this headline">¶</a></h1>
+<section id="report-py">
+<h2>report.py<a class="headerlink" href="#report-py" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">Invst Access</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#trading-analysis">Trading analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#trading-analysis-methods">Trading analysis methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#trader-automation">Trader automation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#general-libraries">General libraries</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="modules.html" title="next chapter">Core</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Fabio de Luca.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

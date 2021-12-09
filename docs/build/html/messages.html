@@ -1,0 +1,158 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Messages module &#8212; Invst Access 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Constants module" href="constants.html" />
+    <link rel="prev" title="Config module" href="config.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-src.lib.messages">
+<span id="messages-module"></span><h1>Messages module<a class="headerlink" href="#module-src.lib.messages" title="Permalink to this headline">¶</a></h1>
+<p>Module for centralized management of messages to the user and logging.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.lib.messages.get_status">
+<span class="sig-prename descclassname"><span class="pre">src.lib.messages.</span></span><span class="sig-name descname"><span class="pre">get_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.lib.messages.get_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the content (flag, level and message) for a given ID and adds an
+entry to the logger, according to the level of the content. The logger
+must be passed to the method.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There are 3 elements as general abstraction, described below:</p>
+<ul class="simple">
+<li><p><strong>flag</strong>: status of success, neutral or fail. Neutral is intended
+only for cases where a clear definition of success or fail
+is not possible.</p></li>
+<li><p><strong>level</strong>: level for the logging: <cite>DEBUG</cite>, <cite>INFO</cite>, <cite>WARNING</cite>, <cite>ERROR</cite>.
+By default (proposal from <cite>example.py</cite>) the console will display up to
+<cite>INFO</cite> level, while the log file will store up to <cite>DEBUG</cite> level.</p></li>
+<li><p><strong>message</strong>: text to be displayed or logged for supporting user.</p></li>
+</ul>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>logger_name</strong> (<em>string</em>) – Logger name for handling the content. This follows the <cite>logging</cite>
+library for Python.</p></li>
+<li><p><strong>message_id</strong> (<em>string</em>) – Identifies which message from the dictionary to be returned, along
+with the flag and level information.</p></li>
+<li><p><strong>param</strong> (<em>tuple of strings</em><em>, </em><em>optional</em>) – For messages which have parameters to be set (using %s), this
+parameter will be used in the order passed. In case this
+parameter is passed as a single string, it will be automatically
+converted into a tuple (of 1 entry).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Invst Access</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Source (src)</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="data_access.html">Data Access module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="analysis.html">Data Analysis module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="session.html">Session module</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html#libraries-lib">Libraries (lib)</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="config.html">Config module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Messages module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.html#constants-invst-const">Constants (invst_const)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">Source (src)</a><ul>
+      <li>Previous: <a href="config.html" title="previous chapter">Config module</a></li>
+      <li>Next: <a href="constants.html" title="next chapter">Constants module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Fabio de Luca.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/messages.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
