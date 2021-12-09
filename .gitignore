@@ -67,8 +67,10 @@ instance/
 # Scrapy stuff:
 .scrapy
 
-# Sphinx documentation
-docs/_build/
+# Sphinx documentation -- forced to be added for github pages
+# docs/_build/
+!docs/build/
+docs/build/doctrees/
 
 # PyBuilder
 target/
