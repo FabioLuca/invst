@@ -242,6 +242,24 @@ def summary_table(results_summary, excel_filename):
         worksheet.write(0, col_num, value, format_headers)
         col_num = col_num + 1
 
+    worksheet.freeze_panes(1, 0)
+
+    worksheet.autofilter(f"A1:M{df_pivot.shape[0] + 1}")
+
+    today_string = datetime.today().strftime('%Y-%m-%d')
+    #analysis_folder = Path.cwd().resolve() / "export" / "analysis" / today_string
+
+    for row_num in range(df_pivot.shape[0]):
+        symbol_value = df_pivot["Symbol"].iloc[row_num]
+        method_value = df_pivot["Method"].iloc[row_num]
+        string_value = symbol_value
+        # file_link = analysis_folder / \
+        #     f"Analysis {method_value} {symbol_value}.html"
+        string_fomular = f'=HYPERLINK(_xlfn.CONCAT(LEFT(CELL("filename"),SEARCH("[",CELL("filename"))-1),"analysis\{today_string}\Analysis {method_value} {symbol_value}.html"), "{symbol_value}")'
+        worksheet.write_formula(f"B{row_num + 2}", string_fomular)
+        # worksheet.write_url(f"B{row_num + 2}",
+        #                     string_fomular, string=string_value)
+
     writer.save()
 
     return df_pivot
