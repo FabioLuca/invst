@@ -1,7 +1,7 @@
-Config module
-=============
+Configuration management
+--------------------------------------------------------------------------------
 
-.. automodule:: lib.config
+.. automodule:: src.lib.config
    :members:
    :undoc-members:
    :show-inheritance:

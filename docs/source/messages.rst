@@ -1,7 +1,7 @@
-Messages module
-===============
+Messages management
+--------------------------------------------------------------------------------
 
-.. automodule:: lib.messages
+.. automodule:: src.lib.messages
    :members:
    :undoc-members:
    :show-inheritance:

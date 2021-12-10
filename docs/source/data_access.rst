@@ -1,7 +1,7 @@
-Data Access module
-==================
+Data Access (AlphaVantage)
+--------------------------------------------------------------------------------
 
-.. automodule:: data_access
+.. automodule:: src.data_access
    :members:
    :undoc-members:
    :show-inheritance:

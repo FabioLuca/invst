@@ -67,8 +67,11 @@ instance/
 # Scrapy stuff:
 .scrapy
 
-# Sphinx documentation
-docs/_build/
+# Sphinx documentation -- forced to be added for github pages
+# docs/_build/
+!docs/build/
+docs/build/doctrees/
+docs/build/html/_sources
 
 # PyBuilder
 target/
@@ -138,3 +141,7 @@ dmypy.json
 !.vscode/extensions.json
 
 logs/
+
+# Any kind of export from the script
+Export*xlsx
+export/

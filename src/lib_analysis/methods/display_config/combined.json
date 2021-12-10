@@ -1,0 +1,128 @@
+{
+    "general": {
+        "display_name": "Combined",
+        "save_name": "COMB",
+        "title_font_size": 20,
+        "legend_title_font_size": 12,
+        "count_subplots_rows": 3,
+        "count_subplots_columns": 1,
+        "xaxis_rangeslider_visible": false,
+        "theme": "plotly",
+        "bargap": 0.02,
+        "ohlc_increasing_color": "#95cfa4",
+        "ohlc_decreasing_color": "#d6a19c",
+        "shared_x_axes": true,
+        "vertical_spacing": 0.05,
+        "subplots_rows_heights": [
+            0.6,
+            0.2,
+            0.2
+        ],
+        "subplots_secondary_y_axis": [
+            true,
+            true,
+            true
+        ],
+        "subplots_left_y_axis_titles": [
+            "Close Value (USD) and Analysis",
+            "Recommendation",
+            "Simulation"
+        ],
+        "subplots_right_y_axis_titles": [
+            "A",
+            "B",
+            "C"
+        ],
+        "subplots_x_axis_titles": [
+            " ",
+            " ",
+            "Time"
+        ],
+        "categorical_y": [
+            false,
+            true,
+            false
+        ],
+        "categorical_y_order": [
+            [],
+            [
+                "SELL",
+                "HOLD",
+                "BUY"
+            ],
+            []
+        ]
+    },
+    "components": {
+        "Close Final": {
+            "display_name": "Close Final",
+            "show": true,
+            "type": "Line",
+            "categorical": false,
+            "color": "#0067bf",
+            "opacity": 1,
+            "width": 2,
+            "dash": "solid",
+            "shape": "linear",
+            "subplot_horizontal": 1,
+            "subplot_vertical": 1,
+            "secondary_y": false
+        },
+        "Combined Recommendation": {
+            "display_name": "Recommendation",
+            "show": true,
+            "type": "Line",
+            "categorical": false,
+            "color": "#555555",
+            "opacity": 1,
+            "width": 1.5,
+            "dash": "solid",
+            "shape": "hv",
+            "subplot_horizontal": 1,
+            "subplot_vertical": 2,
+            "secondary_y": false
+        },
+        "Combined Recommended Events": {
+            "display_name": "Recommended Events",
+            "show": true,
+            "type": "Line",
+            "categorical": false,
+            "color": "#FF0000",
+            "opacity": 0.2,
+            "width": 1.5,
+            "dash": "solid",
+            "shape": "hv",
+            "subplot_horizontal": 1,
+            "subplot_vertical": 2,
+            "secondary_y": false
+        },
+        "Combined Simulation Reference": {
+            "display_name": "Simulation Reference",
+            "show": true,
+            "type": "Line",
+            "categorical": false,
+            "color": "#FF0000",
+            "opacity": 1,
+            "width": 1.5,
+            "dash": "solid",
+            "shape": "linear",
+            "subplot_horizontal": 1,
+            "subplot_vertical": 3,
+            "secondary_y": false
+        },
+        "Combined Simulation": {
+            "display_name": "Simulation",
+            "show": true,
+            "type": "Line",
+            "categorical": false,
+            "color": "#000000",
+            "opacity": 1,
+            "width": 1.5,
+            "dash": "solid",
+            "shape": "linear",
+            "subplot_horizontal": 1,
+            "subplot_vertical": 3,
+            "secondary_y": false
+        }
+    }
+}

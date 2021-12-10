@@ -1,9 +1,16 @@
 pytest
 requests
 pandas
+pandas-ta
 pylint
 matplotlib
 Sphinx
 rinohtype
 datetime
 uuid
+openpyxl
+xlsxwriter
+plotly
+dash
+tensorflow
+scikit-learn

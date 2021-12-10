@@ -1,7 +1,7 @@
-Constants module
-================
+Constants
+--------------------------------------------------------------------------------
 
-.. automodule:: lib.invst_const.constants
+.. automodule:: src.lib.invst_const.constants
    :members:
    :undoc-members:
    :show-inheritance:
