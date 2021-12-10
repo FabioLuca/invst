@@ -272,6 +272,13 @@ sheet in the <cite>.xlsx</cite> file.</p></li>
 </section>
 <section id="automation">
 <h2>Automation<a class="headerlink" href="#automation" title="Permalink to this headline">¶</a></h2>
+<p>As a general note when running the automation scripts, to be able to
+successfu execute them, due to importing and relative path management, the
+following command is to be used from the project root folder:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">automation</span><span class="o">.&lt;</span><span class="n">Script</span> <span class="n">name</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>For the <cite>&lt;Script name&gt;</cite> the .py extension shall not be used.</p>
 <section id="module-automation.comdirect_status_report">
 <span id="comdirect-status-report-py"></span><h3>comdirect_status_report.py<a class="headerlink" href="#module-automation.comdirect_status_report" title="Permalink to this headline">¶</a></h3>
 <p>Automation script to display charts and reports of the data collected and
