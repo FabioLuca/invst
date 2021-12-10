@@ -28,6 +28,15 @@ class Basic:
                 If passed, the result of the operation will be stored in the new
                 dataframe, otherwise, the original dataframe is used.
 
+        Returns
+        -------
+            None
+                The outcome from the calculation is not explicitly returned, but
+                added to the Pandas dataframe as new columns. The new columns
+                are:
+
+                #. `result_column`: Result of the difference operation.
+
         """
         if result_column == "":
             result_column = f"{minuend_column} minus {subtrahend_column}"
@@ -62,6 +71,16 @@ class Basic:
             result_dataframe: Pandas Dataframe, optional
                 If passed, the result of the operation will be stored in the new
                 dataframe, otherwise, the original dataframe is used.
+
+        Returns
+        -------
+            None
+                The outcome from the calculation is not explicitly returned, but
+                added to the Pandas dataframe as new columns. The new columns
+                are:
+
+                #. `result_column`: Result of the scalar multiplication
+                   operation.
 
         """
         if result_column == "":
@@ -151,7 +170,23 @@ class Basic:
 
         Parameters
         ----------
-            none
+            None
+                The input for the calculation is based on the Pandas dataframe
+                data which is already available. The expected column for
+                this operation is:
+
+                #. `Open`
+                #. `Close Final`
+
+        Returns
+        -------
+            None
+                The outcome from the calculation is not explicitly returned, but
+                added to the Pandas dataframe as new columns. The new columns
+                are:
+
+                #. `Delta`: Result of the difference between `Close Final` and
+                   `Open` values for every sample.
 
         """
         self.ohlc_dataset.loc[:, "Delta"] = self.calculate_difference(
