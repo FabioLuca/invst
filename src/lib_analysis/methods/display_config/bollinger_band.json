@@ -1,5 +1,6 @@
 {
     "general": {
+        "reference_name": "BBANDS",
         "display_name": "Bollinger Bands",
         "save_name": "BBANDS",
         "title_font_size": 20,

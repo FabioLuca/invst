@@ -1,5 +1,6 @@
 {
     "general": {
+        "reference_name": "Crash",
         "display_name": "Crash",
         "save_name": "CRASH",
         "title_font_size": 20,
