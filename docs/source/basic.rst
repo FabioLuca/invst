@@ -1,5 +1,5 @@
-Basic module
-============
+Basic operations
+--------------------------------------------------------------------------------
 
 .. automodule:: src.lib_analysis.basic
    :members:

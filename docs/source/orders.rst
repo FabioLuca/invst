@@ -1,5 +1,5 @@
-Orders module
-=============
+Orders
+--------------------------------------------------------------------------------
 
 .. automodule:: src.lib_comdirect.orders
    :members:

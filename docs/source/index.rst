@@ -3,32 +3,34 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to invst-access's documentation!
-========================================
+Welcome to INVST documentation!
+================================================================================
 
+Contents
+--------------------------------------------------------------------------------
 .. toctree::
-   :maxdepth: 4
-   :caption: Contents:
+   :maxdepth: 1
+   :name: mastertoc
 
    modules
-
-General
-=======
+   
+.. General
+.. =======
 
 .. include:: ../../README.rst
 
 Use examples
-============
+--------------------------------------------------------------------------------
 
 .. include:: example.rst
 
-Automations
-===========
+Automation
+--------------------------------------------------------------------------------
 
-.. include:: report.rst  
+.. include:: report.rst
 
 Indices and tables
-==================
+--------------------------------------------------------------------------------
 
 * :ref:`genindex`
 * :ref:`modindex`

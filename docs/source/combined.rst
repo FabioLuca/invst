@@ -1,7 +1,7 @@
-Performance Simulation
+Combined strategy
 --------------------------------------------------------------------------------
 
-.. automodule:: src.lib_analysis.performance_simulation
+.. automodule:: src.lib_analysis.methods.combined
    :members:
    :undoc-members:
    :show-inheritance:

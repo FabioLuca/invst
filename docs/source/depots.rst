@@ -1,5 +1,5 @@
-Depots module
-=============
+Depots
+--------------------------------------------------------------------------------
 
 .. automodule:: src.lib_comdirect.depots
    :members:

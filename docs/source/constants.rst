@@ -1,5 +1,5 @@
-Constants module
-================
+Constants
+--------------------------------------------------------------------------------
 
 .. automodule:: src.lib.invst_const.constants
    :members:

@@ -1,15 +1,15 @@
 Core
-====
+================================================================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    data_access
    analysis
    session
 
-Trading analysis libraries
-==========================
+Trading analysis
+================================================================================
 
 .. toctree::
    :maxdepth: 1
@@ -19,17 +19,21 @@ Trading analysis libraries
    arbitration
    performance_simulation
 
-Trading analysis methods  libraries
-===================================
+Analysis methods
+================================================================================
 
 .. toctree::
    :maxdepth: 1
 
    macd
-   macd_advanced
+   .. macd_advanced
+   rsi_sma
+   rsi_ema
+   bbands
+   combined
 
-Trader automation libraries
-===========================
+Trader automation
+================================================================================
 
 .. toctree::
    :maxdepth: 1
@@ -40,9 +44,7 @@ Trader automation libraries
    orders
 
 General libraries
-=================
-
-Test
+================================================================================
 
 .. toctree::
    :maxdepth: 1
@@ -50,3 +52,12 @@ Test
    config
    messages
    constants
+
+Automation and scripts
+================================================================================
+
+.. toctree::
+   :maxdepth: 1
+
+   example
+   report

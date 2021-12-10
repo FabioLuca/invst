@@ -1,5 +1,5 @@
-Accounts module
-===============
+Accounts
+--------------------------------------------------------------------------------
 
 .. automodule:: src.lib_comdirect.accounts
    :members:

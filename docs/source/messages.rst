@@ -1,5 +1,5 @@
-Messages module
-===============
+Messages management
+--------------------------------------------------------------------------------
 
 .. automodule:: src.lib.messages
    :members:

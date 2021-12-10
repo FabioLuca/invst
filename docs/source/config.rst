@@ -1,5 +1,5 @@
-Config module
-=============
+Configuration management
+--------------------------------------------------------------------------------
 
 .. automodule:: src.lib.config
    :members:

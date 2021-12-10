@@ -1,5 +1,5 @@
-Pre-Processing module
-=====================
+Pre-Processing
+--------------------------------------------------------------------------------
 
 .. automodule:: src.lib_analysis.preprocessing
    :members:

@@ -1,5 +1,5 @@
-Data Access module
-==================
+Data Access (AlphaVantage)
+--------------------------------------------------------------------------------
 
 .. automodule:: src.data_access
    :members:

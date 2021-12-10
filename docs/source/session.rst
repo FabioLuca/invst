@@ -1,5 +1,5 @@
-Session module
-==============
+Trading session (Comdirect)
+--------------------------------------------------------------------------------
 
 .. automodule:: src.session
    :members:

@@ -1,5 +1,5 @@
-Arbitration module
-==================
+Arbitration
+--------------------------------------------------------------------------------
 
 .. automodule:: src.lib_analysis.arbitration
    :members:
