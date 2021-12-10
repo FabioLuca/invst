@@ -1,0 +1,154 @@
+{
+    "general": {
+        "display_name": "Arbitration",
+        "save_name": "Arbitration",
+        "title_font_size": 20,
+        "legend_title_font_size": 12,
+        "count_subplots_rows": 5,
+        "count_subplots_columns": 1,
+        "xaxis_rangeslider_visible": false,
+        "theme": "plotly",
+        "bargap": 0.02,
+        "ohlc_increasing_color": "#95cfa4",
+        "ohlc_decreasing_color": "#d6a19c",
+        "shared_x_axes": true,
+        "vertical_spacing": 0.05,
+        "subplots_rows_heights": [
+            0.6,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+        ],
+        "subplots_secondary_y_axis": [
+            true,
+            true,
+            true,
+            true,
+            true
+        ],
+        "subplots_left_y_axis_titles": [
+            "Close Value (USD)",
+            "MACD",
+            "RSI SMA",
+            "RSI EMA",
+            "BBANDS"
+        ],
+        "subplots_right_y_axis_titles": [
+            "",
+            "",
+            "",
+            "",
+            ""
+        ],
+        "subplots_x_axis_titles": [
+            " ",
+            " ",
+            " ",
+            " ",
+            "Time"
+        ],
+        "categorical_y": [
+            false,
+            true,
+            true,
+            true,
+            true
+        ],
+        "categorical_y_order": [
+            [],
+            [
+                "SELL",
+                "HOLD",
+                "BUY"
+            ],
+            [
+                "SELL",
+                "HOLD",
+                "BUY"
+            ],
+            [
+                "SELL",
+                "HOLD",
+                "BUY"
+            ],
+            [
+                "SELL",
+                "HOLD",
+                "BUY"
+            ]
+        ]
+    },
+    "components": {
+        "Close Final": {
+            "display_name": "Close Final",
+            "show": true,
+            "type": "Line",
+            "categorical": false,
+            "color": "#000000",
+            "opacity": 0.5,
+            "width": 1.5,
+            "dash": "solid",
+            "shape": "linear",
+            "subplot_horizontal": 1,
+            "subplot_vertical": 1,
+            "secondary_y": false
+        },
+        "MACD Recommendation": {
+            "display_name": "MACD Recommendation",
+            "show": true,
+            "type": "Line",
+            "categorical": true,
+            "color": "#000000",
+            "opacity": 1,
+            "width": 1.5,
+            "dash": "solid",
+            "shape": "hv",
+            "subplot_horizontal": 1,
+            "subplot_vertical": 2,
+            "secondary_y": false
+        },
+        "RSI SMA Recommendation": {
+            "display_name": "RSI SMA",
+            "show": true,
+            "type": "Line",
+            "categorical": true,
+            "color": "#000000",
+            "opacity": 1,
+            "width": 1.5,
+            "dash": "solid",
+            "shape": "hv",
+            "subplot_horizontal": 1,
+            "subplot_vertical": 3,
+            "secondary_y": false
+        },
+        "RSI EMA Recommendation": {
+            "display_name": "RSI EMA",
+            "show": true,
+            "type": "Line",
+            "categorical": true,
+            "color": "#000000",
+            "opacity": 1,
+            "width": 1.5,
+            "dash": "solid",
+            "shape": "hv",
+            "subplot_horizontal": 1,
+            "subplot_vertical": 4,
+            "secondary_y": false
+        },
+        "BBANDS Recommendation": {
+            "display_name": "BBANDS",
+            "show": true,
+            "type": "Line",
+            "categorical": true,
+            "color": "#000000",
+            "opacity": 1,
+            "width": 1.5,
+            "dash": "solid",
+            "shape": "hv",
+            "subplot_horizontal": 1,
+            "subplot_vertical": 5,
+            "secondary_y": false
+        }
+    }
+}
