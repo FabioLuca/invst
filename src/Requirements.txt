@@ -1,6 +1,7 @@
 pytest
 requests
 pandas
+pandas-ta
 pylint
 matplotlib
 Sphinx
@@ -12,3 +13,4 @@ xlsxwriter
 plotly
 dash
 tensorflow
+scikit-learn
