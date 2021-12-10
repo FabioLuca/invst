@@ -22,12 +22,41 @@ Contents
 Use examples
 --------------------------------------------------------------------------------
 
-.. include:: example.rst
+example.py
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. automodule:: example
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 Automation
 --------------------------------------------------------------------------------
 
-.. include:: report.rst
+comdirect_status_report.py
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. automodule:: automation.comdirect_status_report
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :exclude-members: create_page
+
+comdirect_status_update.py
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. automodule:: automation.comdirect_status_update
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+run_analysis.py
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. automodule:: automation.run_analysis
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 Indices and tables
 --------------------------------------------------------------------------------

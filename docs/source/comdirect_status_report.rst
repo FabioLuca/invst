@@ -1,8 +1,7 @@
-report.py
+comdirect_status_report.py
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. automodule:: automation.report
+.. automodule:: automation.comdirect_status_report
    :members:
    :undoc-members:
    :show-inheritance:
-   :exclude-members: create_page

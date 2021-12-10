@@ -60,4 +60,6 @@ Automation and scripts
    :maxdepth: 1
 
    example
-   report
+   comdirect_status_update
+   comdirect_status_report
+   run_analysis

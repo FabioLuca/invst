@@ -15,7 +15,8 @@
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="example.py" href="example.html" />
+    <link rel="next" title="run_analysis.py" href="run_analysis.html" />
+    <link rel="prev" title="comdirect_status_update.py" href="comdirect_status_update.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -42,16 +43,15 @@ server which can be accessed by the addressed informed on the console, for
 example: <a class="reference external" href="http://127.0.0.1:8050/">http://127.0.0.1:8050/</a></p>
 <p>Only the files matching the pattern <cite>Export_Comdirect_</cite> are evaluated, so any
 other files in the folder will be ignored.</p>
-</section>
-<section id="module-automation.comdirect_status_update">
-<span id="comdirect-status-update-py"></span><h1>comdirect_status_update.py<a class="headerlink" href="#module-automation.comdirect_status_update" title="Permalink to this headline">¶</a></h1>
-<p>Script for getting the current values from Comdirect and storing into Excel
-files, to be used as a tracker.</p>
-</section>
-<section id="module-automation.run_analysis">
-<span id="run-analysis-py"></span><h1>run_analysis.py<a class="headerlink" href="#module-automation.run_analysis" title="Permalink to this headline">¶</a></h1>
-<p>Script for sequence analysis of a list of sysmbols / tickers and providing
-a report of the overall results for performance evaluation.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="automation.comdirect_status_report.create_page">
+<span class="sig-prename descclassname"><span class="pre">automation.comdirect_status_report.</span></span><span class="sig-name descname"><span class="pre">create_page</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#automation.comdirect_status_report.create_page" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a Dash application for displaying the charts. Dash will
+automatically load the .css which are in the assets folder, so there is
+no need to pass them. For that, this method of calling the app is
+necessary: app = dash.Dash(__name__)</p>
+</dd></dl>
+
 </section>
 
 
@@ -85,7 +85,8 @@ a report of the overall results for performance evaluation.</p>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
   <li><a href="modules.html">Core</a><ul>
-      <li>Previous: <a href="example.html" title="previous chapter">example.py</a></li>
+      <li>Previous: <a href="comdirect_status_update.html" title="previous chapter">comdirect_status_update.py</a></li>
+      <li>Next: <a href="run_analysis.html" title="next chapter">run_analysis.py</a></li>
   </ul></li>
   </ul></li>
 </ul>
@@ -120,7 +121,7 @@ a report of the overall results for performance evaluation.</p>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
-      <a href="_sources/report.rst.txt"
+      <a href="_sources/comdirect_status_report.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 

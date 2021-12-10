@@ -267,12 +267,13 @@ are returned to be used for performance tracking.</p></li>
 day (current date is used in the filename), and each data having a separate
 sheet in the <cite>.xlsx</cite> file.</p></li>
 </ol>
+<p>Other files in the automation folder can be used as examples.</p>
 </section>
 </section>
 <section id="automation">
 <h2>Automation<a class="headerlink" href="#automation" title="Permalink to this headline">¶</a></h2>
-<section id="module-automation.report">
-<span id="report-py"></span><h3>report.py<a class="headerlink" href="#module-automation.report" title="Permalink to this headline">¶</a></h3>
+<section id="module-automation.comdirect_status_report">
+<span id="comdirect-status-report-py"></span><h3>comdirect_status_report.py<a class="headerlink" href="#module-automation.comdirect_status_report" title="Permalink to this headline">¶</a></h3>
 <p>Automation script to display charts and reports of the data collected and
 stored in the Excel files in the <cite>export</cite> folder. The script will parse the
 Excel data in the files.</p>
@@ -281,6 +282,16 @@ server which can be accessed by the addressed informed on the console, for
 example: <a class="reference external" href="http://127.0.0.1:8050/">http://127.0.0.1:8050/</a></p>
 <p>Only the files matching the pattern <cite>Export_Comdirect_</cite> are evaluated, so any
 other files in the folder will be ignored.</p>
+</section>
+<section id="module-automation.comdirect_status_update">
+<span id="comdirect-status-update-py"></span><h3>comdirect_status_update.py<a class="headerlink" href="#module-automation.comdirect_status_update" title="Permalink to this headline">¶</a></h3>
+<p>Script for getting the current values from Comdirect and storing into Excel
+files, to be used as a tracker.</p>
+</section>
+<section id="module-automation.run_analysis">
+<span id="run-analysis-py"></span><h3>run_analysis.py<a class="headerlink" href="#module-automation.run_analysis" title="Permalink to this headline">¶</a></h3>
+<p>Script for sequence analysis of a list of sysmbols / tickers and providing
+a report of the overall results for performance evaluation.</p>
 </section>
 </section>
 <section id="indices-and-tables">
