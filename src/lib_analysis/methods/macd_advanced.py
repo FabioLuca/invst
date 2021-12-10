@@ -3,9 +3,10 @@ from src.lib_analysis.basic import Basic
 from src.lib_analysis.arbitration import Arbitration
 from src.lib_analysis.report_analysis import ReportAnalysis
 from src.lib_analysis.performance_simulation import PerformanceSimulation
+from src.lib_analysis.summary import Summary
 
 
-class MACDAdvanced (Basic, Arbitration, PerformanceSimulation, ReportAnalysis):
+class MACDAdvanced (Basic, Arbitration, PerformanceSimulation, ReportAnalysis, Summary):
 
     def calc_MACD_Advanced(self):
         """Calculate de MACD indicator. The MACD is based on the following
@@ -21,7 +22,8 @@ class MACDAdvanced (Basic, Arbitration, PerformanceSimulation, ReportAnalysis):
 
         """
 
-        self.logger.info("Performing MACD analysis")
+        self.logger.info(
+            "Performing Advanced MACD analysis for %s", self.symbol)
 
         self.calc_EMA(source_column="Close Final",
                       length=12,
@@ -55,6 +57,9 @@ class MACDAdvanced (Basic, Arbitration, PerformanceSimulation, ReportAnalysis):
                                        threshold_upper=0.15,
                                        threshold_lower=0.15,
                                        mode="norm",
+                                       values_upper_mid_lower=(
+                                           #    C.BUY, C.HOLD, C.SELL),
+                                           "BUY", "HOLD", "SELL"),
                                        result_column="MACD Recommendation")
 
         self.define_actions(source_column="MACD Recommendation",
@@ -75,3 +80,5 @@ class MACDAdvanced (Basic, Arbitration, PerformanceSimulation, ReportAnalysis):
 
         if self.display_analysis or self.save_analysis:
             self.present_analysis()
+
+        self.get_summary(method_name="MACD Advanced")

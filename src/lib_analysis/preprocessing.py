@@ -27,6 +27,7 @@ class PreProcessing:
         """
 
         self.ohlc_dataset = self.ohlc_dataset.tail(length)
+        #self.ohlc_dataset.reset_index(drop=True, inplace=True)
 
     def define_closure(self):
         """Define the column for closure. This is necessary since depending on

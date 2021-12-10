@@ -1,16 +1,23 @@
 
 import logging
+import json
 import pandas as pd
 from .lib_analysis.preprocessing import PreProcessing
 # from .lib_analysis.basic import Basic
 # from .lib_analysis.arbitration import Arbitration
 
+from .lib_analysis.methods.crash import Crash
 from .lib_analysis.methods.macd import MACD
+from .lib_analysis.methods.rsi_sma import RSI_SMA
+from .lib_analysis.methods.rsi_ema import RSI_EMA
+from .lib_analysis.methods.bollinger_band import BOLLINGER_BANDS
 from .lib_analysis.methods.macd_advanced import MACDAdvanced
 from .lib_analysis.methods.arima import ARIMA
+from .lib_analysis.methods.lstm import LSTM
+from .lib_analysis.methods.combined import CombinedStrategy
 
 
-class Analysis(MACD, MACDAdvanced, ARIMA, PreProcessing):
+class Analysis(Crash, MACD, RSI_SMA, RSI_EMA, BOLLINGER_BANDS, MACDAdvanced, ARIMA, LSTM, CombinedStrategy, PreProcessing):
     """Data analysis class.
 
     Attributes
@@ -40,6 +47,7 @@ class Analysis(MACD, MACDAdvanced, ARIMA, PreProcessing):
     def __init__(self,
                  symbol: str,
                  ohlc_data: pd.DataFrame,
+                 analysis_length: int,
                  initial_value: float,
                  stopgain: float,
                  stoploss: float,
@@ -52,7 +60,13 @@ class Analysis(MACD, MACDAdvanced, ARIMA, PreProcessing):
         self.symbol: str = symbol
         #self.initial_value = None
         self.ohlc_dataset = ohlc_data
+        self.analysis_results = {}
         self.decision = None
+
+        self.analysis_length = analysis_length
+        self.up_movement = 0
+        self.down_movement = 0
+        self.ratio_up_down = 0
 
         self.initial_value = initial_value
         self.stopgain = stopgain
@@ -88,20 +102,46 @@ class Analysis(MACD, MACDAdvanced, ARIMA, PreProcessing):
         # ----------------------------------------------------------------------
         #   Data adequation
         # ----------------------------------------------------------------------
-        self.truncate_range(length=250)  # aprox. 250-working days / year
+        # aprox. 250-working days / year
+        self.truncate_range(length=self.analysis_length)
         self.define_closure()
 
         # ----------------------------------------------------------------------
-        #   Strategies calculations
+        #   Parameters calculations
         # ----------------------------------------------------------------------
+        self.calc_parameters()
+
+        # ----------------------------------------------------------------------
+        #   Individual strategies calculations
+        # ----------------------------------------------------------------------
+        self.calc_Crash()
         self.calc_MACD()
-        self.calc_MACD_Advanced()
+        self.calc_RSI_SMA()
+        self.calc_RSI_EMA()
+        self.calc_BBANDS()
+        # self.calc_MACD_Advanced()
         self.calc_ARIMA()
+        self.calc_LSTM()
+        # self.calc_CombinedStrategy()
+
+        #print(json.dumps(self.analysis_results, sort_keys=False, indent=4))
 
         # ----------------------------------------------------------------------
         #   Final decision based on the previous BSH (Buy-Sell-Hold)
         # ----------------------------------------------------------------------
-        self.decision = self.arbitrate(["MACD Recommendation",
-                                        "ARIMA Recommendation"])
+        self.arbitrate()
 
-        return (self.decision, self.ohlc_dataset)
+        return (self.analysis_results, self.ohlc_dataset)
+
+    def calc_parameters(self):
+
+        self.calc_change(source_column="Close Final",
+                         shift=1,
+                         result_column="Close Final Change")
+
+        self.up_movement = self.ohlc_dataset["Close Final Change"].clip(
+            lower=0).sum() / self.analysis_length
+        self.down_movement = self.ohlc_dataset["Close Final Change"].clip(
+            upper=0).abs().sum() / self.analysis_length
+
+        self.ratio_up_down = self.up_movement / self.down_movement

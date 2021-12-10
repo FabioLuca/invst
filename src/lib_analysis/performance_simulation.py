@@ -1,5 +1,4 @@
 import pandas as pd
-from ..lib.invst_const import constants as C
 
 
 class PerformanceSimulation:
@@ -21,7 +20,7 @@ class PerformanceSimulation:
         # ----------------------------------------------------------------------
         #   Start of a initial value and create the new column.
         # ----------------------------------------------------------------------
-        self.ohlc_dataset[result_column] = initial_value
+        self.ohlc_dataset.loc[:, result_column] = initial_value
 
         # ----------------------------------------------------------------------
         #   Loop thru the moments the ticker was bought, so the results are
@@ -58,7 +57,7 @@ class PerformanceSimulation:
                 #   is done so in case the strategy starts with a BUY situation,
                 #   it won't be added in the calcualtion.
                 # --------------------------------------------------------------
-                if event == C.SELL or event == C.HOLD:
+                if event == "SELL" or event == "HOLD":
                     pre_first_buy = False
 
                 # --------------------------------------------------------------
@@ -66,7 +65,7 @@ class PerformanceSimulation:
                 #   account for the cost of operation. Also resets the cycle
                 #   gain.
                 # --------------------------------------------------------------
-                if event == C.BUY and pre_first_buy == False:
+                if event == "BUY" and pre_first_buy == False:
                     operation_cost_value = operation_cost
                     cycle_balance = total_balance
                 else:
@@ -75,11 +74,11 @@ class PerformanceSimulation:
                 # --------------------------------------------------------------
                 #   Trigger the Stop loss and Gain loss
                 # --------------------------------------------------------------
-                if event == C.BUY and pre_first_buy == False and stoploss < 1:
+                if event == "BUY" and pre_first_buy == False and stoploss < 1:
                     if stoploss_value == 0:
                         stoploss_value = close_prev * stoploss
 
-                if event == C.BUY and pre_first_buy == False and stopgain > 1:
+                if event == "BUY" and pre_first_buy == False and stopgain > 1:
                     if takegain_value == 0:
                         takegain_value = close_prev * stopgain
 
@@ -93,15 +92,15 @@ class PerformanceSimulation:
                     # print(stoploss)
                     # print(stoploss_value)
                     # print(close_prev)
-                    print(close_today)
+                    # print(close_today)
                     # stoploss_latch = True
                     takegain_value = 0
                     stoploss_value = 0
 
                     # if stoploss_latch:
                     # print("RRRRRRRR")
-                    decision = C.SELL
-                    event = C.SELL
+                    decision = "SELL"
+                    event = "SELL"
                     # stoploss_latch = False
 
                 # takegain_latch = False
@@ -119,8 +118,8 @@ class PerformanceSimulation:
                     # if takegain_latch:
                     # print("AQUI")
                     # print(row)
-                    decision = C.SELL
-                    event = C.SELL
+                    decision = "SELL"
+                    event = "SELL"
                     # takegain_latch = False
                     # print(decision)
 
@@ -128,14 +127,14 @@ class PerformanceSimulation:
                 #   De-Trigger the Stoploss and Takegain strategies in case of
                 #   a sell action
                 # --------------------------------------------------------------
-                if event == C.SELL:
+                if event == "SELL":
                     stoploss_value = 0
                     takegain_value = 0
 
                 # --------------------------------------------------------------
                 #   Calculate the tax
                 # --------------------------------------------------------------
-                if event == C.SELL:  # and cycle_profit > 0:
+                if event == "SELL":  # and cycle_profit > 0:
                     cycle_profit = total_balance - cycle_balance
                     # gainloss_latch = False
                     if cycle_profit < 0:
@@ -148,7 +147,7 @@ class PerformanceSimulation:
                 # --------------------------------------------------------------
                 #   Calculate the gain / balance
                 # --------------------------------------------------------------
-                if decision == C.BUY and pre_first_buy == False:
+                if decision == "BUY" and pre_first_buy == False:
                     total_balance = total_balance * perc_day
                     # cycle_profit = cycle_profit + (close_today - close_prev) / close_prev
 
@@ -179,7 +178,7 @@ class PerformanceSimulation:
         # ----------------------------------------------------------------------
         #   Start of a initial value and create the new column.
         # ----------------------------------------------------------------------
-        self.ohlc_dataset[result_column] = initial_value
+        self.ohlc_dataset.loc[:, result_column] = initial_value
 
         # ----------------------------------------------------------------------
         #   Loop thru the moments the ticker was bought, so the results are

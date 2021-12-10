@@ -80,13 +80,24 @@ class ReportAnalysis:
         y = 1
         x = 1
 
-        for secondary_y, title_y_left, title_y_right, title_x in zip(
+        for secondary_y, title_y_left, title_y_right, title_x, categorical_y, category_y_order in zip(
             self.config_general["subplots_secondary_y_axis"],
             self.config_general["subplots_left_y_axis_titles"],
             self.config_general["subplots_right_y_axis_titles"],
             self.config_general["subplots_x_axis_titles"],
+            self.config_general["categorical_y"],
+            self.config_general["categorical_y_order"]
+
         ):
             fig_subplot["layout"]["yaxis" + str(y)]["title"] = title_y_left
+            if categorical_y:
+                fig_subplot["layout"]["yaxis" + str(y)]["type"] = "category"
+                fig_subplot["layout"]["yaxis" +
+                                      str(y)]["categoryorder"] = "array"
+
+                fig_subplot["layout"]["yaxis" +
+                                      str(y)]["categoryarray"] = category_y_order
+
             y = y + 1
             if secondary_y:
                 fig_subplot["layout"]["yaxis" +
@@ -145,6 +156,7 @@ class ReportAnalysis:
             #   LINES
             # ------------------------------------------------------------------
             if (config["type"] == "Line" and config["show"]):
+                yaxis = None
                 trace_add = {
                     "x": self.ohlc_dataset.index,
                     "y": self.ohlc_dataset[component],

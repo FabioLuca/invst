@@ -5,6 +5,8 @@ class ARIMA:
 
     def calc_ARIMA(self):
 
+        self.logger.info("Performing ARIMA analysis for %s", self.symbol)
+
         return 1
 
 
