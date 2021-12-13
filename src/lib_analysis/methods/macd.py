@@ -12,12 +12,45 @@ class MACD (Basic, Arbitration, PerformanceSimulation, ReportAnalysis, Summary):
         """Calculate de MACD indicator. The MACD is based on the following
         steps:
 
-        #. [MACD Line] = 12-period EMA - 26-period EMA
-        #. [MACD Signal] = 9-period EMA of [MACD Line]
-        #. [MACD Histogram] = [MACD Line] - [MACD Signal]
+        .. math::
 
-        The interpretation of the indicator (histogram) is that positive values
-        indicate a buy recommendation, while negative indicate a sell position.
+            \\text{MACD Line} = EMA_{VC}^{(N=12)} - EMA_{VC}^{(N=26)}
+
+        where `VC` refers to the closing value of the stock, and where the
+        exponential moving average is defined for a magnitude `X` (in the
+        current application, :math:`X=VC`) and length `N` by the self-recurring
+        formular as follows:
+
+        .. math::
+
+            EMA_{X}^{(N)}(k) =
+            \\begin{cases}
+                EMA_{X}(0) = X(0) \\\\
+                EMA_{X}(k) = \\alpha.X(k) + (1 - \\alpha).EMA_{X}(k-1)
+            \\end{cases}     
+
+        where:
+
+        .. math::
+
+            \\alpha = \\frac{2}{1 + N}
+
+        the result from :math:`\\text{MACD Line}` is used to calculate the
+        :math:`\\text{MACD Signal}`, determined by:
+
+        .. math::
+
+            \\text{MACD Signal} = EMA_{\\text{MACD Line}}^{(N=9)}
+
+        and finally:
+
+        .. math::
+
+            \\text{MACD Histogram} = \\text{MACD Line} - \\text{MACD Signal}
+
+        The interpretation of the indicator (`MACD Histogram`) is that positive
+        values indicate a buy recommendation, while negative indicate a sell
+        position.
 
         """
 

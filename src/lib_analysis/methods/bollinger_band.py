@@ -17,7 +17,7 @@ class BOLLINGER_BANDS (Basic, Arbitration, PerformanceSimulation, ReportAnalysis
 
         .. math::
 
-            SMA^{(N=20)}(k) = \\frac{1}{N} \\sum_{i=k-N+1}^{k} VC_{i}
+            SMA_{VC}^{(N=20)}(k) = \\frac{1}{N} \\sum_{i=k-N+1}^{k} VC_{i}
 
         where `VC` represenst the closing value for the entry, and `N` the
         length in samples to be taken. For this case, :math:`N=20`. For the
@@ -28,15 +28,15 @@ class BOLLINGER_BANDS (Basic, Arbitration, PerformanceSimulation, ReportAnalysis
 
         .. math::
 
-            StdDev^{(N=20)}(k) = \\sqrt{\\frac{1}{N-1} \\sum_{i=k-N+1}^{k} \\left( VC_{i} - \\overline{VC_{i}}\\right)^{2}}
+            StdDev_{VC}^{(N=20)}(k) = \\sqrt{\\frac{1}{N-1} \\sum_{i=k-N+1}^{k} \\left( VC_{i} - \\overline{VC_{i}}\\right)^{2}}
 
         From the 2 values calculated above, 2 bands will be defined, where:
 
         .. math::
 
-            UB = SMA + 2 StdDev
+            UB = SMA_{VC} + 2 StdDev_{VC}
 
-            LB = SMA - 2 StdDev
+            LB = SMA_{VC} - 2 StdDev_{VC}
 
         on which `UB` and `LB` means upper band and lower band respectively.
 
