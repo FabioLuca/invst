@@ -7,7 +7,7 @@ class PreProcessing:
 
     """
 
-    def truncate_range(self, length: int):
+    def truncate_range(self, length: int = 0, shift_last: int = 0):
         """Limit the data to a proper length, always keeping the latest data
         available.
 
@@ -25,8 +25,9 @@ class PreProcessing:
                 this range is truncated.
 
         """
-
-        self.ohlc_dataset = self.ohlc_dataset.tail(length)
+        if 0 < length < self.ohlc_dataset.shape[0]:
+            self.ohlc_dataset = self.ohlc_dataset.tail(length + shift_last)
+            self.ohlc_dataset = self.ohlc_dataset.head(length)
         #self.ohlc_dataset.reset_index(drop=True, inplace=True)
 
     def define_closure(self):
