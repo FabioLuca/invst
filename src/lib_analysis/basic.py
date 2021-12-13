@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 pd.options.mode.chained_assignment = None
 
 
@@ -492,14 +493,18 @@ class Basic:
 
         return numpy_data
 
-    def split_data(self, numpy_data, percetage_learning: float):
+    def split_data(self, data, percetage_learning: float):
 
-        length = numpy_data.size
+        length = data.size
 
         cut_learning = int(round(length * percetage_learning))
         cut_test = length - cut_learning
 
-        train_data = numpy_data[:cut_learning]
-        test_data = numpy_data[-cut_test:]
+        if isinstance(data, np.ndarray):
+            train_data = data[:cut_learning]
+            test_data = data[-cut_test:]
+        elif isinstance(data, pd.DataFrame):
+            train_data = data.iloc[:cut_learning].values
+            test_data = data.iloc[-cut_test:].values
 
         return train_data, test_data
