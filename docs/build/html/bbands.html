@@ -49,17 +49,17 @@ strategy.</p>
 taking the closure value and calculating the 20 last entries moving
 average (simple):</p>
 <div class="math notranslate nohighlight">
-\[SMA^{(N=20)}(k) = \frac{1}{N} \sum_{i=k-N+1}^{k} VC_{i}\]</div>
+\[SMA_{VC}^{(N=20)}(k) = \frac{1}{N} \sum_{i=k-N+1}^{k} VC_{i}\]</div>
 <p>where <cite>VC</cite> represenst the closing value for the entry, and <cite>N</cite> the
 length in samples to be taken. For this case, <span class="math notranslate nohighlight">\(N=20\)</span>. For the
 closing value, the adjusted one is the one applied.</p>
 <p>Similarly, the moving standard deviation is calculated for the same
 length:</p>
 <div class="math notranslate nohighlight">
-\[StdDev^{(N=20)}(k) = \sqrt{\frac{1}{N-1} \sum_{i=k-N+1}^{k} \left( VC_{i} - \overline{VC_{i}}\right)^{2}}\]</div>
+\[StdDev_{VC}^{(N=20)}(k) = \sqrt{\frac{1}{N-1} \sum_{i=k-N+1}^{k} \left( VC_{i} - \overline{VC_{i}}\right)^{2}}\]</div>
 <p>From the 2 values calculated above, 2 bands will be defined, where:</p>
 <div class="math notranslate nohighlight">
-\[ \begin{align}\begin{aligned}UB = SMA + 2 StdDev\\LB = SMA - 2 StdDev\end{aligned}\end{align} \]</div>
+\[ \begin{align}\begin{aligned}UB = SMA_{VC} + 2 StdDev_{VC}\\LB = SMA_{VC} - 2 StdDev_{VC}\end{aligned}\end{align} \]</div>
 <p>on which <cite>UB</cite> and <cite>LB</cite> means upper band and lower band respectively.</p>
 <p>The analysis or recommandation are based on the rules:</p>
 <ol class="arabic simple">

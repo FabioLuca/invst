@@ -13,6 +13,7 @@
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="RSI SMA (Relative Strength Index)" href="rsi_sma.html" />
@@ -44,13 +45,31 @@
 <span class="sig-name descname"><span class="pre">calc_MACD</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.lib_analysis.methods.macd.MACD.calc_MACD" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate de MACD indicator. The MACD is based on the following
 steps:</p>
-<ol class="arabic simple">
-<li><p>[MACD Line] = 12-period EMA - 26-period EMA</p></li>
-<li><p>[MACD Signal] = 9-period EMA of [MACD Line]</p></li>
-<li><p>[MACD Histogram] = [MACD Line] - [MACD Signal]</p></li>
-</ol>
-<p>The interpretation of the indicator (histogram) is that positive values
-indicate a buy recommendation, while negative indicate a sell position.</p>
+<div class="math notranslate nohighlight">
+\[\text{MACD Line} = EMA_{VC}^{(N=12)} - EMA_{VC}^{(N=26)}\]</div>
+<p>where <cite>VC</cite> refers to the closing value of the stock, and where the
+exponential moving average is defined for a magnitude <cite>X</cite> (in the
+current application, <span class="math notranslate nohighlight">\(X=VC\)</span>) and length <cite>N</cite> by the self-recurring
+formular as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}EMA_{X}^{(N)}(k) =
+\begin{cases}
+    EMA_{X}(0) = X(0) \\
+    EMA_{X}(k) = \alpha.X(k) + (1 - \alpha).EMA_{X}(k-1)
+\end{cases}\end{split}\]</div>
+<p>where:</p>
+<div class="math notranslate nohighlight">
+\[\alpha = \frac{2}{1 + N}\]</div>
+<p>the result from <span class="math notranslate nohighlight">\(\text{MACD Line}\)</span> is used to calculate the
+<span class="math notranslate nohighlight">\(\text{MACD Signal}\)</span>, determined by:</p>
+<div class="math notranslate nohighlight">
+\[\text{MACD Signal} = EMA_{\text{MACD Line}}^{(N=9)}\]</div>
+<p>and finally:</p>
+<div class="math notranslate nohighlight">
+\[\text{MACD Histogram} = \text{MACD Line} - \text{MACD Signal}\]</div>
+<p>The interpretation of the indicator (<cite>MACD Histogram</cite>) is that positive
+values indicate a buy recommendation, while negative indicate a sell
+position.</p>
 </dd></dl>
 
 </dd></dl>
