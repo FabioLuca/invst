@@ -3,6 +3,14 @@
     due to the trading strategy, or issues due to account access.
 
 Overview
+================================================================================
+
+.. contents::
+    :depth: 3
+    :backlinks: none
+    :local:
+
+Project goals
 --------------------------------------------------------------------------------
 
 This project goal is multiple, and split into different elements or steps:
@@ -48,7 +56,8 @@ Analyze data for taking decisions (hold, buy, sell)
 
 The analysis of the data in order to decide on an action to be taken is not
 straight forward, since there are plural methodologies available, on many
-levels of commplexity and success rate.
+levels of commplexity and success rate. See the section "Strategy Principles"
+for more information.
 
 The goal is not to expect very high success rate in the gains, but at least
 have consistent improvements from a buy-hold strategy.
@@ -81,7 +90,9 @@ a graphical report to evaluate and also debug the results.
 Execute an order into a broker
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This step is not implemented yet.
+This step is not implemented yet. As Comdirect API demands 2-factor
+authentication, the possibility of algo-trading loses potential, so this steps
+has lower priority.
 
 Fetch account status
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -116,6 +127,44 @@ to be followed::
 
 The client ID and secret can be obtanined from the Comdirect website. Please
 follow the instructions from their API documentation on how to obtain them.
+
+Strategy principles
+--------------------------------------------------------------------------------
+
+To cover the principles, the starting point will be the OHLC (Open High Low
+Close) data table for Amazon (AMZN) between 10.12.2021 and 09.11.2021:
+
+.. csv-table:: Example of data from Amazon
+   :file: /docs/source/example_amazon.csv
+   :widths: 60, 60, 60, 60, 60, 60
+   :header-rows: 1
+   :delim: ;
+
+The strategies for investiment covered here are basically of 2 types:
+
+#. Momentum analysis
+#. Prediction based on neural networks
+
+The two have different ways of working. The former is based on an "inertia" of
+the market, relling mostly that the market tries to correct itself whenever
+oversold or overbought. Like a physical system, the mostly a position is off
+balance, the stronger the correction is expected.
+
+The second method is based on RNN (recurrent neural netoworks). Based on
+the history of price for a stock, which is supplied to a RNN for learning, new
+data (future) is predicted.
+
+A major difference is on the way data is handled by both of the methods. While
+the first uses the history and suggests an outcome which tend to be valid for a
+few days or weeks, due to the system inertia, the second will produce much more
+shorter term predictions if applied to the actual price (e.g. closing price),
+since it tries to replicate the feature performance. Of course the same method
+can be equally applied to other values or indicators, such a moving average
+(where the fast changing component is filtered out) or to a MACD histogram.
+
+Combining both methods is the ultimate goal, since there is a potential to
+optmize the strategy combining the benefits of each other.
+
 
 To do's and future work
 --------------------------------------------------------------------------------

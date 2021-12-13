@@ -33,6 +33,14 @@ example.py
 Automation
 --------------------------------------------------------------------------------
 
+As a general note when running the automation scripts, to be able to
+successfu execute them, due to importing and relative path management, the
+following command is to be used from the project root folder::
+
+   python -m automation.<Script name>
+
+For the `<Script name>` the .py extension shall not be used.
+
 comdirect_status_report.py
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

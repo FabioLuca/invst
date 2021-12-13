@@ -13,9 +13,10 @@
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Combined module" href="combined.html" />
+    <link rel="next" title="Combined strategy" href="combined.html" />
     <link rel="prev" title="RSI EMA (Relative Strength Index)" href="rsi_ema.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -35,6 +36,8 @@
             
   <section id="module-src.lib_analysis.methods.bollinger_band">
 <span id="bollinger-bands"></span><h1>Bollinger Bands<a class="headerlink" href="#module-src.lib_analysis.methods.bollinger_band" title="Permalink to this headline">¶</a></h1>
+<p>Calculates the recommendation for buy/sell based on the Bollinger Bands
+strategy.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="src.lib_analysis.methods.bollinger_band.BOLLINGER_BANDS">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.lib_analysis.methods.bollinger_band.</span></span><span class="sig-name descname"><span class="pre">BOLLINGER_BANDS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.lib_analysis.methods.bollinger_band.BOLLINGER_BANDS" title="Permalink to this definition">¶</a></dt>
@@ -42,13 +45,66 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="src.lib_analysis.methods.bollinger_band.BOLLINGER_BANDS.calc_BBANDS">
 <span class="sig-name descname"><span class="pre">calc_BBANDS</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.lib_analysis.methods.bollinger_band.BOLLINGER_BANDS.calc_BBANDS" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate de MACD indicator. The MACD is based on the following
-steps:</p>
-<p># . [MACD Line] = 12-period EMA - 26-period EMA
-# . [MACD Signal] = 9-period EMA of [MACD Line]
-# . [MACD Histogram] = [MACD Line] - [MACD Signal]</p>
-<p>The interpretation of the indicator (histogram) is that positive values
-indicate a buy recommendation, while negative indicate a sell position.</p>
+<dd><p>Calculate de Bollinger Bands indicator, which is based on first
+taking the closure value and calculating the 20 last entries moving
+average (simple):</p>
+<div class="math notranslate nohighlight">
+\[SMA_{VC}^{(N=20)}(k) = \frac{1}{N} \sum_{i=k-N+1}^{k} VC_{i}\]</div>
+<p>where <cite>VC</cite> represenst the closing value for the entry, and <cite>N</cite> the
+length in samples to be taken. For this case, <span class="math notranslate nohighlight">\(N=20\)</span>. For the
+closing value, the adjusted one is the one applied.</p>
+<p>Similarly, the moving standard deviation is calculated for the same
+length:</p>
+<div class="math notranslate nohighlight">
+\[StdDev_{VC}^{(N=20)}(k) = \sqrt{\frac{1}{N-1} \sum_{i=k-N+1}^{k} \left( VC_{i} - \overline{VC_{i}}\right)^{2}}\]</div>
+<p>From the 2 values calculated above, 2 bands will be defined, where:</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}UB = SMA_{VC} + 2 StdDev_{VC}\\LB = SMA_{VC} - 2 StdDev_{VC}\end{aligned}\end{align} \]</div>
+<p>on which <cite>UB</cite> and <cite>LB</cite> means upper band and lower band respectively.</p>
+<p>The analysis or recommandation are based on the rules:</p>
+<ol class="arabic simple">
+<li><p>When <cite>VC</cite> is above the <cite>UB</cite>, this indicates an overbought situation,
+and thus a sell indication.</p></li>
+<li><p>When <cite>VC</cite> is above the <cite>LB</cite>, this indicates an oversold situation,
+and thus a buy indication.</p></li>
+</ol>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>None</strong> – <p>The input for the calculation is based on the Pandas dataframe
+data which is already available. The expected column for
+this operation is:</p>
+<ol class="arabic simple">
+<li><p><cite>Close Final</cite></p></li>
+</ol>
+</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>The outcome from the calculation is not explicitly returned, but
+added to the Pandas dataframe as new columns. The new columns
+are:</p>
+<ol class="arabic simple">
+<li><p><cite>BBANDS SMA 20</cite>: Result from the simple moving average of the
+last 20 samples.</p></li>
+<li><p><cite>BBANDS StdDev 20</cite>: Result from the moving sample standard
+deviation of the last 20 samples.</p></li>
+<li><p><cite>BBANDS Upper</cite>: Resulting upper band.</p></li>
+<li><p><cite>BBANDS Lower</cite>: Resulting lower band.</p></li>
+<li><p><cite>BBANDS Recommendation</cite>: Resulting recommendation for the
+strategy.</p></li>
+<li><p><cite>BBANDS Recommendation Events</cite>: Resulting recommendation
+events for the strategy.</p></li>
+<li><p><cite>BBANDS Simulation</cite>: Resulted simulation based on the
+previous strategy recommendation.</p></li>
+<li><p><cite>BBANDS Simulation Reference</cite>: Resulted simulation from the
+buy-hold strategy to be used as reference for the current
+strategy simulation.</p></li>
+</ol>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -75,9 +131,10 @@ indicate a buy recommendation, while negative indicate a sell position.</p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="modules.html">Core</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html#trading-analysis">Trading analysis</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html#trading-analysis-methods">Trading analysis methods</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html#analysis-methods">Analysis methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html#trader-automation">Trader automation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html#general-libraries">General libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#automation-and-scripts">Automation and scripts</a></li>
 </ul>
 
 <div class="relations">
@@ -86,7 +143,7 @@ indicate a buy recommendation, while negative indicate a sell position.</p>
   <li><a href="index.html">Documentation overview</a><ul>
   <li><a href="modules.html">Core</a><ul>
       <li>Previous: <a href="rsi_ema.html" title="previous chapter">RSI EMA (Relative Strength Index)</a></li>
-      <li>Next: <a href="combined.html" title="next chapter">Combined module</a></li>
+      <li>Next: <a href="combined.html" title="next chapter">Combined strategy</a></li>
   </ul></li>
   </ul></li>
 </ul>

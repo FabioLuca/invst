@@ -1,4 +1,6 @@
-import pandas as pd
+"""Calculates the recommendation for buy/sell based on the Bollinger Bands
+strategy.
+"""
 from src.lib_analysis.basic import Basic
 from src.lib_analysis.arbitration import Arbitration
 from src.lib_analysis.report_analysis import ReportAnalysis
@@ -9,15 +11,73 @@ from src.lib_analysis.summary import Summary
 class BOLLINGER_BANDS (Basic, Arbitration, PerformanceSimulation, ReportAnalysis, Summary):
 
     def calc_BBANDS(self):
-        """Calculate de MACD indicator. The MACD is based on the following
-        steps:
+        """Calculate de Bollinger Bands indicator, which is based on first
+        taking the closure value and calculating the 20 last entries moving
+        average (simple):
 
-        # . [MACD Line] = 12-period EMA - 26-period EMA
-        # . [MACD Signal] = 9-period EMA of [MACD Line]
-        # . [MACD Histogram] = [MACD Line] - [MACD Signal]
+        .. math::
 
-        The interpretation of the indicator (histogram) is that positive values
-        indicate a buy recommendation, while negative indicate a sell position.
+            SMA_{VC}^{(N=20)}(k) = \\frac{1}{N} \\sum_{i=k-N+1}^{k} VC_{i}
+
+        where `VC` represenst the closing value for the entry, and `N` the
+        length in samples to be taken. For this case, :math:`N=20`. For the
+        closing value, the adjusted one is the one applied.
+
+        Similarly, the moving standard deviation is calculated for the same
+        length:
+
+        .. math::
+
+            StdDev_{VC}^{(N=20)}(k) = \\sqrt{\\frac{1}{N-1} \\sum_{i=k-N+1}^{k} \\left( VC_{i} - \\overline{VC_{i}}\\right)^{2}}
+
+        From the 2 values calculated above, 2 bands will be defined, where:
+
+        .. math::
+
+            UB = SMA_{VC} + 2 StdDev_{VC}
+
+            LB = SMA_{VC} - 2 StdDev_{VC}
+
+        on which `UB` and `LB` means upper band and lower band respectively.
+
+        The analysis or recommandation are based on the rules:
+
+        #. When `VC` is above the `UB`, this indicates an overbought situation,
+           and thus a sell indication.
+        #. When `VC` is above the `LB`, this indicates an oversold situation,
+           and thus a buy indication.
+
+        Parameters
+        ----------
+            None
+                The input for the calculation is based on the Pandas dataframe
+                data which is already available. The expected column for
+                this operation is:
+
+                #. `Close Final`
+
+        Returns
+        -------
+            None
+                The outcome from the calculation is not explicitly returned, but
+                added to the Pandas dataframe as new columns. The new columns
+                are:
+
+                #. `BBANDS SMA 20`: Result from the simple moving average of the
+                   last 20 samples.
+                #. `BBANDS StdDev 20`: Result from the moving sample standard
+                   deviation of the last 20 samples.
+                #. `BBANDS Upper`: Resulting upper band.
+                #. `BBANDS Lower`: Resulting lower band.
+                #. `BBANDS Recommendation`: Resulting recommendation for the
+                   strategy.
+                #. `BBANDS Recommendation Events`: Resulting recommendation
+                   events for the strategy.
+                #. `BBANDS Simulation`: Resulted simulation based on the
+                   previous strategy recommendation.
+                #. `BBANDS Simulation Reference`: Resulted simulation from the
+                   buy-hold strategy to be used as reference for the current
+                   strategy simulation.
 
         """
 

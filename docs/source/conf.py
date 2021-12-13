@@ -32,7 +32,8 @@ release = "0.0.1"
 extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.doctest',
               'sphinx.ext.intersphinx',
-              "sphinx.ext.napoleon"
+              "sphinx.ext.napoleon",
+              # 'sphinx.ext.mathjax'
               ]
 
 napoleon_google_docstring = False

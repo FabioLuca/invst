@@ -1,5 +1,6 @@
 {
     "general": {
+        "reference_name": "MACD",
         "display_name": "MACD",
         "save_name": "MACD",
         "title_font_size": 20,

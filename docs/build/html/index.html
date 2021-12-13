@@ -52,8 +52,41 @@
 due to the trading strategy, or issues due to account access.</p>
 </div>
 </section>
+</section>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<h1>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="id1">
+<ul class="simple">
+<li><p><a class="reference internal" href="#project-goals" id="id3">Project goals</a></p>
+<ul>
+<li><p><a class="reference internal" href="#fetch-market-data-series-history" id="id4">Fetch market data series (history)</a></p></li>
+<li><p><a class="reference internal" href="#analyze-data-for-taking-decisions-hold-buy-sell" id="id5">Analyze data for taking decisions (hold, buy, sell)</a></p></li>
+<li><p><a class="reference internal" href="#execute-an-order-into-a-broker" id="id6">Execute an order into a broker</a></p></li>
+<li><p><a class="reference internal" href="#fetch-account-status" id="id7">Fetch account status</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#strategy-principles" id="id8">Strategy principles</a></p></li>
+<li><p><a class="reference internal" href="#to-do-s-and-future-work" id="id9">To do’s and future work</a></p></li>
+<li><p><a class="reference internal" href="#virtual-environment" id="id10">Virtual Environment</a></p></li>
+<li><p><a class="reference internal" href="#accessing-the-documentation" id="id11">Accessing the documentation</a></p></li>
+<li><p><a class="reference internal" href="#unit-testing" id="id12">Unit testing</a></p></li>
+<li><p><a class="reference internal" href="#use-examples" id="id13">Use examples</a></p>
+<ul>
+<li><p><a class="reference internal" href="#module-example" id="id14">example.py</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#automation" id="id15">Automation</a></p>
+<ul>
+<li><p><a class="reference internal" href="#module-automation.comdirect_status_report" id="id16">comdirect_status_report.py</a></p></li>
+<li><p><a class="reference internal" href="#module-automation.comdirect_status_update" id="id17">comdirect_status_update.py</a></p></li>
+<li><p><a class="reference internal" href="#module-automation.run_analysis" id="id18">run_analysis.py</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#indices-and-tables" id="id19">Indices and tables</a></p></li>
+</ul>
+</div>
+<section id="project-goals">
+<h2>Project goals<a class="headerlink" href="#project-goals" title="Permalink to this headline">¶</a></h2>
 <p>This project goal is multiple, and split into different elements or steps:</p>
 <ol class="arabic simple">
 <li><p>Fetch market data series (history)</p></li>
@@ -93,7 +126,8 @@ needs to be replaced by the string provided as API key:</p>
 <h3>Analyze data for taking decisions (hold, buy, sell)<a class="headerlink" href="#analyze-data-for-taking-decisions-hold-buy-sell" title="Permalink to this headline">¶</a></h3>
 <p>The analysis of the data in order to decide on an action to be taken is not
 straight forward, since there are plural methodologies available, on many
-levels of commplexity and success rate.</p>
+levels of commplexity and success rate. See the section “Strategy Principles”
+for more information.</p>
 <p>The goal is not to expect very high success rate in the gains, but at least
 have consistent improvements from a buy-hold strategy.</p>
 <p>The very initial implementation is based on a simple MACD (Moving Average
@@ -123,7 +157,9 @@ a graphical report to evaluate and also debug the results.</p>
 </section>
 <section id="execute-an-order-into-a-broker">
 <h3>Execute an order into a broker<a class="headerlink" href="#execute-an-order-into-a-broker" title="Permalink to this headline">¶</a></h3>
-<p>This step is not implemented yet.</p>
+<p>This step is not implemented yet. As Comdirect API demands 2-factor
+authentication, the possibility of algo-trading loses potential, so this steps
+has lower priority.</p>
 </section>
 <section id="fetch-account-status">
 <h3>Fetch account status<a class="headerlink" href="#fetch-account-status" title="Permalink to this headline">¶</a></h3>
@@ -156,6 +192,215 @@ to be followed:</p>
 <p>The client ID and secret can be obtanined from the Comdirect website. Please
 follow the instructions from their API documentation on how to obtain them.</p>
 </section>
+</section>
+<section id="strategy-principles">
+<h2>Strategy principles<a class="headerlink" href="#strategy-principles" title="Permalink to this headline">¶</a></h2>
+<p>To cover the principles, the starting point will be the OHLC (Open High Low
+Close) data table for Amazon (AMZN) between 10.12.2021 and 09.11.2021:</p>
+<table class="colwidths-given docutils align-default" id="id2">
+<caption><span class="caption-text">Example of data from Amazon</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 17%" />
+<col style="width: 17%" />
+<col style="width: 17%" />
+<col style="width: 17%" />
+<col style="width: 17%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Date</p></th>
+<th class="head"><p>Open</p></th>
+<th class="head"><p>High</p></th>
+<th class="head"><p>Low</p></th>
+<th class="head"><p>Close</p></th>
+<th class="head"><p>Volume</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>12/10/21</p></td>
+<td><p>3508,34</p></td>
+<td><p>3518,54</p></td>
+<td><p>3410,00</p></td>
+<td><p>3444,24</p></td>
+<td><p>3034488</p></td>
+</tr>
+<tr class="row-odd"><td><p>12/09/21</p></td>
+<td><p>3515,00</p></td>
+<td><p>3539,39</p></td>
+<td><p>3482,79</p></td>
+<td><p>3483,42</p></td>
+<td><p>2303091</p></td>
+</tr>
+<tr class="row-even"><td><p>12/08/21</p></td>
+<td><p>3523,01</p></td>
+<td><p>3543,60</p></td>
+<td><p>3495,01</p></td>
+<td><p>3523,16</p></td>
+<td><p>2262683</p></td>
+</tr>
+<tr class="row-odd"><td><p>12/07/21</p></td>
+<td><p>3492,00</p></td>
+<td><p>3549,99</p></td>
+<td><p>3466,69</p></td>
+<td><p>3523,29</p></td>
+<td><p>3320536</p></td>
+</tr>
+<tr class="row-even"><td><p>12/06/21</p></td>
+<td><p>3393,00</p></td>
+<td><p>3473,91</p></td>
+<td><p>3338,69</p></td>
+<td><p>3427,37</p></td>
+<td><p>3443000</p></td>
+</tr>
+<tr class="row-odd"><td><p>12/03/21</p></td>
+<td><p>3455,00</p></td>
+<td><p>3469,865</p></td>
+<td><p>3338,60</p></td>
+<td><p>3389,79</p></td>
+<td><p>4035550</p></td>
+</tr>
+<tr class="row-even"><td><p>12/02/21</p></td>
+<td><p>3460,00</p></td>
+<td><p>3492,70</p></td>
+<td><p>3423,75</p></td>
+<td><p>3437,36</p></td>
+<td><p>3236288</p></td>
+</tr>
+<tr class="row-odd"><td><p>12/01/21</p></td>
+<td><p>3545,00</p></td>
+<td><p>3559,88</p></td>
+<td><p>3441,60</p></td>
+<td><p>3443,72</p></td>
+<td><p>3756995</p></td>
+</tr>
+<tr class="row-even"><td><p>11/30/21</p></td>
+<td><p>3563,50</p></td>
+<td><p>3585,77</p></td>
+<td><p>3492,01</p></td>
+<td><p>3507,07</p></td>
+<td><p>4001107</p></td>
+</tr>
+<tr class="row-odd"><td><p>11/29/21</p></td>
+<td><p>3547,644</p></td>
+<td><p>3596,00</p></td>
+<td><p>3531,50</p></td>
+<td><p>3561,57</p></td>
+<td><p>3265557</p></td>
+</tr>
+<tr class="row-even"><td><p>11/26/21</p></td>
+<td><p>3602,095</p></td>
+<td><p>3633,50</p></td>
+<td><p>3504,15</p></td>
+<td><p>3504,56</p></td>
+<td><p>2991297</p></td>
+</tr>
+<tr class="row-odd"><td><p>11/24/21</p></td>
+<td><p>3562,67</p></td>
+<td><p>3613,64</p></td>
+<td><p>3536,85</p></td>
+<td><p>3580,41</p></td>
+<td><p>2328018</p></td>
+</tr>
+<tr class="row-even"><td><p>11/23/21</p></td>
+<td><p>3585,04</p></td>
+<td><p>3621,05</p></td>
+<td><p>3527,71</p></td>
+<td><p>3580,04</p></td>
+<td><p>3692246</p></td>
+</tr>
+<tr class="row-odd"><td><p>11/22/21</p></td>
+<td><p>3676,377</p></td>
+<td><p>3713,455</p></td>
+<td><p>3567,50</p></td>
+<td><p>3572,57</p></td>
+<td><p>4847850</p></td>
+</tr>
+<tr class="row-even"><td><p>11/19/21</p></td>
+<td><p>3712,69</p></td>
+<td><p>3762,145</p></td>
+<td><p>3675,72</p></td>
+<td><p>3676,57</p></td>
+<td><p>4946203</p></td>
+</tr>
+<tr class="row-odd"><td><p>11/18/21</p></td>
+<td><p>3566,35</p></td>
+<td><p>3704,20</p></td>
+<td><p>3561,00</p></td>
+<td><p>3696,06</p></td>
+<td><p>5703538</p></td>
+</tr>
+<tr class="row-even"><td><p>11/17/21</p></td>
+<td><p>3564,72</p></td>
+<td><p>3587,245</p></td>
+<td><p>3545,35</p></td>
+<td><p>3549,00</p></td>
+<td><p>2560270</p></td>
+</tr>
+<tr class="row-odd"><td><p>11/16/21</p></td>
+<td><p>3539,00</p></td>
+<td><p>3576,50</p></td>
+<td><p>3525,146</p></td>
+<td><p>3540,70</p></td>
+<td><p>2217071</p></td>
+</tr>
+<tr class="row-even"><td><p>11/15/21</p></td>
+<td><p>3537,00</p></td>
+<td><p>3593,88</p></td>
+<td><p>3525,81</p></td>
+<td><p>3545,68</p></td>
+<td><p>2929719</p></td>
+</tr>
+<tr class="row-odd"><td><p>11/12/21</p></td>
+<td><p>3485,00</p></td>
+<td><p>3540,726</p></td>
+<td><p>3447,05</p></td>
+<td><p>3525,15</p></td>
+<td><p>2689434</p></td>
+</tr>
+<tr class="row-even"><td><p>11/11/21</p></td>
+<td><p>3513,00</p></td>
+<td><p>3543,24</p></td>
+<td><p>3467,47</p></td>
+<td><p>3472,50</p></td>
+<td><p>2264406</p></td>
+</tr>
+<tr class="row-odd"><td><p>11/10/21</p></td>
+<td><p>3563,87</p></td>
+<td><p>3605,45</p></td>
+<td><p>3463,09</p></td>
+<td><p>3482,05</p></td>
+<td><p>4027422</p></td>
+</tr>
+<tr class="row-even"><td><p>11/09/21</p></td>
+<td><p>3515,25</p></td>
+<td><p>3593,77</p></td>
+<td><p>3501,425</p></td>
+<td><p>3576,23</p></td>
+<td><p>4294922</p></td>
+</tr>
+</tbody>
+</table>
+<p>The strategies for investiment covered here are basically of 2 types:</p>
+<ol class="arabic simple">
+<li><p>Momentum analysis</p></li>
+<li><p>Prediction based on neural networks</p></li>
+</ol>
+<p>The two have different ways of working. The former is based on an “inertia” of
+the market, relling mostly that the market tries to correct itself whenever
+oversold or overbought. Like a physical system, the mostly a position is off
+balance, the stronger the correction is expected.</p>
+<p>The second method is based on RNN (recurrent neural netoworks). Based on
+the history of price for a stock, which is supplied to a RNN for learning, new
+data (future) is predicted.</p>
+<p>A major difference is on the way data is handled by both of the methods. While
+the first uses the history and suggests an outcome which tend to be valid for a
+few days or weeks, due to the system inertia, the second will produce much more
+shorter term predictions if applied to the actual price (e.g. closing price),
+since it tries to replicate the feature performance. Of course the same method
+can be equally applied to other values or indicators, such a moving average
+(where the fast changing component is filtered out) or to a MACD histogram.</p>
+<p>Combining both methods is the ultimate goal, since there is a potential to
+optmize the strategy combining the benefits of each other.</p>
 </section>
 <section id="to-do-s-and-future-work">
 <h2>To do’s and future work<a class="headerlink" href="#to-do-s-and-future-work" title="Permalink to this headline">¶</a></h2>
@@ -272,6 +517,13 @@ sheet in the <cite>.xlsx</cite> file.</p></li>
 </section>
 <section id="automation">
 <h2>Automation<a class="headerlink" href="#automation" title="Permalink to this headline">¶</a></h2>
+<p>As a general note when running the automation scripts, to be able to
+successfu execute them, due to importing and relative path management, the
+following command is to be used from the project root folder:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">automation</span><span class="o">.&lt;</span><span class="n">Script</span> <span class="n">name</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>For the <cite>&lt;Script name&gt;</cite> the .py extension shall not be used.</p>
 <section id="module-automation.comdirect_status_report">
 <span id="comdirect-status-report-py"></span><h3>comdirect_status_report.py<a class="headerlink" href="#module-automation.comdirect_status_report" title="Permalink to this headline">¶</a></h3>
 <p>Automation script to display charts and reports of the data collected and

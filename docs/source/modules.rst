@@ -31,6 +31,7 @@ Analysis methods
    rsi_ema
    bbands
    combined
+   lstm
 
 Trader automation
 ================================================================================

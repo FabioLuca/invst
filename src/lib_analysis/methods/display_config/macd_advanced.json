@@ -1,5 +1,6 @@
 {
     "general": {
+        "reference_name": "MACD Advanced",
         "display_name": "Advanced MACD",
         "save_name": "Advanced_MACD",
         "title_font_size": 20,

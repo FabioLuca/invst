@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 pd.options.mode.chained_assignment = None
 
 
@@ -27,6 +28,15 @@ class Basic:
             result_dataframe: Pandas Dataframe, optional
                 If passed, the result of the operation will be stored in the new
                 dataframe, otherwise, the original dataframe is used.
+
+        Returns
+        -------
+            None
+                The outcome from the calculation is not explicitly returned, but
+                added to the Pandas dataframe as new columns. The new columns
+                are:
+
+                #. `result_column`: Result of the difference operation.
 
         """
         if result_column == "":
@@ -62,6 +72,16 @@ class Basic:
             result_dataframe: Pandas Dataframe, optional
                 If passed, the result of the operation will be stored in the new
                 dataframe, otherwise, the original dataframe is used.
+
+        Returns
+        -------
+            None
+                The outcome from the calculation is not explicitly returned, but
+                added to the Pandas dataframe as new columns. The new columns
+                are:
+
+                #. `result_column`: Result of the scalar multiplication
+                   operation.
 
         """
         if result_column == "":
@@ -151,7 +171,23 @@ class Basic:
 
         Parameters
         ----------
-            none
+            None
+                The input for the calculation is based on the Pandas dataframe
+                data which is already available. The expected column for
+                this operation is:
+
+                #. `Open`
+                #. `Close Final`
+
+        Returns
+        -------
+            None
+                The outcome from the calculation is not explicitly returned, but
+                added to the Pandas dataframe as new columns. The new columns
+                are:
+
+                #. `Delta`: Result of the difference between `Close Final` and
+                   `Open` values for every sample.
 
         """
         self.ohlc_dataset.loc[:, "Delta"] = self.calculate_difference(
@@ -457,14 +493,18 @@ class Basic:
 
         return numpy_data
 
-    def split_data(self, numpy_data, percetage_learning: float):
+    def split_data(self, data, percetage_learning: float):
 
-        length = numpy_data.size
+        length = data.size
 
         cut_learning = int(round(length * percetage_learning))
         cut_test = length - cut_learning
 
-        train_data = numpy_data[:cut_learning]
-        test_data = numpy_data[-cut_test:]
+        if isinstance(data, np.ndarray):
+            train_data = data[:cut_learning]
+            test_data = data[-cut_test:]
+        elif isinstance(data, pd.DataFrame):
+            train_data = data.iloc[:cut_learning].values
+            test_data = data.iloc[-cut_test:].values
 
         return train_data, test_data

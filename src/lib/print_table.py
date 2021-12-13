@@ -1,9 +1,16 @@
 import pandas as pd
+import json
 from datetime import datetime
 from pathlib import Path
 
 
 def summary_table(results_summary, excel_filename):
+    """Creates a presentation of the data from summary for evaluation. First
+    creates a version to be displayed on the console to the user. Second
+    creates Excel format (from Pandas) and then configure the same sheet to
+    improve the formatting.
+
+    """
 
     list_item = []
 
@@ -109,23 +116,23 @@ def summary_table(results_summary, excel_filename):
         {'bold': True, 'text_wrap': True, 'valign': 'top', 'align': 'center',
          'bg_color': '#1F497D', 'font_color': '#FFFFFF'})
 
-    format_buy = workbook.add_format({'bg_color': '#4b9c09',
-                                      'bold': True,
+    format_buy = workbook.add_format({'bg_color':   '#4b9c09',
+                                      'bold':       True,
                                       'font_color': '#000000'})
-    format_hold = workbook.add_format({'bg_color': '#DDDDDD',
+    format_hold = workbook.add_format({'bg_color':   '#DDDDDD',
                                        'font_color': '#AAAAAA'})
-    format_sell = workbook.add_format({'bg_color': '#871e17',
-                                       'bold': True,
+    format_sell = workbook.add_format({'bg_color':   '#871e17',
+                                       'bold':       True,
                                        'font_color': '#FFFFFF'})
-    format_dark_green = workbook.add_format({'bg_color': '#65c75f',
+    format_dark_green = workbook.add_format({'bg_color':   '#65c75f',
                                              'font_color': '#000000'})
-    format_green = workbook.add_format({'bg_color': '#BDFB97',
+    format_green = workbook.add_format({'bg_color':   '#BDFB97',
                                         'font_color': '#000000'})
-    format_yellow = workbook.add_format({'bg_color': '#fadb75',
+    format_yellow = workbook.add_format({'bg_color':   '#fadb75',
                                          'font_color': '#000000'})
-    format_red = workbook.add_format({'bg_color': '#FF797C',
+    format_red = workbook.add_format({'bg_color':   '#FF797C',
                                       'font_color': '#000000'})
-    format_dark_red = workbook.add_format({'bg_color': '#e84848',
+    format_dark_red = workbook.add_format({'bg_color':   '#e84848',
                                            'font_color': '#000000'})
 
     worksheet.set_column('B:B', 12, format_text)
@@ -181,66 +188,96 @@ def summary_table(results_summary, excel_filename):
 
     range_cells = f"M2:M{df_pivot.shape[0] + 1}"
 
-    worksheet.conditional_format(range_cells, {'type': 'cell',
+    worksheet.conditional_format(range_cells, {'type':     'cell',
                                                'criteria': '>',
-                                               'value': 0.05,
-                                               'format': format_dark_green})
+                                               'value':    0.05,
+                                               'format':   format_dark_green})
 
-    worksheet.conditional_format(range_cells, {'type': 'cell',
+    worksheet.conditional_format(range_cells, {'type':     'cell',
                                                'criteria': '>',
-                                               'value': 0,
-                                               'format': format_green})
+                                               'value':    0,
+                                               'format':   format_green})
 
-    worksheet.conditional_format(range_cells, {'type': 'cell',
+    worksheet.conditional_format(range_cells, {'type':     'cell',
                                                'criteria': '>',
                                                'value': -0.02,
-                                               'format': format_yellow})
+                                               'format':   format_yellow})
 
     worksheet.conditional_format(range_cells, {'type':     'cell',
                                                'criteria': '>',
                                                'value': -0.10,
-                                               'format': format_red})
+                                               'format':   format_red})
 
-    worksheet.conditional_format(range_cells, {'type': 'cell',
+    worksheet.conditional_format(range_cells, {'type':     'cell',
                                                'criteria': '<=',
                                                'value': -0.10,
-                                               'format': format_dark_red})
+                                               'format':   format_dark_red})
 
     ###### Relative gain & Relative gain reference #############################
 
     range_cells = f"K2:L{df_pivot.shape[0] + 1}"
 
-    worksheet.conditional_format(range_cells, {'type': 'cell',
+    worksheet.conditional_format(range_cells, {'type':     'cell',
                                                'criteria': '>',
-                                               'value': 0.2,
-                                               'format': format_dark_green})
+                                               'value':    0.2,
+                                               'format':   format_dark_green})
 
-    worksheet.conditional_format(range_cells, {'type': 'cell',
+    worksheet.conditional_format(range_cells, {'type':     'cell',
                                                'criteria': '>',
-                                               'value': 0.05,
-                                               'format': format_green})
+                                               'value':    0.05,
+                                               'format':   format_green})
 
-    worksheet.conditional_format(range_cells, {'type': 'cell',
+    worksheet.conditional_format(range_cells, {'type':     'cell',
                                                'criteria': '>',
-                                               'value': 0.00,
-                                               'format': format_yellow})
+                                               'value':    0.00,
+                                               'format':   format_yellow})
 
     worksheet.conditional_format(range_cells, {'type':     'cell',
                                                'criteria': '>',
                                                'value': -0.05,
-                                               'format': format_red})
+                                               'format':   format_red})
 
-    worksheet.conditional_format(range_cells, {'type': 'cell',
+    worksheet.conditional_format(range_cells, {'type':     'cell',
                                                'criteria': '<=',
                                                'value': -0.05,
-                                               'format': format_dark_red})
+                                               'format':   format_dark_red})
 
     worksheet.set_row(0, None, format_headers)
 
+    # --------------------------------------------------------------------------
+    #   Configure the headers and adds the freezed pane on the header and
+    #   auto-filter.
+    # --------------------------------------------------------------------------
     col_num = 1
     for value in columns_order:
         worksheet.write(0, col_num, value, format_headers)
         col_num = col_num + 1
+
+    worksheet.freeze_panes(1, 0)
+    worksheet.autofilter(f"A1:M{df_pivot.shape[0] + 1}")
+
+    # --------------------------------------------------------------------------
+    #   Adds hyperlinks to the table.
+    # --------------------------------------------------------------------------
+    today_string = datetime.today().strftime('%Y-%m-%d')
+    method_config_folder = Path.cwd().resolve() / "src" / \
+        "lib_analysis" / "methods" / "display_config"
+    files = list(filter(Path.is_file, method_config_folder.glob('**/*.json')))
+
+    method_savenames = {}
+    for method_file in files:
+        with open(method_file) as json_file:
+            data = json.load(json_file)
+        method_name = data["general"]["reference_name"]
+        method_savename = data["general"]["save_name"]
+        method_savenames[method_name] = method_savename
+
+    for row_num in range(df_pivot.shape[0]):
+        symbol_value = df_pivot["Symbol"].iloc[row_num]
+        method_value = df_pivot["Method"].iloc[row_num]
+        method_file = method_savenames[method_value]
+        string_fomular = f'=HYPERLINK(_xlfn.CONCAT(LEFT(CELL("filename"),SEARCH("[",CELL("filename"))-1),"analysis\{today_string}\Analysis {method_file} {symbol_value}.html"), "{symbol_value}")'
+        worksheet.write_formula(f"B{row_num + 2}", string_fomular)
 
     writer.save()
 

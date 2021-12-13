@@ -1,5 +1,6 @@
 {
     "general": {
+        "reference_name": "Arbitration",
         "display_name": "Arbitration",
         "save_name": "Arbitration",
         "title_font_size": 20,

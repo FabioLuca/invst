@@ -1,5 +1,6 @@
 {
     "general": {
+        "reference_name": "Combined",
         "display_name": "Combined",
         "save_name": "COMB",
         "title_font_size": 20,

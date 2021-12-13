@@ -1,5 +1,6 @@
 {
     "general": {
+        "reference_name": "RSI SMA",
         "display_name": "RSI Simple",
         "save_name": "RSI_SMA",
         "title_font_size": 20,
