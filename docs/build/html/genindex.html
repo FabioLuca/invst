@@ -5,9 +5,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index &#8212; Invst Access 0.0.1 documentation</title>
+    <title>Index &#8212; Invst documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
@@ -21,9 +22,70 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head><body>
-  
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/images/logo.png" alt="Logo"/>
+    
+  </a>
+</p>
 
-    <div class="document">
+
+
+<p class="blurb">A project for algorithm trading with AlphaVantage and Comdirect.</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=FabioLuca&repo=invst&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#trading-analysis">Trading analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#analysis-methods">Analysis methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#trader-automation">Trader automation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#general-libraries">General libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#automation-and-scripts">Automation and scripts</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
       <div class="documentwrapper">
         <div class="bodywrapper">
           
@@ -144,10 +206,10 @@
 </li>
       <li><a href="basic.html#src.lib_analysis.basic.Basic.calc_minimum">calc_minimum() (src.lib_analysis.basic.Basic method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="basic.html#src.lib_analysis.basic.Basic.calc_MovingStdDev">calc_MovingStdDev() (src.lib_analysis.basic.Basic method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="basic.html#src.lib_analysis.basic.Basic.calc_multiplication">calc_multiplication() (src.lib_analysis.basic.Basic method)</a>
 </li>
       <li><a href="analysis.html#src.analysis.Analysis.calc_parameters">calc_parameters() (src.analysis.Analysis method)</a>
@@ -173,6 +235,10 @@
       <li><a href="basic.html#src.lib_analysis.basic.Basic.convert_numpy">convert_numpy() (src.lib_analysis.basic.Basic method)</a>
 </li>
       <li><a href="lstm.html#src.lib_analysis.methods.lstm.LSTM.create_dataset">create_dataset() (src.lib_analysis.methods.lstm.LSTM method)</a>
+</li>
+      <li><a href="lstm.html#src.lib_analysis.methods.lstm.LSTM.create_future_index">create_future_index() (src.lib_analysis.methods.lstm.LSTM method)</a>
+</li>
+      <li><a href="lstm.html#src.lib_analysis.methods.lstm.LSTM.create_lstm_model">create_lstm_model() (src.lib_analysis.methods.lstm.LSTM method)</a>
 </li>
       <li><a href="comdirect_status_report.html#automation.comdirect_status_report.create_page">create_page() (in module automation.comdirect_status_report)</a>
 </li>
@@ -408,6 +474,8 @@
 </li>
       <li><a href="basic.html#src.lib_analysis.basic.Basic.split_data">split_data() (src.lib_analysis.basic.Basic method)</a>
 </li>
+      <li><a href="lstm.html#src.lib_analysis.methods.lstm.LSTM.squash_output">squash_output() (src.lib_analysis.methods.lstm.LSTM method)</a>
+</li>
       <li>
     src.analysis
 
@@ -478,6 +546,8 @@
         <li><a href="combined.html#module-src.lib_analysis.methods.combined">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     src.lib_analysis.methods.lstm
 
@@ -485,8 +555,6 @@
         <li><a href="lstm.html#module-src.lib_analysis.methods.lstm">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     src.lib_analysis.methods.macd
 
@@ -603,56 +671,8 @@
           
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">Invst Access</a></h1>
-
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">Core</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html#trading-analysis">Trading analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html#analysis-methods">Analysis methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html#trader-automation">Trader automation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html#general-libraries">General libraries</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html#automation-and-scripts">Automation and scripts</a></li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-  </ul></li>
-</ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
-
-
-
-
-
-
-
-
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
+    <div class="clearer"></div>
+  </div>
     <div class="footer">
       &copy;2021, Fabio de Luca.
       

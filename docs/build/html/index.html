@@ -6,9 +6,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Welcome to INVST documentation! &#8212; Invst Access 0.0.1 documentation</title>
+    <title>Welcome to INVST documentation! &#8212; Invst documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
@@ -23,9 +24,71 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head><body>
-  
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="#">
+    <img class="logo" src="_static/images/logo.png" alt="Logo"/>
+    
+  </a>
+</p>
 
-    <div class="document">
+
+
+<p class="blurb">A project for algorithm trading with AlphaVantage and Comdirect.</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=FabioLuca&repo=invst&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#trading-analysis">Trading analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#analysis-methods">Analysis methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#trader-automation">Trader automation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#general-libraries">General libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#automation-and-scripts">Automation and scripts</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="modules.html" title="next chapter">Core</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
       <div class="documentwrapper">
         <div class="bodywrapper">
           
@@ -34,8 +97,8 @@
             
   <section id="welcome-to-invst-documentation">
 <h1>Welcome to INVST documentation!<a class="headerlink" href="#welcome-to-invst-documentation" title="Permalink to this headline">¶</a></h1>
-<section id="contents">
-<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
+<section id="page-contents">
+<h2>Page contents<a class="headerlink" href="#page-contents" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound" id="mastertoc">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">Core</a></li>
@@ -55,7 +118,7 @@ due to the trading strategy, or issues due to account access.</p>
 </section>
 <section id="overview">
 <h1>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
-<div class="contents local topic" id="id1">
+<div class="contents local topic" id="contents">
 <ul class="simple">
 <li><p><a class="reference internal" href="#project-goals" id="id3">Project goals</a></p>
 <ul>
@@ -197,8 +260,8 @@ follow the instructions from their API documentation on how to obtain them.</p>
 <h2>Strategy principles<a class="headerlink" href="#strategy-principles" title="Permalink to this headline">¶</a></h2>
 <p>To cover the principles, the starting point will be the OHLC (Open High Low
 Close) data table for Amazon (AMZN) between 10.12.2021 and 09.11.2021:</p>
-<table class="colwidths-given docutils align-default" id="id2">
-<caption><span class="caption-text">Example of data from Amazon</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
+<table class="colwidths-given docutils align-default" id="id1">
+<caption><span class="caption-text">Example of data from Amazon</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col style="width: 17%" />
 <col style="width: 17%" />
@@ -399,6 +462,222 @@ shorter term predictions if applied to the actual price (e.g. closing price),
 since it tries to replicate the feature performance. Of course the same method
 can be equally applied to other values or indicators, such a moving average
 (where the fast changing component is filtered out) or to a MACD histogram.</p>
+<p>As an illustration of the different structure of the outcomes, the table below
+shows a general outcome based on the data above for Amazon, for an analysis
+ran on the 10.12.2021:</p>
+<table class="colwidths-given docutils align-default" id="id2">
+<caption><span class="caption-text">Example of results</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Date</p></th>
+<th class="head"><p>Close</p></th>
+<th class="head"><p>Momentum Analysis</p></th>
+<th class="head"><p>NN Analysis</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>12/17/21</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Prediction</p></td>
+</tr>
+<tr class="row-odd"><td><p>12/16/21</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Prediction</p></td>
+</tr>
+<tr class="row-even"><td><p>12/15/21</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Prediction</p></td>
+</tr>
+<tr class="row-odd"><td><p>12/14/21</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Prediction</p></td>
+</tr>
+<tr class="row-even"><td><p>12/13/21</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Prediction</p></td>
+</tr>
+<tr class="row-odd"><td><p>12/12/21</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Prediction</p></td>
+</tr>
+<tr class="row-even"><td><p>12/11/21</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Prediction</p></td>
+</tr>
+<tr class="row-odd"><td><p>12/10/21</p></td>
+<td><p>3444,24</p></td>
+<td><p>Buy/Hold/Sell</p></td>
+<td><p>Input Data</p></td>
+</tr>
+<tr class="row-even"><td><p>12/09/21</p></td>
+<td><p>3483,42</p></td>
+<td><p>Buy/Hold/Sell</p></td>
+<td><p>Input Data</p></td>
+</tr>
+<tr class="row-odd"><td><p>12/08/21</p></td>
+<td><p>3523,16</p></td>
+<td><p>Buy/Hold/Sell</p></td>
+<td><p>Input Data</p></td>
+</tr>
+<tr class="row-even"><td><p>12/07/21</p></td>
+<td><p>3523,29</p></td>
+<td><p>Buy/Hold/Sell</p></td>
+<td><p>Input Data</p></td>
+</tr>
+<tr class="row-odd"><td><p>12/06/21</p></td>
+<td><p>3427,37</p></td>
+<td><p>Buy/Hold/Sell</p></td>
+<td><p>Learning Data</p></td>
+</tr>
+<tr class="row-even"><td><p>12/03/21</p></td>
+<td><p>3389,79</p></td>
+<td><p>Buy/Hold/Sell</p></td>
+<td><p>Learning Data</p></td>
+</tr>
+<tr class="row-odd"><td><p>12/02/21</p></td>
+<td><p>3437,36</p></td>
+<td><p>Buy/Hold/Sell</p></td>
+<td><p>Learning Data</p></td>
+</tr>
+<tr class="row-even"><td><p>12/01/21</p></td>
+<td><p>3443,72</p></td>
+<td><p>Buy/Hold/Sell</p></td>
+<td><p>Learning Data</p></td>
+</tr>
+<tr class="row-odd"><td><p>11/30/21</p></td>
+<td><p>3507,07</p></td>
+<td><p>Buy/Hold/Sell</p></td>
+<td><p>Learning Data</p></td>
+</tr>
+<tr class="row-even"><td><p>11/29/21</p></td>
+<td><p>3561,57</p></td>
+<td><p>Buy/Hold/Sell</p></td>
+<td><p>Learning Data</p></td>
+</tr>
+<tr class="row-odd"><td><p>11/26/21</p></td>
+<td><p>3504,56</p></td>
+<td><p>Buy/Hold/Sell</p></td>
+<td><p>Learning Data</p></td>
+</tr>
+<tr class="row-even"><td><p>11/24/21</p></td>
+<td><p>3580,41</p></td>
+<td><p>Buy/Hold/Sell</p></td>
+<td><p>Learning Data</p></td>
+</tr>
+<tr class="row-odd"><td><p>11/23/21</p></td>
+<td><p>3580,04</p></td>
+<td><p>Buy/Hold/Sell</p></td>
+<td><p>Learning Data</p></td>
+</tr>
+<tr class="row-even"><td><p>11/22/21</p></td>
+<td><p>3572,57</p></td>
+<td><p>Buy/Hold/Sell</p></td>
+<td><p>Learning Data</p></td>
+</tr>
+<tr class="row-odd"><td><p>11/19/21</p></td>
+<td><p>3676,57</p></td>
+<td><p>Buy/Hold/Sell</p></td>
+<td><p>Learning Data</p></td>
+</tr>
+<tr class="row-even"><td><p>11/18/21</p></td>
+<td><p>3696,06</p></td>
+<td><p>Buy/Hold/Sell</p></td>
+<td><p>Learning Data</p></td>
+</tr>
+<tr class="row-odd"><td><p>11/17/21</p></td>
+<td><p>3549,00</p></td>
+<td><p>Buy/Hold/Sell</p></td>
+<td><p>Learning Data</p></td>
+</tr>
+<tr class="row-even"><td><p>11/16/21</p></td>
+<td><p>3540,70</p></td>
+<td><p>Buy/Hold/Sell</p></td>
+<td><p>Learning Data</p></td>
+</tr>
+<tr class="row-odd"><td><p>11/15/21</p></td>
+<td><p>3545,68</p></td>
+<td><p>Buy/Hold/Sell</p></td>
+<td><p>Learning Data</p></td>
+</tr>
+<tr class="row-even"><td><p>11/12/21</p></td>
+<td><p>3525,15</p></td>
+<td><p>Buy/Hold/Sell</p></td>
+<td><p>Learning Data</p></td>
+</tr>
+<tr class="row-odd"><td><p>11/11/21</p></td>
+<td><p>3472,50</p></td>
+<td><p>Buy/Hold/Sell</p></td>
+<td><p>Learning Data</p></td>
+</tr>
+<tr class="row-even"><td><p>11/10/21</p></td>
+<td><p>3482,05</p></td>
+<td><p>Buy/Hold/Sell</p></td>
+<td><p>Learning Data</p></td>
+</tr>
+<tr class="row-odd"><td><p>11/09/21</p></td>
+<td><p>3576,23</p></td>
+<td><p>Buy/Hold/Sell</p></td>
+<td><p>Learning Data</p></td>
+</tr>
+</tbody>
+</table>
+<p>Especially for the Neural-Network example above, the length of the data is
+chosen just to illustrate its presence, and not the actual length. As observed
+above, the last input data used to make the prediction has a length of 4.</p>
 <p>Combining both methods is the ultimate goal, since there is a potential to
 optmize the strategy combining the benefits of each other.</p>
 </section>
@@ -542,7 +821,7 @@ files, to be used as a tracker.</p>
 </section>
 <section id="module-automation.run_analysis">
 <span id="run-analysis-py"></span><h3>run_analysis.py<a class="headerlink" href="#module-automation.run_analysis" title="Permalink to this headline">¶</a></h3>
-<p>Script for sequence analysis of a list of sysmbols / tickers and providing
+<p>Script for sequence analysis of a list of symbols / tickers and providing
 a report of the overall results for performance evaluation.</p>
 </section>
 </section>
@@ -561,57 +840,8 @@ a report of the overall results for performance evaluation.</p>
           
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="#">Invst Access</a></h1>
-
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">Core</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html#trading-analysis">Trading analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html#analysis-methods">Analysis methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html#trader-automation">Trader automation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html#general-libraries">General libraries</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html#automation-and-scripts">Automation and scripts</a></li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="#">Documentation overview</a><ul>
-      <li>Next: <a href="modules.html" title="next chapter">Core</a></li>
-  </ul></li>
-</ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
-
-
-
-
-
-
-
-
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
+    <div class="clearer"></div>
+  </div>
     <div class="footer">
       &copy;2021, Fabio de Luca.
       

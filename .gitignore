@@ -145,3 +145,6 @@ logs/
 # Any kind of export from the script
 Export*xlsx
 export/
+
+# Remove the models from keras
+models/

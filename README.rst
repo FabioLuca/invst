@@ -162,6 +162,20 @@ since it tries to replicate the feature performance. Of course the same method
 can be equally applied to other values or indicators, such a moving average
 (where the fast changing component is filtered out) or to a MACD histogram.
 
+As an illustration of the different structure of the outcomes, the table below
+shows a general outcome based on the data above for Amazon, for an analysis
+ran on the 10.12.2021:
+
+.. csv-table:: Example of results
+   :file: /docs/source/example_result_amazon.csv
+   :widths: 60, 60, 60, 60
+   :header-rows: 1
+   :delim: ;
+
+Especially for the Neural-Network example above, the length of the data is
+chosen just to illustrate its presence, and not the actual length. As observed
+above, the last input data used to make the prediction has a length of 4.
+
 Combining both methods is the ultimate goal, since there is a potential to
 optmize the strategy combining the benefits of each other.
 

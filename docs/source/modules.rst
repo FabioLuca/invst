@@ -64,3 +64,4 @@ Automation and scripts
    comdirect_status_update
    comdirect_status_report
    run_analysis
+   print_table
