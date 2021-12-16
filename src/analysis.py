@@ -112,6 +112,14 @@ class Analysis(Crash, MACD, RSI_SMA, RSI_EMA, BOLLINGER_BANDS, MACDAdvanced, ARI
         self.calc_parameters()
 
         # ----------------------------------------------------------------------
+        #   NN predictions of signals
+        # ----------------------------------------------------------------------
+        self.calc_LSTM(source_column="Close Final",
+                       sequence_length=30,  # Represents 6 weeks (work-days)
+                       prediction_length=15  # Represents 3 weeks (work-days)
+                       )
+
+        # ----------------------------------------------------------------------
         #   Individual strategies calculations
         # ----------------------------------------------------------------------
         self.calc_Crash()
@@ -121,7 +129,7 @@ class Analysis(Crash, MACD, RSI_SMA, RSI_EMA, BOLLINGER_BANDS, MACDAdvanced, ARI
         self.calc_BBANDS()
         # self.calc_MACD_Advanced()
         self.calc_ARIMA()
-        self.calc_LSTM()
+
         # self.calc_CombinedStrategy()
 
         #print(json.dumps(self.analysis_results, sort_keys=False, indent=4))

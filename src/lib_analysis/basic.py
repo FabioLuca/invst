@@ -493,12 +493,19 @@ class Basic:
 
         return numpy_data
 
-    def split_data(self, data, percetage_learning: float):
+    def split_data(self, data, percetage_learning: float = -1, sequence_length: int = 0):
 
         length = data.size
 
-        cut_learning = int(round(length * percetage_learning))
-        cut_test = length - cut_learning
+        if 0 <= percetage_learning <= 1:
+            cut_learning = int(round(length * percetage_learning))
+            cut_test = length - cut_learning
+        elif int(percetage_learning) == -1 and sequence_length > 0:
+            cut_learning = int(length - sequence_length)
+            cut_test = length - cut_learning
+        else:
+            cut_learning = length
+            cut_test = 0
 
         if isinstance(data, np.ndarray):
             train_data = data[:cut_learning]
@@ -506,5 +513,12 @@ class Basic:
         elif isinstance(data, pd.DataFrame):
             train_data = data.iloc[:cut_learning].values
             test_data = data.iloc[-cut_test:].values
+
+        # if percetage_learning == 0:
+        #     train_data = None
+        #     test_data = data
+        # else:
+        #     train_data = data
+        #     test_data = None
 
         return train_data, test_data

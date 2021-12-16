@@ -17,10 +17,37 @@ sys.path.insert(0, os.path.abspath(os.path.join('..', '..')))
 
 # -- Project information -----------------------------------------------------
 
-project = 'Invst Access'
+project = 'Invst'
 copyright = '2021, Fabio de Luca'
 author = 'Fabio de Luca'
 release = "0.0.1"
+html_title = "Invst documentation"
+html_logo = "images/logo.png"
+
+html_sidebars = {
+    '**': [
+        'about.html',
+        'navigation.html',
+        'relations.html',
+        'searchbox.html',
+        'donate.html',
+    ]
+}
+
+html_context = {
+    'display_github': True,
+    'github_user': 'FabioLuca',
+    'github_repo': 'invst',
+    'github_version': 'master/docs/',
+}
+
+html_theme_options = {
+    'logo': 'images/logo.png',
+    "description": "A project for algorithm trading with AlphaVantage and Comdirect.",
+    "github_user": "FabioLuca",
+    "github_repo": "invst",
+    "fixed_sidebar": True,
+}
 
 # -- General configuration ---------------------------------------------------
 
@@ -60,5 +87,5 @@ html_theme = 'alabaster'  # "bizstyle" #'alabaster'
 
 # Since there is no _static in this project, and to remove the warning, the
 # template was chnaged to be empty.
-# html_static_path = ['_static'] --> Original
-html_static_path = []
+html_static_path = ['_static']
+html_css_files = ['css/custom.css']

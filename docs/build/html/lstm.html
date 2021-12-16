@@ -6,9 +6,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>LSTM (Long Short-Term Memory) &#8212; Invst Access 0.0.1 documentation</title>
+    <title>LSTM (Long Short-Term Memory) &#8212; Invst documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
@@ -25,108 +26,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head><body>
-  
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          
-
-          <div class="body" role="main">
-            
-  <section id="module-src.lib_analysis.methods.lstm">
-<span id="lstm-long-short-term-memory"></span><h1>LSTM (Long Short-Term Memory)<a class="headerlink" href="#module-src.lib_analysis.methods.lstm" title="Permalink to this headline">¶</a></h1>
-<p>The basic architecture of the</p>
-<a class="reference internal image-reference" href="https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/LSTM_Cell.svg/1200px-LSTM_Cell.svg.png"><img alt="Alternative text" class="align-center" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/LSTM_Cell.svg/1200px-LSTM_Cell.svg.png" style="width: 400px;" /></a>
-<dl class="py class">
-<dt class="sig sig-object py" id="src.lib_analysis.methods.lstm.LSTM">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.lib_analysis.methods.lstm.</span></span><span class="sig-name descname"><span class="pre">LSTM</span></span><a class="headerlink" href="#src.lib_analysis.methods.lstm.LSTM" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="basic.html#src.lib_analysis.basic.Basic" title="src.lib_analysis.basic.Basic"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.lib_analysis.basic.Basic</span></code></a></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="src.lib_analysis.methods.lstm.LSTM.calc_LSTM">
-<span class="sig-name descname"><span class="pre">calc_LSTM</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.lib_analysis.methods.lstm.LSTM.calc_LSTM" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate a prediction based on the LSTM (Long Short-Term Memory)
-method, which is a RNN (recurrent neural network) architecture.</p>
-<p>The implementation is based on the following steps:</p>
-<dl class="simple">
-<dt># . Vectorize the data, since it starts as a <cite>(N,)</cite> shape, where <cite>N</cite> is</dt><dd><p>the number of data points. After vectorization, it becomes of shape
-<cite>(N, 1)</cite>.</p>
-</dd>
-</dl>
-<p># . Normalize the data points to the range [0, 1].
-# . Splits the data into 2 blocks: learning and testing. This is done</p>
-<blockquote>
-<div><p>for all the data available to this points, even if not necessary for
-the algorithm per se. The additional data split is done for reason of
-plotting results.</p>
-</div></blockquote>
-<ol class="arabic simple">
-<li><p>Strucutre the data for the RNN. See documentation in the
-<cite>create_dataset</cite> method for more details.</p></li>
-<li><p>Rephase the data to a 3D for LSTM demand: samples, time steps,
-and features. As an example, for the <cite>N</cite> size dataset, if we use
-sequences (called sub-sequences in the code) of size <cite>L</cite>, and given
-only 1 feature (e.g. only the Closing value is used), then this
-tensor will be (N-L-1, L, 1). Note that the N-L-1 is due to the
-previous operation of structuring the data.</p></li>
-</ol>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="src.lib_analysis.methods.lstm.LSTM.create_dataset">
-<span class="sig-name descname"><span class="pre">create_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_sequence_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_sequence_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shift_future</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.lib_analysis.methods.lstm.LSTM.create_dataset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Structures the data into sequences and labels for the learning. It’s
-done by breaking the data into sub-sequences and pairing to the
-respective label.</p>
-<p>For example, a dataset of <cite>N</cite> entries:</p>
-<div class="math notranslate nohighlight">
-\[\text{Seq}_{N} = [x_{1}, x_{2}, x_{3}, x_{4}, \ldots, x_{N}]\]</div>
-<p>a sub-sequence of size <cite>L</cite> (where <span class="math notranslate nohighlight">\(L &lt; N\)</span>) to predict the next
-point after the sequence, it would be defined as:</p>
-<div class="math notranslate nohighlight">
-\[\text{SubSeq}_{i, L} = [x_{i}, x_{i+1}, x_{i+2}, \ldots, x_{i+L}] \rightarrow \text{Predict: } x_{i+L+1}\]</div>
-<p>As a numeric example, given <span class="math notranslate nohighlight">\(\text{Seq}\)</span> with 6 samples:</p>
-<div class="math notranslate nohighlight">
-\[\text{Seq}_{6} = [x_{1}, x_{2}, x_{3}, x_{4}, x_{5}, x_{6}]\]</div>
-<p>and using 3 samples to predict the next one, so the parameter
-<cite>time_step</cite> is equal to 3:</p>
-<div class="math notranslate nohighlight">
-\[ \begin{align}\begin{aligned}\text{SubSeq}_{1, 3} = \left[ x_{1}, x_{2}, x_{3} \right] \rightarrow \text{Predict: } x_{4}\\\text{SubSeq}_{2, 3} = \left[ x_{2}, x_{3}, x_{4} \right] \rightarrow \text{Predict: } x_{5}\\\text{SubSeq}_{3, 3} = \left[ x_{3}, x_{4}, x_{5} \right] \rightarrow \text{Predict: } x_{6}\end{aligned}\end{align} \]</div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dataset</strong> (<em>data</em>) – Name of the column in the Pandas Dataframe to be used for the
-calculation of the moving average.</p></li>
-<li><p><strong>input_sequence_length</strong> (<em>integer</em><em>, </em><em>optional</em>) – Length of the sequences.</p></li>
-<li><p><strong>output_sequence_length</strong> (<em>integer</em><em>, </em><em>optional</em>) – Length of the sequences.</p></li>
-<li><p><strong>shift_future</strong> (<em>integer</em><em>, </em><em>optional</em>) – Length of the sequences.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>sequences</strong> (<em>Numpy array</em>) – Array of sequence arrays paired to the labels.</p></li>
-<li><p><strong>labels</strong> (<em>Numpy array</em>) – Array of labels paired to the sequence arrays.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-</section>
-
-
-          </div>
-          
-        </div>
-      </div>
+  <div class="document">
+    
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">Invst Access</a></h1>
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/images/logo.png" alt="Logo"/>
+    
+  </a>
+</p>
 
 
 
+<p class="blurb">A project for algorithm trading with AlphaVantage and Comdirect.</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=FabioLuca&repo=invst&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
 
 
 
@@ -173,8 +94,215 @@ calculation of the moving average.</p></li>
 
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-src.lib_analysis.methods.lstm">
+<span id="lstm-long-short-term-memory"></span><h1>LSTM (Long Short-Term Memory)<a class="headerlink" href="#module-src.lib_analysis.methods.lstm" title="Permalink to this headline">¶</a></h1>
+<p>The basic architecture of the</p>
+<a class="reference internal image-reference" href="https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/LSTM_Cell.svg/1200px-LSTM_Cell.svg.png"><img alt="Alternative text" class="align-center" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/LSTM_Cell.svg/1200px-LSTM_Cell.svg.png" style="width: 400px;" /></a>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.lib_analysis.methods.lstm.LSTM">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.lib_analysis.methods.lstm.</span></span><span class="sig-name descname"><span class="pre">LSTM</span></span><a class="headerlink" href="#src.lib_analysis.methods.lstm.LSTM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="basic.html#src.lib_analysis.basic.Basic" title="src.lib_analysis.basic.Basic"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.lib_analysis.basic.Basic</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.lib_analysis.methods.lstm.LSTM.calc_LSTM">
+<span class="sig-name descname"><span class="pre">calc_LSTM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sequence_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prediction_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ratio_train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-</span> <span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.lib_analysis.methods.lstm.LSTM.calc_LSTM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate a prediction based on the LSTM (Long Short-Term Memory)
+method, which is a RNN (recurrent neural network) architecture.</p>
+<p>The implementation is based on the following steps:</p>
+<ol class="arabic simple">
+<li><p>Vectorize the data, since it starts as a <code class="docutils literal notranslate"><span class="pre">(N,)</span></code> shape, where <cite>N</cite>
+is the number of data points. After vectorization, it becomes of
+shape <code class="docutils literal notranslate"><span class="pre">(N,</span> <span class="pre">1)</span></code>.</p></li>
+<li><p>Normalize the data points to the range [0, 1].</p></li>
+<li><p>Splits the data into 2 blocks: learning and testing. This is done
+for all the data available to this points, even if not necessary for
+the algorithm per se. The additional data split is done for reason of
+plotting results.</p></li>
+<li><p>Strucutre the data for the RNN. See documentation in the
+<code class="docutils literal notranslate"><span class="pre">create_dataset</span></code> method for more details.</p></li>
+<li><p>Rephase the data to a 3D for LSTM demand: samples, time steps,
+and features. As an example, for the <cite>N</cite> size dataset, if we use
+sequences (called sub-sequences in the code) of size <cite>L</cite>, and given
+only 1 feature (e.g. only the Closing value is used), then this
+tensor will be (N-L-1, L, 1). Note that the <cite>N-L-1</cite> is due to the
+previous operation of structuring the data.</p></li>
+</ol>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sequence_length</strong> (<em>int</em>) – Number of samples to be used as sub-sequences for the feature
+learning.</p></li>
+<li><p><strong>prediction_length</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of samples to be used as sub-sequences for the feature
+learning.</p></li>
+<li><p><strong>ratio_train</strong> (<em>float</em><em>, </em><em>optional</em>) – Value between 0 and 1 that represents the division in the
+series to split between training and test data. If a value of
+-1 is supplied (default value), then the split is done so that
+the last <cite>N</cite> samples (with <cite>N</cite> = sequence_length) will be
+allocate to test, and thus provide a prediction of length
+<code class="docutils literal notranslate"><span class="pre">prediction_length</span></code>, while all the remaining data will be used
+for training.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.lib_analysis.methods.lstm.LSTM.create_dataset">
+<span class="sig-name descname"><span class="pre">create_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_sequence_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_sequence_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shift_future</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.lib_analysis.methods.lstm.LSTM.create_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Structures the data into sequences and labels for the learning. It’s
+done by breaking the data into sub-sequences and pairing to the
+respective label (sequence or single value).</p>
+<p>For example, in the case the predicted sequence has length one, a
+dataset of <cite>N</cite> entries:</p>
+<div class="math notranslate nohighlight">
+\[\text{Seq}_{N} = [x_{1}, x_{2}, x_{3}, x_{4}, \ldots, x_{N}]\]</div>
+<p>a sub-sequence of size <cite>L</cite> (where <span class="math notranslate nohighlight">\(L &lt; N\)</span>) to predict the next
+point after the sequence, it would be defined as:</p>
+<div class="math notranslate nohighlight">
+\[\text{SubSeq}_{i, L} = [x_{i}, x_{i+1}, x_{i+2}, \ldots, x_{i+L}] \rightarrow \text{Predict: } x_{i+L+1}\]</div>
+<p>As a numeric example, given <span class="math notranslate nohighlight">\(\text{Seq}\)</span> with 6 samples:</p>
+<div class="math notranslate nohighlight">
+\[\text{Seq}_{6} = [x_{1}, x_{2}, x_{3}, x_{4}, x_{5}, x_{6}]\]</div>
+<p>and using 3 samples to predict the next one, so the parameter
+<code class="docutils literal notranslate"><span class="pre">time_step</span></code> is equal to 3:</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}\text{SubSeq}_{1, 3} = \left[ x_{1}, x_{2}, x_{3} \right] \rightarrow \text{Predict: } x_{4}\\\text{SubSeq}_{2, 3} = \left[ x_{2}, x_{3}, x_{4} \right] \rightarrow \text{Predict: } x_{5}\\\text{SubSeq}_{3, 3} = \left[ x_{3}, x_{4}, x_{5} \right] \rightarrow \text{Predict: } x_{6}\end{aligned}\end{align} \]</div>
+<p>Example (predicted length greater than one):</p>
+<a class="reference internal image-reference" href="_images/drawing_lstm_structure.png"><img alt="Example of data structure" class="align-center" src="_images/drawing_lstm_structure.png" style="width: 600px;" /></a>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>data</em>) – Name of the column in the Pandas Dataframe to be used for the
+calculation of the moving average.</p></li>
+<li><p><strong>input_sequence_length</strong> (<em>integer</em><em>, </em><em>optional</em>) – Length of the sequences.</p></li>
+<li><p><strong>output_sequence_length</strong> (<em>integer</em><em>, </em><em>optional</em>) – Length of the sequences.</p></li>
+<li><p><strong>shift_future</strong> (<em>integer</em><em>, </em><em>optional</em>) – Length of the sequences.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>sequences</strong> (<em>Numpy array</em>) – Array of sequence arrays paired to the labels.</p></li>
+<li><p><strong>labels</strong> (<em>Numpy array</em>) – Array of labels paired to the sequence arrays.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.lib_analysis.methods.lstm.LSTM.create_future_index">
+<span class="sig-name descname"><span class="pre">create_future_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">previous_day</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.timedelta64</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.lib_analysis.methods.lstm.LSTM.create_future_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an array of dates following the Numpy timedelta type to be
+used for the predictions. The list skips weekends, however holidays are
+not taken into account, so not skipped.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>steps</strong> (<em>int</em>) – Length of the list of dates.</p></li>
+<li><p><strong>previous_day</strong> (<em>np.timedelta64</em>) – The last day to be used for the list. The first date of the
+list will be next one from the passed <code class="docutils literal notranslate"><span class="pre">previous_day</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>sequences</strong> – List with a sequence of dates, incrementing one by one. Weekends
+are skipped in the list.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of np.timedelta64</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.lib_analysis.methods.lstm.LSTM.create_lstm_model">
+<span class="sig-name descname"><span class="pre">create_lstm_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_blocks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sequence_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prediction_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_neurons</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.lib_analysis.methods.lstm.LSTM.create_lstm_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates the LSTM model. The architecture can be different, depending
+on the inputs from the method. Basically 3 designs are possible:</p>
+<ol class="arabic simple">
+<li><p>Many to one</p></li>
+<li><p>Many to many where the size of the input and output are the same</p></li>
+<li><p>Many to many where the size of the input and output are different</p></li>
+</ol>
+<p>Pictured below:</p>
+<a class="reference internal image-reference" href="_images/lstm_design.png"><img alt="Example of data squashing" class="align-center" src="_images/lstm_design.png" style="width: 600px;" /></a>
+<p>For the application, the most relevant is the last case, since more data
+can be used to try to predict a range not so far into the future, and
+thus try to increase the chances of success.</p>
+<p>To optimize operation, the method will store the model after calculation
+in case the parameter <code class="docutils literal notranslate"><span class="pre">save_model</span></code> is enabled (<code class="docutils literal notranslate"><span class="pre">true</span></code>). Also in
+case this parameter is enabled, before starting a new run, it tries to
+load the stored model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.lib_analysis.methods.lstm.LSTM.squash_output">
+<span class="sig-name descname"><span class="pre">squash_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'average'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.lib_analysis.methods.lstm.LSTM.squash_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combines the overlapping results from the steps into a single
+sequence of values. The combination can be done by different methods:</p>
+<ol class="arabic simple">
+<li><p>Average.</p></li>
+<li><p>Last.</p></li>
+<li><p>First.</p></li>
+<li><p>Weighted average (linear weigths, with highest weight to the last
+value).</p></li>
+</ol>
+<p>The squashing is the reverse operation from the <code class="docutils literal notranslate"><span class="pre">create_dataset</span></code>
+method. To illustrate it, an example of a 7 elements is presented below:</p>
+<a class="reference internal image-reference" href="_images/drawing_lstm_squash.png"><img alt="Example of data squashing" class="align-center" src="_images/drawing_lstm_squash.png" style="width: 600px;" /></a>
+<p>Incide each cell (value), the index is written, so first the data
+element index and then the index inside this vector. The last value is
+always 0, since we have here only 2 dimensions.</p>
+<p>The operation is done by a more simple iteration. To represent it, the
+same data is represented below, just rearranging it. The colors are used
+to indicate the tracking of the “movement”:</p>
+<a class="reference internal image-reference" href="_images/drawing_lstm_rearrange.png"><img alt="Example of rearrangement" class="align-center" src="_images/drawing_lstm_rearrange.png" style="width: 600px;" /></a>
+<p>The important point is to note that <strong>each level has an unique sum of
+the indexes</strong>, so the first anti-diagonal cut is denoted by sum 0,
+the second anti-diagonal cut by sum equal to 1, and so one.</p>
+<p>A second note is that the initial part and final part of the squashing
+have less elements to be used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>np.array</em>) – Data to be squashed.</p></li>
+<li><p><strong>mode</strong> (<em>string</em><em>, </em><em>optional</em>) – <p>The method to be used for the combination of the values. The
+possible methods are:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">average</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">last</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">first</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">weighted-average</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>results</strong> – List of values from <code class="docutils literal notranslate"><span class="pre">data</span></code> squashed into a single dimension
+vector. The size of the output is given by the first dimension
+of data added to its second dimension.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
     <div class="footer">
       &copy;2021, Fabio de Luca.
       
