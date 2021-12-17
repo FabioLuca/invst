@@ -112,7 +112,9 @@
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Use this project at your own risk. Authors are not responsible for losses
-due to the trading strategy, or issues due to account access.</p>
+due to the trading strategy adopted, or issues due to account access.
+Comdirect will block an account if 2-factor authentication is not properly
+responded.</p>
 </div>
 </section>
 </section>
@@ -130,27 +132,40 @@ due to the trading strategy, or issues due to account access.</p>
 </li>
 <li><p><a class="reference internal" href="#strategy-principles" id="id8">Strategy principles</a></p></li>
 <li><p><a class="reference internal" href="#to-do-s-and-future-work" id="id9">To do’s and future work</a></p></li>
-<li><p><a class="reference internal" href="#virtual-environment" id="id10">Virtual Environment</a></p></li>
-<li><p><a class="reference internal" href="#accessing-the-documentation" id="id11">Accessing the documentation</a></p></li>
-<li><p><a class="reference internal" href="#unit-testing" id="id12">Unit testing</a></p></li>
-<li><p><a class="reference internal" href="#use-examples" id="id13">Use examples</a></p>
+<li><p><a class="reference internal" href="#setup-and-operations" id="id10">Setup and operations</a></p>
 <ul>
-<li><p><a class="reference internal" href="#module-example" id="id14">example.py</a></p></li>
+<li><p><a class="reference internal" href="#virtual-environment" id="id11">Virtual Environment</a></p></li>
+<li><p><a class="reference internal" href="#accessing-the-documentation" id="id12">Accessing the documentation</a></p></li>
+<li><p><a class="reference internal" href="#unit-testing" id="id13">Unit testing</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#automation" id="id15">Automation</a></p>
+<li><p><a class="reference internal" href="#use-examples" id="id14">Use examples</a></p>
 <ul>
-<li><p><a class="reference internal" href="#module-automation.comdirect_status_report" id="id16">comdirect_status_report.py</a></p></li>
-<li><p><a class="reference internal" href="#module-automation.comdirect_status_update" id="id17">comdirect_status_update.py</a></p></li>
-<li><p><a class="reference internal" href="#module-automation.run_analysis" id="id18">run_analysis.py</a></p></li>
+<li><p><a class="reference internal" href="#module-example" id="id15">example.py</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#indices-and-tables" id="id19">Indices and tables</a></p></li>
+<li><p><a class="reference internal" href="#automation" id="id16">Automation</a></p>
+<ul>
+<li><p><a class="reference internal" href="#module-automation.comdirect_status_report" id="id17">comdirect_status_report.py</a></p></li>
+<li><p><a class="reference internal" href="#module-automation.comdirect_status_update" id="id18">comdirect_status_update.py</a></p></li>
+<li><p><a class="reference internal" href="#module-automation.run_analysis" id="id19">run_analysis.py</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#indices-and-tables" id="id20">Indices and tables</a></p></li>
 </ul>
 </div>
 <section id="project-goals">
 <h2>Project goals<a class="headerlink" href="#project-goals" title="Permalink to this headline">¶</a></h2>
-<p>This project goal is multiple, and split into different elements or steps:</p>
+<p>This project goal is to automate the operation of trading in the market, such as
+stocks or ETF’s (Exchange Traded Fund). In priciple the same approach can be
+adopted and extended to Cryptocurrencies, where the limitation is on the
+trading platformed used, if it permits such operations or not.</p>
+<p>The goal is not to operate as high-frequency trading, but like a regular trader.
+The aimed advantages for the project is then on the potential of analysing a
+bigger amount of data (different stocks or products) at a short time; apply
+consistent mathematical and physical models, due to the major amount of data
+and tools available.</p>
+<p>This project is split into a few major elements or steps:</p>
 <ol class="arabic simple">
 <li><p>Fetch market data series (history)</p></li>
 <li><p>Analyze data for taking decisions (hold, buy, sell)</p></li>
@@ -160,14 +175,14 @@ due to the trading strategy, or issues due to account access.</p>
 <section id="fetch-market-data-series-history">
 <h3>Fetch market data series (history)<a class="headerlink" href="#fetch-market-data-series-history" title="Permalink to this headline">¶</a></h3>
 <p>The first element is to provide an encapsulation for accessing trading values
-history for a given ticker by using the AlphaVantage API. Although other
-sources are possible, they were not completely implemented yet. The output for
-a chosen ticker (stock) is a Pandas dataframe containing the open-high-low-close
-values, also known as OHLC. More data is also available in the dataframe, as the
-volume and adjusted close values, for example.</p>
+history for a given ticker by using the <a class="reference external" href="https://www.alphavantage.co/">AlphaVantage API</a>. Although othernnsources are possible, they
+were not completely implemented yet. The output forna chosen ticker (stock) is a
+Pandas dataframe containing the open-high-low-closennvalues, also known as OHLC.
+More data is also available in the dataframe, as thenvolume and adjusted close
+values, for example.</p>
 <p>To work with the project an API key to AlphaVantage is necessary. Please follow
-the instructions on their website to acquire one. One available, a file named
-<cite>api-cfg-access.json</cite> need to be placed directly in the <cite>cfg</cite> folder. The
+the instructions on their website to acquire one. Once available, a file named
+<code class="docutils literal notranslate"><span class="pre">api-cfg-access.json</span></code> need to be placed directly in the <code class="docutils literal notranslate"><span class="pre">cfg</span></code> folder. The
 structure of the Json data follows the template below, where <cite>&lt;YOUR API KEY&gt;</cite>
 needs to be replaced by the string provided as API key:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
@@ -183,7 +198,7 @@ needs to be replaced by the string provided as API key:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>For this goal, the core implementation is done in the <cite>data_access.py</cite> file.</p>
+<p>For this goal, the core implementation is done in the <code class="docutils literal notranslate"><span class="pre">data_access.py</span></code> file.</p>
 </section>
 <section id="analyze-data-for-taking-decisions-hold-buy-sell">
 <h3>Analyze data for taking decisions (hold, buy, sell)<a class="headerlink" href="#analyze-data-for-taking-decisions-hold-buy-sell" title="Permalink to this headline">¶</a></h3>
@@ -220,21 +235,19 @@ a graphical report to evaluate and also debug the results.</p>
 </section>
 <section id="execute-an-order-into-a-broker">
 <h3>Execute an order into a broker<a class="headerlink" href="#execute-an-order-into-a-broker" title="Permalink to this headline">¶</a></h3>
-<p>This step is not implemented yet. As Comdirect API demands 2-factor
-authentication, the possibility of algo-trading loses potential, so this steps
-has lower priority.</p>
+<p>This step is not implemented yet.</p>
 </section>
 <section id="fetch-account-status">
 <h3>Fetch account status<a class="headerlink" href="#fetch-account-status" title="Permalink to this headline">¶</a></h3>
 <p>As a mean to provide capacity to manage the operation, the Comdirect account
 status is tracked by fetching all the current balances and depots informations
 (values, prices), which are provided as Pandas dataframes and can be stored as
-Micrsoft Excel files, for example, as provided in <cite>example.py</cite>, or stored in
+Micrsoft Excel files, for example, as provided in <code class="docutils literal notranslate"><span class="pre">example.py</span></code>, or stored in
 databases for further analysis (e.g. display evolution in chart).</p>
-<p>In terms of implementation, all the Comdirect API related access and handling
-is done by the <cite>session.py</cite>.</p>
+<p>In terms of implementation, all the <a class="reference external" href="https://www.comdirect.de/cms/kontakt-zugaenge-api.html">Comdirect API</a> related access and
+handling is done by the <code class="docutils literal notranslate"><span class="pre">session.py</span></code>.</p>
 <p>For access, similar to other cases above, the information must be provided in
-the <cite>api-cfg-access.json</cite> (to be placed in the <cite>cfg</cite> folder). The structure
+the <code class="docutils literal notranslate"><span class="pre">api-cfg-access.json</span></code> (to be placed in the <code class="docutils literal notranslate"><span class="pre">cfg</span></code> folder). The structure
 to be followed:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="s2">&quot;api&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -449,7 +462,7 @@ Close) data table for Amazon (AMZN) between 10.12.2021 and 09.11.2021:</p>
 <li><p>Prediction based on neural networks</p></li>
 </ol>
 <p>The two have different ways of working. The former is based on an “inertia” of
-the market, relling mostly that the market tries to correct itself whenever
+the market, relying mostly that the market tries to correct itself whenever
 oversold or overbought. Like a physical system, the mostly a position is off
 balance, the stronger the correction is expected.</p>
 <p>The second method is based on RNN (recurrent neural netoworks). Based on
@@ -680,21 +693,29 @@ chosen just to illustrate its presence, and not the actual length. As observed
 above, the last input data used to make the prediction has a length of 4.</p>
 <p>Combining both methods is the ultimate goal, since there is a potential to
 optmize the strategy combining the benefits of each other.</p>
+<p>As another demonstration of the data organization, see the figure below. The
+image presents the way the data is handled: first the methods will add their
+signals to the structure, second the predictions are done to extrapolate the
+data into the future.</p>
+<a class="reference internal image-reference" href="_images/strategy_data.png"><img alt="Data structure" class="align-center" src="_images/strategy_data.png" style="width: 600px;" /></a>
 </section>
 <section id="to-do-s-and-future-work">
 <h2>To do’s and future work<a class="headerlink" href="#to-do-s-and-future-work" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p>Fetch the data from tickets besides AlphaVantage, as it only supports stocks.
+<li><p>Fetch the data from tickers besides AlphaVantage, as it only supports stocks.
 Adding other sources could support ETF’s and crypto’s for instance.</p></li>
 <li><p>Fetch data from API’s which provide more up-to-data data, without bigger
 delays such as 1-day delay, since it can impact the algorithm decision.</p></li>
 <li><p>Improve the trading strategies.</p></li>
+<li><p>Optmize parameters in the RNN, since it is still based on the vanilla version.</p></li>
 <li><p>Complete the trading implementation, as the order placement is missing.
 Currently only the fetching of account and depot information is implemented.</p></li>
 </ul>
 </section>
+<section id="setup-and-operations">
+<h2>Setup and operations<a class="headerlink" href="#setup-and-operations" title="Permalink to this headline">¶</a></h2>
 <section id="virtual-environment">
-<h2>Virtual Environment<a class="headerlink" href="#virtual-environment" title="Permalink to this headline">¶</a></h2>
+<h3>Virtual Environment<a class="headerlink" href="#virtual-environment" title="Permalink to this headline">¶</a></h3>
 <p>It is recommended to run the project with a Virtual Environment. To do so,
 first make sure to have the package available in you computer:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">virtualenv</span>
@@ -737,7 +758,7 @@ can be installed by the command:</p>
 </div>
 </section>
 <section id="accessing-the-documentation">
-<h2>Accessing the documentation<a class="headerlink" href="#accessing-the-documentation" title="Permalink to this headline">¶</a></h2>
+<h3>Accessing the documentation<a class="headerlink" href="#accessing-the-documentation" title="Permalink to this headline">¶</a></h3>
 <p>The documentation can be generated by using Sphinx. In order to do so, first
 acrivate the virtual environement, and then from the project <cite>docs</cite> folder use
 the command below. This is valid for Linux or Windows when using its terminal:</p>
@@ -752,7 +773,7 @@ the command below. This is valid for Linux or Windows when using its terminal:</
 <cite>docs/build/html</cite>.</p>
 </section>
 <section id="unit-testing">
-<h2>Unit testing<a class="headerlink" href="#unit-testing" title="Permalink to this headline">¶</a></h2>
+<h3>Unit testing<a class="headerlink" href="#unit-testing" title="Permalink to this headline">¶</a></h3>
 <p>Unit test cases are available in the <cite>tests</cite> folder. The tests are based in the
 <cite>pytest</cite> package. To run all the tests, after activating the virtual
 environement, use the command:</p>
@@ -764,6 +785,7 @@ the command:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pytest</span> <span class="n">tests</span><span class="o">/</span><span class="n">test_access</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
+</section>
 </section>
 <section id="use-examples">
 <h2>Use examples<a class="headerlink" href="#use-examples" title="Permalink to this headline">¶</a></h2>
