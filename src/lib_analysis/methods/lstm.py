@@ -70,6 +70,7 @@ class LSTM (Basic):
         number_features = 1
         hidden_neurons = 300
         epochs = 200
+        normalization_range = (-1, 1)
 
         self.logger.info(
             "Performing LSTM analysis for %s for source %s", self.symbol, source_column)
@@ -80,7 +81,8 @@ class LSTM (Basic):
         # ----------------------------------------------------------------------
         #   Get the data for analysis and adapt to the proper format.
         # ----------------------------------------------------------------------
-        index = self.ohlc_dataset.index.to_numpy()
+        index = self.ohlc_dataset[self.ohlc_dataset['Data Type']
+                                  == "Real data"].index.to_numpy()
         new_index = self.create_future_index(steps=prediction_length,
                                              previous_day=index[-1])
         data = self.convert_numpy(source_column=source_column)
@@ -89,7 +91,7 @@ class LSTM (Basic):
         # ----------------------------------------------------------------------
         #   Normalize the data between 0 and 1.
         # ----------------------------------------------------------------------
-        scaler = MinMaxScaler(feature_range=(0, 1))
+        scaler = MinMaxScaler(feature_range=normalization_range)
         data_normalized = scaler.fit_transform(data_vector)
 
         # ----------------------------------------------------------------------
@@ -147,7 +149,8 @@ class LSTM (Basic):
             prediction_length=prediction_length,
             number_features=number_features,
             hidden_neurons=hidden_neurons,
-            save_model=False
+            save_model=False,
+            source_column=source_column
         )
 
         train_predict = model.predict(x_train_reshaped)
@@ -159,7 +162,9 @@ class LSTM (Basic):
         train_predict = scaler.inverse_transform(train_predict)
         test_predict = scaler.inverse_transform(test_predict)
 
-        self.ohlc_dataset[source_column] = test_predict.tolist()
+        self.ohlc_dataset.loc[self.ohlc_dataset["Data Type"]
+                              == "Prediction data", result_column] = test_predict.tolist()
+        self.ohlc_dataset_prediction[result_column] = test_predict.tolist()
 
         train_data_index_redux = train_data_index[(
             sequence_length):]
@@ -221,7 +226,7 @@ class LSTM (Basic):
         print(f"Plot Y:                  {len(train_predict[0])}")
         print("===============================================================")
 
-        return 1
+        # return 1
 
     def create_dataset(self, dataset, input_sequence_length: int = 1, output_sequence_length: int = 1, shift_future: int = 0):
         """Structures the data into sequences and labels for the learning. It's
@@ -339,7 +344,8 @@ class LSTM (Basic):
                           prediction_length: int,
                           number_features: int,
                           hidden_neurons: int = 100,
-                          save_model: bool = False):
+                          save_model: bool = False,
+                          source_column: str = ""):
         """Creates the LSTM model. The architecture can be different, depending
         on the inputs from the method. Basically 3 designs are possible:
 
@@ -364,7 +370,7 @@ class LSTM (Basic):
         load the stored model.
 
         """
-        model_name = f"{number_blocks}_{epochs}_{sequence_length}_{prediction_length}_{number_features}"
+        model_name = f"{source_column}_{number_blocks}_{epochs}_{sequence_length}_{prediction_length}_{number_features}"
         model_path = f"models/lstm_{model_name}"
 
         if Path(model_path).is_dir() and save_model:

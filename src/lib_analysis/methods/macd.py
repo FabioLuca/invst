@@ -4,9 +4,10 @@ from src.lib_analysis.arbitration import Arbitration
 from src.lib_analysis.report_analysis import ReportAnalysis
 from src.lib_analysis.performance_simulation import PerformanceSimulation
 from src.lib_analysis.summary import Summary
+from src.lib_analysis.methods.lstm import LSTM
 
 
-class MACD (Basic, Arbitration, PerformanceSimulation, ReportAnalysis, Summary):
+class MACD (LSTM, Basic, Arbitration, PerformanceSimulation, ReportAnalysis, Summary):
 
     def calc_MACD(self):
         """Calculate de MACD indicator. The MACD is based on the following
@@ -75,6 +76,11 @@ class MACD (Basic, Arbitration, PerformanceSimulation, ReportAnalysis, Summary):
         self.calc_difference(minuend_column="MACD Line",
                              subtrahend_column="MACD Signal",
                              result_column="MACD Histogram")
+
+        self.calc_LSTM(source_column="MACD Histogram",
+                       sequence_length=self.sequence_length,
+                       prediction_length=self.prediction_length,
+                       result_column="MACD Histogram")
 
         self.recommend_threshold_cross(source_column="MACD Histogram",
                                        threshold_upper=0.15,

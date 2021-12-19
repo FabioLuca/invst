@@ -1,3 +1,5 @@
+"""Data analysis and decision taking module.
+"""
 
 import logging
 import json
@@ -11,13 +13,13 @@ from .lib_analysis.methods.macd import MACD
 from .lib_analysis.methods.rsi_sma import RSI_SMA
 from .lib_analysis.methods.rsi_ema import RSI_EMA
 from .lib_analysis.methods.bollinger_band import BOLLINGER_BANDS
-from .lib_analysis.methods.macd_advanced import MACDAdvanced
-from .lib_analysis.methods.arima import ARIMA
-from .lib_analysis.methods.lstm import LSTM
+# from .lib_analysis.methods.macd_advanced import MACDAdvanced
+# from .lib_analysis.methods.arima import ARIMA
+# from .lib_analysis.methods.lstm import LSTM
 from .lib_analysis.methods.combined import CombinedStrategy
 
 
-class Analysis(Crash, MACD, RSI_SMA, RSI_EMA, BOLLINGER_BANDS, MACDAdvanced, ARIMA, LSTM, CombinedStrategy, PreProcessing):
+class Analysis(Crash, MACD, RSI_SMA, RSI_EMA, BOLLINGER_BANDS, CombinedStrategy, PreProcessing):
     """Data analysis class.
 
     Attributes
@@ -60,13 +62,19 @@ class Analysis(Crash, MACD, RSI_SMA, RSI_EMA, BOLLINGER_BANDS, MACDAdvanced, ARI
         self.symbol: str = symbol
         #self.initial_value = None
         self.ohlc_dataset = ohlc_data
+        self.ohlc_dataset_prediction = None
         self.analysis_results = {}
         self.decision = None
 
-        self.analysis_length = analysis_length
+        self.analysis_length_pre = 0
+        self.analysis_length_post = analysis_length
+        self.data_length = 0
         self.up_movement = 0
         self.down_movement = 0
         self.ratio_up_down = 0
+
+        self.sequence_length = 30  # Represents 6 weeks (work-days)
+        self.prediction_length = 15  # Represents 3 weeks (work-days)
 
         self.initial_value = initial_value
         self.stopgain = stopgain
@@ -102,8 +110,9 @@ class Analysis(Crash, MACD, RSI_SMA, RSI_EMA, BOLLINGER_BANDS, MACDAdvanced, ARI
         # ----------------------------------------------------------------------
         #   Data adequation
         # ----------------------------------------------------------------------
+        self.define_past_time()
         # aprox. 250-working days / year
-        self.truncate_range(length=self.analysis_length)
+        self.truncate_range(length=self.analysis_length_pre)
         self.define_closure()
 
         # ----------------------------------------------------------------------
@@ -112,12 +121,9 @@ class Analysis(Crash, MACD, RSI_SMA, RSI_EMA, BOLLINGER_BANDS, MACDAdvanced, ARI
         self.calc_parameters()
 
         # ----------------------------------------------------------------------
-        #   NN predictions of signals
+        #   Creates a new dataframe time range to future dates
         # ----------------------------------------------------------------------
-        self.calc_LSTM(source_column="Close Final",
-                       sequence_length=30,  # Represents 6 weeks (work-days)
-                       prediction_length=15  # Represents 3 weeks (work-days)
-                       )
+        self.extend_time_range(length=self.prediction_length)
 
         # ----------------------------------------------------------------------
         #   Individual strategies calculations
@@ -128,7 +134,16 @@ class Analysis(Crash, MACD, RSI_SMA, RSI_EMA, BOLLINGER_BANDS, MACDAdvanced, ARI
         self.calc_RSI_EMA()
         self.calc_BBANDS()
         # self.calc_MACD_Advanced()
-        self.calc_ARIMA()
+        # self.calc_ARIMA()
+
+        # ----------------------------------------------------------------------
+        #   RNN predictions of signals
+        # ----------------------------------------------------------------------
+        # self.calc_LSTM(source_column="MACD Histogram",
+        #                sequence_length=self.sequence_length,
+        #                prediction_length=self.prediction_length,
+        #                result_column="Prediction MACD Histogram"
+        #                )
 
         # self.calc_CombinedStrategy()
 
@@ -148,8 +163,8 @@ class Analysis(Crash, MACD, RSI_SMA, RSI_EMA, BOLLINGER_BANDS, MACDAdvanced, ARI
                          result_column="Close Final Change")
 
         self.up_movement = self.ohlc_dataset["Close Final Change"].clip(
-            lower=0).sum() / self.analysis_length
+            lower=0).sum() / self.data_length
         self.down_movement = self.ohlc_dataset["Close Final Change"].clip(
-            upper=0).abs().sum() / self.analysis_length
+            upper=0).abs().sum() / self.data_length
 
         self.ratio_up_down = self.up_movement / self.down_movement

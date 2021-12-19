@@ -36,7 +36,7 @@ class Basic:
                 added to the Pandas dataframe as new columns. The new columns
                 are:
 
-                #. `result_column`: Result of the difference operation.
+                # . `result_column`: Result of the difference operation.
 
         """
         if result_column == "":
@@ -45,6 +45,8 @@ class Basic:
         if result_dataframe is None:
             self.ohlc_dataset.loc[:, result_column] = self.ohlc_dataset[minuend_column] - \
                 self.ohlc_dataset[subtrahend_column]
+            self.ohlc_dataset.loc[self.ohlc_dataset['Data Type']
+                                  == "Prediction data", result_column] = np.nan
         else:
             result_dataframe.loc[:, result_column] = self.ohlc_dataset[minuend_column] - \
                 self.ohlc_dataset[subtrahend_column]
@@ -80,7 +82,7 @@ class Basic:
                 added to the Pandas dataframe as new columns. The new columns
                 are:
 
-                #. `result_column`: Result of the scalar multiplication
+                # . `result_column`: Result of the scalar multiplication
                    operation.
 
         """
@@ -160,6 +162,8 @@ class Basic:
         if result_dataframe is None:
             self.ohlc_dataset.loc[:, result_column] = self.ohlc_dataset[dividend_column] / \
                 self.ohlc_dataset[divisor_column]
+            self.ohlc_dataset.loc[self.ohlc_dataset['Data Type']
+                                  == "Prediction data", result_column] = np.nan
         else:
             result_dataframe.loc[:, result_column] = self.ohlc_dataset[dividend_column] / \
                 self.ohlc_dataset[divisor_column]
@@ -176,8 +180,8 @@ class Basic:
                 data which is already available. The expected column for
                 this operation is:
 
-                #. `Open`
-                #. `Close Final`
+                # . `Open`
+                # . `Close Final`
 
         Returns
         -------
@@ -186,7 +190,7 @@ class Basic:
                 added to the Pandas dataframe as new columns. The new columns
                 are:
 
-                #. `Delta`: Result of the difference between `Close Final` and
+                # . `Delta`: Result of the difference between `Close Final` and
                    `Open` values for every sample.
 
         """
@@ -208,6 +212,8 @@ class Basic:
         """
         self.ohlc_dataset.loc[:,
                               result_column] = self.ohlc_dataset[source_column].abs()
+        self.ohlc_dataset.loc[self.ohlc_dataset['Data Type']
+                              == "Prediction data", result_column] = np.nan
 
     def calc_change(self,
                     source_column: str,
@@ -238,6 +244,9 @@ class Basic:
         if result_dataframe is None:
             self.ohlc_dataset.loc[:,
                                   result_column] = self.ohlc_dataset[source_column].diff(shift)
+            self.ohlc_dataset.loc[self.ohlc_dataset['Data Type']
+                                  == "Prediction data", result_column] = np.nan
+
         else:
             result_dataframe.loc[:,
                                  result_column] = self.ohlc_dataset[source_column].diff(shift)
@@ -339,6 +348,8 @@ class Basic:
             if result_dataframe is None:
                 self.ohlc_dataset.loc[:, result_column] = self.ohlc_dataset[source_column].rolling(
                     window=length).mean()
+                self.ohlc_dataset.loc[self.ohlc_dataset['Data Type']
+                                      == "Prediction data", result_column] = np.nan
             else:
                 result_dataframe.loc[:, result_column] = self.ohlc_dataset[source_column].rolling(
                     window=length).mean()
@@ -348,6 +359,8 @@ class Basic:
             if result_dataframe is None:
                 self.ohlc_dataset.loc[:, result_column] = self.ohlc_dataset[source_column].rolling(
                     window=length, min_periods=minimum_length).mean()
+                self.ohlc_dataset.loc[self.ohlc_dataset['Data Type']
+                                      == "Prediction data", result_column] = np.nan
             else:
                 result_dataframe.loc[:, result_column] = self.ohlc_dataset[source_column].rolling(
                     window=length, min_periods=minimum_length).mean()
@@ -388,6 +401,8 @@ class Basic:
             if result_dataframe is None:
                 self.ohlc_dataset.loc[:, result_column] = self.ohlc_dataset[source_column].rolling(
                     window=length).std()
+                self.ohlc_dataset.loc[self.ohlc_dataset['Data Type']
+                                      == "Prediction data", result_column] = np.nan
             else:
                 result_dataframe.loc[:, result_column] = self.ohlc_dataset[source_column].rolling(
                     window=length).std()
@@ -397,6 +412,8 @@ class Basic:
             if result_dataframe is None:
                 self.ohlc_dataset.loc[:, result_column] = self.ohlc_dataset[source_column].rolling(
                     window=length, min_periods=minimum_length).std()
+                self.ohlc_dataset.loc[self.ohlc_dataset['Data Type']
+                                      == "Prediction data", result_column] = np.nan
             else:
                 result_dataframe.loc[:, result_column] = self.ohlc_dataset[source_column].rolling(
                     window=length, min_periods=minimum_length).std()
@@ -430,13 +447,15 @@ class Basic:
         if result_dataframe is None:
             self.ohlc_dataset.loc[:, result_column] = self.ohlc_dataset[source_column].ewm(
                 span=length, min_periods=0, adjust=False, ignore_na=False).mean()
+            self.ohlc_dataset.loc[self.ohlc_dataset['Data Type']
+                                  == "Prediction data", result_column] = np.nan
         else:
             result_dataframe.loc[:, result_column] = self.ohlc_dataset[source_column].ewm(
                 span=length, min_periods=0, adjust=False, ignore_na=False).mean()
 
     def calc_integration(self, source_column: str, length: int = 0, result_column: str = "", result_dataframe: pd.DataFrame = None):
         """Calculate the integration for the specified column for a window in a
-        Pandas dataframe. For length equals 0, the complete series is used. 
+        Pandas dataframe. For length equals 0, the complete series is used.
         Depending on the parameters, the result will be a new column on the
         same dataframe.
         """
@@ -470,6 +489,8 @@ class Basic:
         if result_dataframe is None:
             self.ohlc_dataset.loc[:, result_column] = self.ohlc_dataset[source_column].rolling(
                 window=length).min()
+            self.ohlc_dataset.loc[self.ohlc_dataset['Data Type']
+                                  == "Prediction data", result_column] = np.nan
         else:
             result_dataframe.loc[:, result_column] = self.ohlc_dataset[source_column].rolling(
                 window=length).min()
@@ -483,13 +504,16 @@ class Basic:
         if result_dataframe is None:
             self.ohlc_dataset.loc[:, result_column] = self.ohlc_dataset[source_column].rolling(
                 window=length).max()
+            self.ohlc_dataset.loc[self.ohlc_dataset['Data Type']
+                                  == "Prediction data", result_column] = np.nan
         else:
             result_dataframe.loc[:, result_column] = self.ohlc_dataset[source_column].rolling(
                 window=length).max()
 
     def convert_numpy(self, source_column: str):
 
-        numpy_data = self.ohlc_dataset[source_column].to_numpy()
+        numpy_data = self.ohlc_dataset[self.ohlc_dataset['Data Type']
+                                       == "Real data"][source_column].to_numpy()
 
         return numpy_data
 
@@ -508,10 +532,10 @@ class Basic:
             cut_test = 0
 
         if isinstance(data, np.ndarray):
-            train_data = data[:cut_learning]
+            train_data = data[: cut_learning]
             test_data = data[-cut_test:]
         elif isinstance(data, pd.DataFrame):
-            train_data = data.iloc[:cut_learning].values
+            train_data = data.iloc[: cut_learning].values
             test_data = data.iloc[-cut_test:].values
 
         # if percetage_learning == 0:

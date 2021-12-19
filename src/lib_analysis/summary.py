@@ -19,16 +19,16 @@ class Summary:
         relative_gain_comp = (last_value - last_value_ref) / last_value_ref
 
         up_movement = self.ohlc_dataset["Summary Change"].clip(
-            lower=0).sum() / self.analysis_length
+            lower=0).sum() / self.data_length
         down_movement = self.ohlc_dataset["Summary Change"].clip(
-            upper=0).abs().sum() / self.analysis_length
+            upper=0).abs().sum() / self.data_length
 
         ratio_up_down = up_movement / down_movement
 
         self.analysis_results[method_name] = {}
         self.analysis_results[method_name]["Last Day Event"] = last_event
         self.analysis_results[method_name]["Previous Day Event"] = previous_event
-        self.analysis_results[method_name]["Analysis length"] = self.analysis_length
+        self.analysis_results[method_name]["Analysis length"] = self.data_length
         self.analysis_results[method_name]["Average Volume"] = self.ohlc_dataset["Volume"].mean(
         )
         self.analysis_results[method_name]["Up Movement"] = up_movement
