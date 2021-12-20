@@ -72,19 +72,22 @@ class RSI_SMA (Basic, Arbitration, PerformanceSimulation, ReportAnalysis, Summar
         #                  shift=1,
         #                  result_column="RSI SMA Close Final Difference")
 
-        self.calc_threshold(source_column="Close Final Change",
+        self.calc_threshold(dataframe=self.ohlc_dataset,
+                            source_column="Close Final Change",
                             threshold=0,
                             comparison="<",
                             replace_value=0,
                             result_column="RSI SMA Gain")
 
-        self.calc_threshold(source_column="Close Final Change",
+        self.calc_threshold(dataframe=self.ohlc_dataset,
+                            source_column="Close Final Change",
                             threshold=0,
                             comparison=">",
                             replace_value=0,
                             result_column="RSI SMA Loss")
 
-        self.calc_absolute(source_column="RSI SMA Loss",
+        self.calc_absolute(dataframe=self.ohlc_dataset,
+                           source_column="RSI SMA Loss",
                            result_column="RSI SMA Loss Absolute")
 
         # self.calc_SMA(source_column="RSI SMA Gain",
@@ -117,7 +120,8 @@ class RSI_SMA (Basic, Arbitration, PerformanceSimulation, ReportAnalysis, Summar
                  self.ohlc_dataset['RSI SMA Loss Absolute'].iloc[i + N + 1])\
                 / N
 
-        self.calc_division(dividend_column="RSI SMA Gain Average",
+        self.calc_division(dataframe=self.ohlc_dataset,
+                           dividend_column="RSI SMA Gain Average",
                            divisor_column="RSI SMA Loss Average",
                            result_column="RSI SMA RS")
 

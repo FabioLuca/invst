@@ -72,31 +72,37 @@ class RSI_EMA (Basic, Arbitration, PerformanceSimulation, ReportAnalysis, Summar
         #                  shift=1,
         #                  result_column="RSI EMA Close Final Difference")
 
-        self.calc_threshold(source_column="Close Final Change",
+        self.calc_threshold(dataframe=self.ohlc_dataset,
+                            source_column="Close Final Change",
                             threshold=0,
                             comparison="<",
                             replace_value=0,
                             result_column="RSI EMA Gain")
 
-        self.calc_threshold(source_column="Close Final Change",
+        self.calc_threshold(dataframe=self.ohlc_dataset,
+                            source_column="Close Final Change",
                             threshold=0,
                             comparison=">",
                             replace_value=0,
                             result_column="RSI EMA Loss")
 
-        self.calc_scalar_multiplication(factor1_column="RSI EMA Loss",
+        self.calc_scalar_multiplication(dataframe=self.ohlc_dataset,
+                                        factor1_column="RSI EMA Loss",
                                         factor2=-1,
                                         result_column="RSI EMA Loss Positive")
 
-        self.calc_EMA(source_column="RSI EMA Gain",
+        self.calc_EMA(dataframe=self.ohlc_dataset,
+                      source_column="RSI EMA Gain",
                       length=N,
                       result_column="RSI EMA Gain Average")
 
-        self.calc_EMA(source_column="RSI EMA Loss Positive",
+        self.calc_EMA(dataframe=self.ohlc_dataset,
+                      source_column="RSI EMA Loss Positive",
                       length=N,
                       result_column="RSI EMA Loss Average")
 
-        self.calc_division(dividend_column="RSI EMA Gain Average",
+        self.calc_division(dataframe=self.ohlc_dataset,
+                           dividend_column="RSI EMA Gain Average",
                            divisor_column="RSI EMA Loss Average",
                            result_column="RSI EMA RS")
 

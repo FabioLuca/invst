@@ -1,4 +1,3 @@
-import pandas as pd
 from src.lib_analysis.basic import Basic
 from src.lib_analysis.arbitration import Arbitration
 from src.lib_analysis.report_analysis import ReportAnalysis
@@ -28,7 +27,7 @@ class MACD (LSTM, Basic, Arbitration, PerformanceSimulation, ReportAnalysis, Sum
             \\begin{cases}
                 EMA_{X}(0) = X(0) \\\\
                 EMA_{X}(k) = \\alpha.X(k) + (1 - \\alpha).EMA_{X}(k-1)
-            \\end{cases}     
+            \\end{cases}
 
         where:
 
@@ -57,39 +56,46 @@ class MACD (LSTM, Basic, Arbitration, PerformanceSimulation, ReportAnalysis, Sum
 
         self.logger.info("Performing MACD analysis for %s", self.symbol)
 
-        self.calc_EMA(source_column="Close Final",
+        self.calc_EMA(dataframe=self.ohlc_dataset,
+                      source_column="Close Final",
                       length=12,
                       result_column="MACD EMA 12")
 
-        self.calc_EMA(source_column="Close Final",
+        self.calc_EMA(dataframe=self.ohlc_dataset,
+                      source_column="Close Final",
                       length=26,
                       result_column="MACD EMA 26")
 
-        self.calc_difference(minuend_column="MACD EMA 12",
+        self.calc_difference(dataframe=self.ohlc_dataset,
+                             minuend_column="MACD EMA 12",
                              subtrahend_column="MACD EMA 26",
                              result_column="MACD Line")
 
-        self.calc_EMA(source_column="MACD Line",
+        self.calc_EMA(dataframe=self.ohlc_dataset,
+                      source_column="MACD Line",
                       length=9,
                       result_column="MACD Signal")
 
-        self.calc_difference(minuend_column="MACD Line",
+        self.calc_difference(dataframe=self.ohlc_dataset,
+                             minuend_column="MACD Line",
                              subtrahend_column="MACD Signal",
                              result_column="MACD Histogram")
 
-        self.calc_LSTM(source_column="MACD Histogram",
+        self.calc_LSTM(dataframe=self.ohlc_dataset,
+                       source_column="MACD Histogram",
                        sequence_length=self.sequence_length,
                        prediction_length=self.prediction_length,
-                       result_column="MACD Histogram")
+                       extend_original_data=True,
+                       result_column="MACD Histogram Fit")
 
-        self.recommend_threshold_cross(source_column="MACD Histogram",
-                                       threshold_upper=0.15,
-                                       threshold_lower=0.15,
-                                       mode="norm",
-                                       values_upper_mid_lower=(
-                                           # C.BUY, C.HOLD, C.SELL),
-                                           "BUY", "HOLD", "SELL"),
-                                       result_column="MACD Recommendation")
+        self.recommend_threshold_cross(
+            source_column="MACD Histogram",
+            threshold_upper=0.15,
+            threshold_lower=0.15,
+            mode="norm",
+            values_upper_mid_lower=(
+                "BUY", "HOLD", "SELL"),
+            result_column="MACD Recommendation")
 
         self.define_actions(source_column="MACD Recommendation",
                             result_column="MACD Recommended Events")

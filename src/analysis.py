@@ -2,20 +2,15 @@
 """
 
 import logging
-import json
+import datetime
 import pandas as pd
+from pathlib import Path
 from .lib_analysis.preprocessing import PreProcessing
-# from .lib_analysis.basic import Basic
-# from .lib_analysis.arbitration import Arbitration
-
 from .lib_analysis.methods.crash import Crash
 from .lib_analysis.methods.macd import MACD
 from .lib_analysis.methods.rsi_sma import RSI_SMA
 from .lib_analysis.methods.rsi_ema import RSI_EMA
 from .lib_analysis.methods.bollinger_band import BOLLINGER_BANDS
-# from .lib_analysis.methods.macd_advanced import MACDAdvanced
-# from .lib_analysis.methods.arima import ARIMA
-# from .lib_analysis.methods.lstm import LSTM
 from .lib_analysis.methods.combined import CombinedStrategy
 
 
@@ -29,12 +24,35 @@ class Analysis(Crash, MACD, RSI_SMA, RSI_EMA, BOLLINGER_BANDS, CombinedStrategy,
         ohlc_data: `Pandas dataframe`
             A Pandas dataframe with the OHLC data to be used on the analysis.
         decision: `int`
-            An integere which holds the final outcome of the analysis. The value
-            is enumerated as:
+            An integere which holds the **final outcome** of the analysis. The
+            value is enumerated as:
 
-            * **BUY** = 1
-            * **SELL** = -1
-            * **HOLD** = 0
+            * ``BUY`` = 1
+            * ``SELL`` = -1
+            * ``HOLD`` = 0
+
+        analysis_length_pre: `int`
+            Number of samples to be used for the analysis. This number is the
+            one applied on the initial steps of the analysis, when truncating
+            the dataset. Afterwards the truncated dataset is immediatelly used
+            for the methods and predictions. For the methods themselves, this
+            number shouldn't be too high, since using older data doesn't
+            bring performance improvement to them. However, for the neural
+            netoworks, a higher value can bring benefits since it means a larger
+            dataset for learning. The downside on using al the available data
+            is that it may take a considerable time to adjust the neural network
+            if ``analysis_length_pre`` is too high.
+        analysis_length_post: `int`
+            Number of samples to be used for simulation and comparison. The
+            analysis themselves use the ``analysis_length_pre`` parameter. This
+            parameter is applies for final comparison.
+
+        sequence_length: `int`
+            Number of samples to be used as sequence for input to the RNN /
+            LSTM.
+        prediction_length: `int`
+            Number of samples to be used as sequence for output in the RNN /
+            LSTM.
 
         logger_name: `string`
             Name of the logger.
@@ -60,20 +78,22 @@ class Analysis(Crash, MACD, RSI_SMA, RSI_EMA, BOLLINGER_BANDS, CombinedStrategy,
                  save_analysis: bool = False):
 
         self.symbol: str = symbol
-        #self.initial_value = None
         self.ohlc_dataset = ohlc_data
         self.ohlc_dataset_prediction = None
         self.analysis_results = {}
         self.decision = None
 
-        self.analysis_length_pre = 0
-        self.analysis_length_post = analysis_length
+        self.analysis_length_pre = analysis_length
+        self.analysis_length_post = 250
         self.data_length = 0
         self.up_movement = 0
         self.down_movement = 0
         self.ratio_up_down = 0
 
-        self.sequence_length = 30  # Represents 6 weeks (work-days)
+        # ----------------------------------------------------------------------
+        #   RNN related attributes
+        # ----------------------------------------------------------------------
+        self.sequence_length = 50  # Represents 6 weeks (work-days)
         self.prediction_length = 15  # Represents 3 weeks (work-days)
 
         self.initial_value = initial_value
@@ -111,7 +131,6 @@ class Analysis(Crash, MACD, RSI_SMA, RSI_EMA, BOLLINGER_BANDS, CombinedStrategy,
         #   Data adequation
         # ----------------------------------------------------------------------
         self.define_past_time()
-        # aprox. 250-working days / year
         self.truncate_range(length=self.analysis_length_pre)
         self.define_closure()
 
@@ -133,32 +152,28 @@ class Analysis(Crash, MACD, RSI_SMA, RSI_EMA, BOLLINGER_BANDS, CombinedStrategy,
         self.calc_RSI_SMA()
         self.calc_RSI_EMA()
         self.calc_BBANDS()
-        # self.calc_MACD_Advanced()
-        # self.calc_ARIMA()
-
-        # ----------------------------------------------------------------------
-        #   RNN predictions of signals
-        # ----------------------------------------------------------------------
-        # self.calc_LSTM(source_column="MACD Histogram",
-        #                sequence_length=self.sequence_length,
-        #                prediction_length=self.prediction_length,
-        #                result_column="Prediction MACD Histogram"
-        #                )
-
-        # self.calc_CombinedStrategy()
-
-        #print(json.dumps(self.analysis_results, sort_keys=False, indent=4))
 
         # ----------------------------------------------------------------------
         #   Final decision based on the previous BSH (Buy-Sell-Hold)
         # ----------------------------------------------------------------------
         self.arbitrate()
 
+        # ----------------------------------------------------------------------
+        #   Export the dataframe for storage.
+        # ----------------------------------------------------------------------
+        if self.save_analysis:
+            today_string = datetime.today().strftime('%Y-%m-%d')
+            file_export = f"Data_{today_string}.xlsx"
+            file_export = Path.cwd().resolve() / "export" / "analysis" / \
+                today_string / file_export
+            self.ohlc_dataset.to_excel(file_export)
+
         return (self.analysis_results, self.ohlc_dataset)
 
     def calc_parameters(self):
 
-        self.calc_change(source_column="Close Final",
+        self.calc_change(dataframe=self.ohlc_dataset,
+                         source_column="Close Final",
                          shift=1,
                          result_column="Close Final Change")
 

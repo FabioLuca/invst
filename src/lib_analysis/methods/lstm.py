@@ -6,12 +6,11 @@
     :alt: Alternative text
 
 """
-
-import matplotlib.pyplot as plt
+import pandas as pd
 import numpy as np
 from pathlib import Path
+import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
-from sklearn.metrics import mean_squared_error
 from tensorflow import keras
 from keras.models import Sequential
 from keras.layers import LSTM as KerasLSTM
@@ -25,7 +24,15 @@ from src.lib_analysis.basic import Basic
 
 class LSTM (Basic):
 
-    def calc_LSTM(self, source_column: str, sequence_length: int, prediction_length: int = 1, result_column: str = "", ratio_train: float = -1.0):
+    def calc_LSTM(self,
+                  dataframe: pd.DataFrame,
+                  source_column: str,
+                  sequence_length: int,
+                  prediction_length: int = 1,
+                  extend_original_data: bool = True,
+                  result_column: str = "",
+                  ratio_train: float = -1.0,
+                  verbose: bool = False):
         """Calculate a prediction based on the LSTM (Long Short-Term Memory)
         method, which is a RNN (recurrent neural network) architecture.
 
@@ -81,11 +88,12 @@ class LSTM (Basic):
         # ----------------------------------------------------------------------
         #   Get the data for analysis and adapt to the proper format.
         # ----------------------------------------------------------------------
-        index = self.ohlc_dataset[self.ohlc_dataset['Data Type']
-                                  == "Real data"].index.to_numpy()
+        index = dataframe[dataframe['Data Type']
+                          == "Real data"].index.to_numpy()
         new_index = self.create_future_index(steps=prediction_length,
                                              previous_day=index[-1])
-        data = self.convert_numpy(source_column=source_column)
+        data = self.convert_numpy(dataframe=dataframe,
+                                  source_column=source_column)
         data_vector = data.reshape(-1, 1)
 
         # ----------------------------------------------------------------------
@@ -113,7 +121,7 @@ class LSTM (Basic):
                             sequence_length=sequence_length))
 
         # ----------------------------------------------------------------------
-        #   Structure the dataset and reshape for the LSTM
+        #   Structure the dataset and reshape for the LSTM.
         # ----------------------------------------------------------------------
         x_train, y_train = self.create_dataset(
             dataset=train_data_normalized,
@@ -162,71 +170,88 @@ class LSTM (Basic):
         train_predict = scaler.inverse_transform(train_predict)
         test_predict = scaler.inverse_transform(test_predict)
 
-        self.ohlc_dataset.loc[self.ohlc_dataset["Data Type"]
-                              == "Prediction data", result_column] = test_predict.tolist()
-        self.ohlc_dataset_prediction[result_column] = test_predict.tolist()
+        # ----------------------------------------------------------------------
+        #   Results from the fitting are output'ed in 2 ways: First they are
+        #   appended to the original data, as a sequence of the previous ones.
+        #   Second, the data is also stored in a new columns in the dataframe.
+        # ----------------------------------------------------------------------
+        if extend_original_data:
+            dataframe.loc[dataframe["Data Type"]
+                          == "Prediction data", source_column] = test_predict.tolist()
 
-        train_data_index_redux = train_data_index[(
-            sequence_length):]
-        test_data_index_redux = test_data_index[(
-            sequence_length):]
+        self.ohlc_dataset_prediction[source_column] = test_predict.tolist()
 
-        train_predict = train_predict.reshape(1, -1)
-        test_predict = test_predict.reshape(1, -1)
-        train_data_index_redux = train_data_index_redux.reshape(1, -1)
-        test_data_index_redux = test_data_index_redux.reshape(1, -1)
+        temp_train_predict = (
+            ([[np.nan]] * sequence_length) +
+            (train_predict.tolist()) +
+            ([[np.nan]] * sequence_length)
+        )
 
-        print(f"Plot X:                  {len(train_data_index_redux[0])}")
-        print(f"Plot Y:                  {len(train_predict[0])}")
+        dataframe.loc[dataframe["Data Type"]
+                      == "Real data", result_column] = temp_train_predict
+        dataframe.loc[dataframe["Data Type"]
+                      == "Prediction data", result_column] = test_predict.tolist()
 
-        plt.title("Predicted")
-        plt.plot(index, data_vector, "-g", label='Original', linewidth=1)
-        plt.plot(train_data_index, train_data_absolute, "-.c",
-                 linewidth=1, label='Original Train')
-        plt.plot(test_data_index, test_data_absolute, "-.m",
-                 linewidth=1, label='Original Test')
-        plt.plot(train_data_index_redux[0],
-                 train_predict[0], "-b",
-                 # marker=".",
-                 # markersize=8,
-                 linewidth=2, label='Predicted Train')
-        if 0 <= ratio_train <= 1:
-            plt.plot(test_data_index_redux[0], test_predict[0],
-                     "-r", linewidth=2,
-                     label='Predicted Test')
-        else:
-            plt.plot(new_index, test_predict[0], "-r",
-                     marker=".",
-                     markersize=8,
-                     linewidth=2, label='Predicted Test')
+        # ----------------------------------------------------------------------
+        #   Plot and print some data for debugging reasons.
+        # ----------------------------------------------------------------------
+        if verbose:
+            train_data_index_redux = train_data_index[(
+                sequence_length):]
+            test_data_index_redux = test_data_index[(
+                sequence_length):]
 
-        plt.legend()
-        plt.show()
+            train_predict = train_predict.reshape(1, -1)
+            test_predict = test_predict.reshape(1, -1)
+            train_data_index_redux = train_data_index_redux.reshape(1, -1)
+            test_data_index_redux = test_data_index_redux.reshape(1, -1)
 
-        print("===============================================================")
-        print(f"Size original data:      {len(data)}")
-        print(f"Size original index:     {len(index)}")
-        print(f"Size added index:        {len(new_index)}")
-        print(f"Sequence length:         {sequence_length}")
-        print(f"Prediction length:       {prediction_length}")
-        print(f"Shape normalized train:  {train_data_normalized.shape}")
-        print(f"Shape normalized test:   {test_data_normalized.shape}")
-        print(f"Shape absolute train:    {train_data_absolute.shape}")
-        print(f"Shape absolute test:     {test_data_absolute.shape}")
-        print(f"Shape index train:       {train_data_index.shape}")
-        print(f"Shape index train:       {test_data_index.shape}")
-        print(f"Shape X train:           {x_train.shape}")
-        print(f"Shape Y train:           {y_train.shape}")
-        print(f"Shape X test:            {x_test.shape}")
-        print(f"Shape Y test:            {y_test.shape}")
-        print(f"Shape index test:        {test_data_index.shape}")
-        print(f"Shape predicted train:   {train_predict.shape}")
-        print(f"Shape predicted test:    {test_predict.shape}")
-        print(f"Plot X:                  {len(train_data_index_redux[0])}")
-        print(f"Plot Y:                  {len(train_predict[0])}")
-        print("===============================================================")
+            plt.title("Debug Predicted")
+            plt.plot(index, data_vector, "-g", label='Original', linewidth=1)
+            plt.plot(train_data_index, train_data_absolute, "-.c",
+                     linewidth=1, label='Original Train')
+            plt.plot(test_data_index, test_data_absolute, "-.m",
+                     linewidth=1, label='Original Test')
+            plt.plot(train_data_index_redux[0],
+                     train_predict[0], "-b",
+                     # marker=".",
+                     # markersize=8,
+                     linewidth=2, label='Predicted Train')
+            if 0 <= ratio_train <= 1:
+                plt.plot(test_data_index_redux[0], test_predict[0],
+                         "-r", linewidth=2,
+                         label='Predicted Test')
+            else:
+                plt.plot(new_index, test_predict[0], "-r",
+                         marker=".",
+                         markersize=8,
+                         linewidth=2, label='Predicted Test')
 
-        # return 1
+            plt.legend()
+            plt.show()
+
+            print("===============================================================")
+            print(f"Size original data:      {len(data)}")
+            print(f"Size original index:     {len(index)}")
+            print(f"Size added index:        {len(new_index)}")
+            print(f"Sequence length:         {sequence_length}")
+            print(f"Prediction length:       {prediction_length}")
+            print(f"Shape normalized train:  {train_data_normalized.shape}")
+            print(f"Shape normalized test:   {test_data_normalized.shape}")
+            print(f"Shape absolute train:    {train_data_absolute.shape}")
+            print(f"Shape absolute test:     {test_data_absolute.shape}")
+            print(f"Shape index train:       {train_data_index.shape}")
+            print(f"Shape index train:       {test_data_index.shape}")
+            print(f"Shape X train:           {x_train.shape}")
+            print(f"Shape Y train:           {y_train.shape}")
+            print(f"Shape X test:            {x_test.shape}")
+            print(f"Shape Y test:            {y_test.shape}")
+            print(f"Shape index test:        {test_data_index.shape}")
+            print(f"Shape predicted train:   {train_predict.shape}")
+            print(f"Shape predicted test:    {test_predict.shape}")
+            print(f"Plot X:                  {len(train_data_index_redux[0])}")
+            print(f"Plot Y:                  {len(train_predict[0])}")
+            print("===============================================================")
 
     def create_dataset(self, dataset, input_sequence_length: int = 1, output_sequence_length: int = 1, shift_future: int = 0):
         """Structures the data into sequences and labels for the learning. It's

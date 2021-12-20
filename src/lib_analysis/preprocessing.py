@@ -1,5 +1,5 @@
-import numpy as np
 import datetime
+import numpy as np
 
 
 class PreProcessing:
@@ -12,6 +12,22 @@ class PreProcessing:
     """
 
     def define_past_time(self):
+        """Populates all the initial available data as `Real data`. This
+        information is relevant to the dataset, as any data from prediction
+        (future) will be tagged as `Predict data`.
+
+        Parameters
+        ----------
+            None:
+                No parameters are used by this method.
+
+        Returns
+        -------
+            None:
+                Result is done directly to the ``ohlc_dataset`` dataframe,
+                by adding a new column named ``Data Type``.
+
+        """
         self.ohlc_dataset["Data Type"] = "Real data"
 
     def truncate_range(self, length: int = 0, shift_last: int = 0):

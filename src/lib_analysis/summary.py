@@ -4,7 +4,8 @@ class Summary:
 
     def get_summary(self, method_name: str):
 
-        self.calc_change(source_column="Close Final",
+        self.calc_change(dataframe=self.ohlc_dataset,
+                         source_column="Close Final",
                          shift=1,
                          result_column="Summary Change")
 

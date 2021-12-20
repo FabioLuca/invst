@@ -84,11 +84,13 @@ class BOLLINGER_BANDS (Basic, Arbitration, PerformanceSimulation, ReportAnalysis
         self.logger.info(
             "Performing Bollinger Bands analysis for %s", self.symbol)
 
-        self.calc_SMA(source_column="Close Final",
+        self.calc_SMA(dataframe=self.ohlc_dataset,
+                      source_column="Close Final",
                       length=20,
                       result_column="BBANDS SMA 20")
 
-        self.calc_MovingStdDev(source_column="Close Final",
+        self.calc_MovingStdDev(dataframe=self.ohlc_dataset,
+                               source_column="Close Final",
                                length=20,
                                result_column="BBANDS StdDev 20")
 
