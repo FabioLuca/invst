@@ -1,3 +1,7 @@
+import datetime
+import numpy as np
+
+
 class PreProcessing:
     """Pre processing is intended to make initial operations to fix or adequate
     the data which is received from the API, fo example, limiting the amount of
@@ -6,6 +10,25 @@ class PreProcessing:
     entry.
 
     """
+
+    def define_past_time(self):
+        """Populates all the initial available data as `Real data`. This
+        information is relevant to the dataset, as any data from prediction
+        (future) will be tagged as `Predict data`.
+
+        Parameters
+        ----------
+            None:
+                No parameters are used by this method.
+
+        Returns
+        -------
+            None:
+                Result is done directly to the ``ohlc_dataset`` dataframe,
+                by adding a new column named ``Data Type``.
+
+        """
+        self.ohlc_dataset["Data Type"] = "Real data"
 
     def truncate_range(self, length: int = 0, shift_last: int = 0):
         """Limit the data to a proper length, always keeping the latest data
@@ -29,6 +52,56 @@ class PreProcessing:
             self.ohlc_dataset = self.ohlc_dataset.tail(length + shift_last)
             self.ohlc_dataset = self.ohlc_dataset.head(length)
         #self.ohlc_dataset.reset_index(drop=True, inplace=True)
+
+        self.data_length = len(self.ohlc_dataset)
+
+    def extend_time_range(self, length: int):
+        """Populates the Pandas dataframe with dates following the next day for
+        predictions. The list skips weekends, however holidays are not taken
+        into account, so not skipped.
+
+        Parameters
+        ----------
+            length: int
+                Length of the list of dates.
+
+        Returns
+        -------
+            None:
+                Populated new index with dates on the
+                ``ohlc_dataset_prediction`` dataframe, with a sequence of dates
+                incrementing one by one. Weekends are skipped in the list.
+
+        """
+        self.ohlc_dataset_prediction = self.ohlc_dataset.copy()
+        self.ohlc_dataset_prediction = self.ohlc_dataset_prediction[0:0]
+
+        initial_day = list(self.ohlc_dataset.index)[-1]
+        initial_day = initial_day.to_pydatetime()
+
+        new_index = []
+        count_day = 1
+
+        new_day = initial_day
+
+        new_row = [np.nan] * len(self.ohlc_dataset_prediction.columns)
+
+        for i in range(length):
+            new_day = new_day + datetime.timedelta(days=1)
+            while new_day.weekday() >= 5:
+                new_day = new_day + datetime.timedelta(days=1)
+
+            self.ohlc_dataset_prediction.loc[len(
+                self.ohlc_dataset_prediction)] = new_row
+            new_index.append(new_day)
+            count_day = count_day + 1
+
+        self.ohlc_dataset_prediction.index = new_index
+
+        self.ohlc_dataset_prediction["Data Type"] = "Prediction data"
+
+        self.ohlc_dataset = self.ohlc_dataset.append(
+            self.ohlc_dataset_prediction)
 
     def define_closure(self):
         """Define the column for closure. This is necessary since depending on

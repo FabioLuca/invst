@@ -113,7 +113,7 @@ if __name__ == "__main__":
         # --------------------------------------------------------------------------
         analysis = Analysis(symbol=ticker,
                             ohlc_data=result_values,
-                            analysis_length=400,  # 250,  # 0
+                            analysis_length=750,
                             initial_value=10000,
                             stopgain=1.4,
                             stoploss=0.85,

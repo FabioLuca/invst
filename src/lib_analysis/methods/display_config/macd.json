@@ -145,6 +145,20 @@
             "subplot_vertical": 2,
             "secondary_y": false
         },
+        "MACD Histogram Fit": {
+            "display_name": "MACD Histogram Fit",
+            "show": true,
+            "type": "Line",
+            "categorical": false,
+            "color": "#000000",
+            "opacity": 0.7,
+            "width": 1.5,
+            "dash": "solid",
+            "shape": "linear",
+            "subplot_horizontal": 1,
+            "subplot_vertical": 2,
+            "secondary_y": false
+        },
         "MACD Histogram Integral": {
             "display_name": "MACD Histogram Integral",
             "show": false,
