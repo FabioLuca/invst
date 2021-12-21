@@ -14,7 +14,7 @@ def summary_table(results_summary, excel_filename):
 
     list_item = []
 
-    print("{:<9} {:<10} {:<14} {:<12} {:<12} {:<12} {:<12} {:<9} {:<9} {:<9} {:<13} {:<14}".format(
+    print("{:<9} {:<10} {:<14} {:<12} {:<12} {:<12} {:<12} {:<9} {:<9} {:<9} {:<9} {:<9} {:<13} {:<14}".format(
         "Symbol",
         "Method",
         "Data Length",
@@ -24,6 +24,8 @@ def summary_table(results_summary, excel_filename):
         "Ratio Mov",
         "Last Day",
         "Prev Day",
+        "Next Event",
+        "Day Next Ev.",
         "Rel Gain",
         "Rel Gain Ref",
         "Rel Gain Comp"))
@@ -51,7 +53,7 @@ def summary_table(results_summary, excel_filename):
 
                 list_item.append(tuple_row)
 
-            print("{:<9} {:<10} {:<14} {:<12.3f} {:<12.3f} {:<12.3f} {:<12.3f} {:<9} {:<9} {:<9.2f} {:<13.2f} {:<14.2f}".format(
+            print("{:<9} {:<10} {:<14} {:<12.3f} {:<12.3f} {:<12.3f} {:<12.3f} {:<9} {:<9} {:<9} {:<9} {:<9.2f} {:<13.2f} {:<14.2f}".format(
                 symbol,
                 method,
                 content[method]["Analysis length"],
@@ -61,6 +63,8 @@ def summary_table(results_summary, excel_filename):
                 content[method]["Ratio Movement"],
                 content[method]["Last Day Event"],
                 content[method]["Previous Day Event"],
+                content[method]["Next Event"],
+                content[method]["Day Next Event"],
                 content[method]["Relative gain"] * 100,
                 content[method]["Relative gain reference"] * 100,
                 content[method]["Relative gain comparison"] * 100))
@@ -95,6 +99,8 @@ def summary_table(results_summary, excel_filename):
                      "Ratio Movement",
                      "Last Day Event",
                      "Previous Day Event",
+                     "Next Event",
+                     "Day Next Event",
                      "Relative gain",
                      "Relative gain reference",
                      "Relative gain comparison"]
@@ -108,6 +114,8 @@ def summary_table(results_summary, excel_filename):
     format_text = workbook.add_format(
         {'num_format': 'General', 'align': 'left'})
     format_text_middle = workbook.add_format(
+        {'num_format': 'General', 'align': 'center'})
+    format_date = workbook.add_format(
         {'num_format': 'General', 'align': 'center'})
     format_float = workbook.add_format({'num_format': '#,##0.000'})
     format_integer = workbook.add_format({'num_format': '#,##0'})
@@ -124,6 +132,13 @@ def summary_table(results_summary, excel_filename):
     format_sell = workbook.add_format({'bg_color':   '#871e17',
                                        'bold':       True,
                                        'font_color': '#FFFFFF'})
+
+    format_no_change = workbook.add_format({'bg_color':   '#DDDDDD',
+                                            'font_color': '#AAAAAA'})
+    format_change = workbook.add_format({'bg_color':    '#122aa1',
+                                         'bold':        False,
+                                         'font_color':  '#FFFFFF'})
+
     format_dark_green = workbook.add_format({'bg_color':   '#65c75f',
                                              'font_color': '#000000'})
     format_green = workbook.add_format({'bg_color':   '#BDFB97',
@@ -140,10 +155,13 @@ def summary_table(results_summary, excel_filename):
     worksheet.set_column('D:D', 10, format_integer)
     worksheet.set_column('E:E', 16, format_integer)
     worksheet.set_column('F:H', 10, format_float)
-    worksheet.set_column('I:J', 10, format_text_middle)
-    worksheet.set_column('K:M', 12, format_percentage)
+    worksheet.set_column('I:K', 10, format_text_middle)
+    worksheet.set_column('L:L', 10, format_date)
+    worksheet.set_column('M:O', 12, format_percentage)
 
-    range_cells = f"I2:J{df_pivot.shape[0] + 1}"
+    ###### Action ##############################################################
+
+    range_cells = f"I2:K{df_pivot.shape[0] + 1}"
 
     worksheet.conditional_format(range_cells, {'type':     'cell',
                                                'criteria': 'equal to',
@@ -159,6 +177,20 @@ def summary_table(results_summary, excel_filename):
                                                'criteria': 'equal to',
                                                'value':    '"SELL"',
                                                'format':   format_sell})
+
+    ###### Future date action ##################################################
+
+    range_cells = f"L2:L{df_pivot.shape[0] + 1}"
+
+    worksheet.conditional_format(range_cells, {'type':     'cell',
+                                               'criteria': 'equal to',
+                                               'value':    '"No change"',
+                                               'format':   format_no_change})
+
+    worksheet.conditional_format(range_cells, {'type':     'cell',
+                                               'criteria': 'not equal to',
+                                               'value':    '"No change"',
+                                               'format':   format_change})
 
     ###### Ratio movement ######################################################
 
@@ -186,7 +218,7 @@ def summary_table(results_summary, excel_filename):
 
     ###### Relative gain comparison ############################################
 
-    range_cells = f"M2:M{df_pivot.shape[0] + 1}"
+    range_cells = f"O2:O{df_pivot.shape[0] + 1}"
 
     worksheet.conditional_format(range_cells, {'type':     'cell',
                                                'criteria': '>',
@@ -215,7 +247,7 @@ def summary_table(results_summary, excel_filename):
 
     ###### Relative gain & Relative gain reference #############################
 
-    range_cells = f"K2:L{df_pivot.shape[0] + 1}"
+    range_cells = f"M2:N{df_pivot.shape[0] + 1}"
 
     worksheet.conditional_format(range_cells, {'type':     'cell',
                                                'criteria': '>',
@@ -254,7 +286,7 @@ def summary_table(results_summary, excel_filename):
         col_num = col_num + 1
 
     worksheet.freeze_panes(1, 0)
-    worksheet.autofilter(f"A1:M{df_pivot.shape[0] + 1}")
+    worksheet.autofilter(f"A1:O{df_pivot.shape[0] + 1}")
 
     # --------------------------------------------------------------------------
     #   Adds hyperlinks to the table.
