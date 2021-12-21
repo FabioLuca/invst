@@ -1,11 +1,20 @@
 import pandas as pd
 import numpy as np
+from datetime import datetime
 #from ..lib.invst_const import constants as C
 
 
 class Arbitration:
 
-    def recommend_threshold_cross(self, source_column: str, threshold_upper: float,  threshold_lower: float, mode: str = "abs", hysteresis: bool = True, values_upper_mid_lower: tuple = ("BUY", "HOLD", "SELL"),  result_column: str = "", result_dataframe: pd.DataFrame = None):
+    def recommend_threshold_cross(self,
+                                  source_column: str,
+                                  threshold_upper: float,
+                                  threshold_lower: float,
+                                  mode: str = "abs",
+                                  hysteresis: bool = True,
+                                  values_upper_mid_lower: tuple = (
+                                      "BUY", "HOLD", "SELL"),
+                                  result_column: str = ""):
         """Calculate a recommendation to buy or sell based on a threshold crossing.
         Strategy methods: Functions which will return a final recommendation
         about a ticker. The returned value is a value between -1 and 1
@@ -41,34 +50,8 @@ class Arbitration:
             result_column = f"Recommendation {source_column} {threshold_upper} {threshold_lower}"
 
         # --------------------------------------------------------------------------
-        #   Parse and checkks the specifica parameters
-        # --------------------------------------------------------------------------
-        # input_parameters = specific_parameters["specific_parameters"]
-        # input_name = input_parameters.get("source_column_name", "")
-        # value_default_string = input_parameters.get("value_default_string", "")
-        # value_high_string = input_parameters.get("value_high_string", "")
-        # value_low_string = input_parameters.get("value_low_string", "")
-        # threshold_high = input_parameters.get(
-        #     "threshold_high", Const.ERROR_BUY)
-        # threshold_low = input_parameters.get("threshold_low", Const.ERROR_SELL)
-        # if (
-        #     input_name == ""
-        #     or value_default_string == ""
-        #     or value_high_string == ""
-        #     or value_low_string == ""
-        #     or threshold_high == Const.ERROR_BUY
-        #     or threshold_low == Const.ERROR_SELL
-        # ):
-        #     result = data_input
-        #     flag = Const.FAIL
-        #     level = Const.ERROR
-        #     message = "Invalid input for the Recommendation Threshold Cross method"
-        # --------------------------------------------------------------------------
         #   Populate the default value as HOLD
         # --------------------------------------------------------------------------
-        # value_default = getattr(Const, value_default_string)
-        # value_high = getattr(Const, value_high_string)
-        # value_low = getattr(Const, value_low_string)
         value_default = values_upper_mid_lower[1]
         value_high = values_upper_mid_lower[0]
         value_low = values_upper_mid_lower[2]
@@ -105,27 +88,6 @@ class Arbitration:
                     result_column)] = value
 
             i = i + 1
-
-        # # --------------------------------------------------------------------------
-        # #   Display results
-        # # --------------------------------------------------------------------------
-        # if config.disp_data:
-        #     logger.display_data(data_input)
-
-        # # --------------------------------------------------------------------------
-        # #   Return the result
-        # # --------------------------------------------------------------------------
-        # result = data_input
-        # flag = Const.SUCCESS
-        # level = Const.INFO
-        # message = (
-        #     "Defined indicators from '"
-        #     + str(input_name)
-        #     + "' based on simple threshold cross."
-        # )
-        # if config.log_results and logger is not None:
-        #     logger.add_log_event(flag, level, message)
-        # return result, flag, level, message
 
     def recommend_threshold_curve(self, source_column: str, reference_column_upper: str,  reference_column_lower: str, hysteresis: bool = True, values_upper_mid_lower: tuple = ("BUY", "HOLD", "SELL"),  result_column: str = "", result_dataframe: pd.DataFrame = None):
 
@@ -194,7 +156,7 @@ class Arbitration:
 
         The higher priority trigger in the overall logic is for crash
         protection. So if a stock value drops more than 10% in a single day
-        a Sell order will take the priority over all the other analysis. This
+        a sell order will take the priority over all the other analysis. This
         trigger is only valid from the most recent entry.
 
         The first observation using data from many symbols is that the MACD
@@ -217,6 +179,43 @@ class Arbitration:
         """
 
         self.logger.info("Performing Combined analysis for %s", self.symbol)
+
+        result = "HOLD"
+
+        real_dataframe = self.ohlc_dataset[self.ohlc_dataset['Data Type']
+                                           == "Real data"]
+        prediction_dataframe = self.ohlc_dataset[self.ohlc_dataset['Data Type']
+                                                 == "Prediction data"]
+
+        next_event_datetime = datetime.strptime(
+            self.analysis_results["MACD"]["Day Next Event"], '%Y-%m-%d')
+        next_event_datetime = next_event_datetime.date()
+        last_entry_datetime = datetime.strptime(
+            str(real_dataframe.index[-1]), '%Y-%m-%d %H:%M:%S')
+        last_entry_datetime = last_entry_datetime.date()
+
+        MACD_next_status_spam = (next_event_datetime -
+                                 last_entry_datetime).days
+
+        MACD_previous_status = self.analysis_results["MACD"]["Previous Day Event"]
+        MACD_new_status = self.analysis_results["MACD"]["Last Day Event"]
+        MACD_next_status = self.analysis_results["MACD"]["Next Event"]
+
+        ###### CRASH ###########################################################
+        if self.ohlc_dataset["Crash Recommendation"].iloc[-1] == "SELL":
+            result = "SELL"
+        ###### LOWER OSCILATION ################################################
+        elif self.ratio_up_down < 1.2:
+            print("Lower oscillation")
+            if MACD_previous_status == "HOLD" and MACD_new_status != "HOLD" and MACD_next_status_spam > 10:
+                print("MACD based")
+                result = MACD_new_status
+        ###### OTHERS ##########################################################
+        else:
+            if MACD_previous_status == "HOLD" and MACD_new_status != "HOLD" and MACD_next_status_spam > 10:
+                result = MACD_new_status
+
+        return result
 
         self.ohlc_dataset.loc[:, "Combined Recommendation"] = "HOLD"
 

@@ -93,29 +93,8 @@
 
           <div class="body" role="main">
             
-  <section id="module-src.lib_analysis.methods.macd_advanced">
-<span id="macd-advanced"></span><h1>MACD Advanced<a class="headerlink" href="#module-src.lib_analysis.methods.macd_advanced" title="Permalink to this headline">¶</a></h1>
-<dl class="py class">
-<dt class="sig sig-object py" id="src.lib_analysis.methods.macd_advanced.MACDAdvanced">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.lib_analysis.methods.macd_advanced.</span></span><span class="sig-name descname"><span class="pre">MACDAdvanced</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.lib_analysis.methods.macd_advanced.MACDAdvanced" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="basic.html#src.lib_analysis.basic.Basic" title="src.lib_analysis.basic.Basic"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.lib_analysis.basic.Basic</span></code></a>, <a class="reference internal" href="arbitration.html#src.lib_analysis.arbitration.Arbitration" title="src.lib_analysis.arbitration.Arbitration"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.lib_analysis.arbitration.Arbitration</span></code></a>, <a class="reference internal" href="performance_simulation.html#src.lib_analysis.performance_simulation.PerformanceSimulation" title="src.lib_analysis.performance_simulation.PerformanceSimulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.lib_analysis.performance_simulation.PerformanceSimulation</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">src.lib_analysis.report_analysis.ReportAnalysis</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">src.lib_analysis.summary.Summary</span></code></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="src.lib_analysis.methods.macd_advanced.MACDAdvanced.calc_MACD_Advanced">
-<span class="sig-name descname"><span class="pre">calc_MACD_Advanced</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.lib_analysis.methods.macd_advanced.MACDAdvanced.calc_MACD_Advanced" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate de MACD indicator. The MACD is based on the following
-steps:</p>
-<ol class="arabic simple">
-<li><p>[MACD Line] = 12-period EMA - 26-period EMA</p></li>
-<li><p>[MACD Signal] = 9-period EMA of [MACD Line]</p></li>
-<li><p>[MACD Histogram] = [MACD Line] - [MACD Signal]</p></li>
-</ol>
-<p>As an advanced implementation of the MACD, the integration of Histogram
-is performed. The reason is to have an additional analysis of when the
-historgram has been for longer period in positive or negative.</p>
-</dd></dl>
-
-</dd></dl>
-
+  <section id="macd-advanced">
+<h1>MACD Advanced<a class="headerlink" href="#macd-advanced" title="Permalink to this headline">¶</a></h1>
 </section>
 
 

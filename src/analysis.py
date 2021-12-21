@@ -2,9 +2,9 @@
 """
 
 import logging
-import datetime
-import pandas as pd
+from datetime import datetime
 from pathlib import Path
+import pandas as pd
 from .lib_analysis.preprocessing import PreProcessing
 from .lib_analysis.methods.crash import Crash
 from .lib_analysis.methods.macd import MACD
@@ -77,12 +77,18 @@ class Analysis(Crash, MACD, RSI_SMA, RSI_EMA, BOLLINGER_BANDS, CombinedStrategy,
                  display_analysis: bool = False,
                  save_analysis: bool = False):
 
+        # ----------------------------------------------------------------------
+        #   Results and data management related attributes.
+        # ----------------------------------------------------------------------
         self.symbol: str = symbol
         self.ohlc_dataset = ohlc_data
         self.ohlc_dataset_prediction = None
         self.analysis_results = {}
         self.decision = None
 
+        # ----------------------------------------------------------------------
+        #   Analysis related attributes.
+        # ----------------------------------------------------------------------
         self.analysis_length_pre = analysis_length
         self.analysis_length_post = 250
         self.data_length = 0
@@ -91,17 +97,23 @@ class Analysis(Crash, MACD, RSI_SMA, RSI_EMA, BOLLINGER_BANDS, CombinedStrategy,
         self.ratio_up_down = 0
 
         # ----------------------------------------------------------------------
-        #   RNN related attributes
+        #   RNN related attributes.
         # ----------------------------------------------------------------------
-        self.sequence_length = 50  # Represents 6 weeks (work-days)
+        self.sequence_length = 50  # Represents 10 weeks (work-days)
         self.prediction_length = 15  # Represents 3 weeks (work-days)
 
+        # ----------------------------------------------------------------------
+        #   Simulation related attributes.
+        # ----------------------------------------------------------------------
         self.initial_value = initial_value
         self.stopgain = stopgain
         self.stoploss = stoploss
         self.operation_cost = operation_cost
         self.tax_percentage = tax_percentage
 
+        # ----------------------------------------------------------------------
+        #   General configurations.
+        # ----------------------------------------------------------------------
         self.display_analysis = display_analysis
         self.save_analysis = save_analysis
 
@@ -114,16 +126,33 @@ class Analysis(Crash, MACD, RSI_SMA, RSI_EMA, BOLLINGER_BANDS, CombinedStrategy,
         self.logger.info("Initializing analysis.")
 
     def analyze(self):
-        """Performs the complete analysis of the data.
+        """Performs the complete analysis of the data for a determined symbol / 
+        ticker.
 
         The basic operation of this method is:
 
-        #. **Pre-Process**: Execute operations for adequating the data for
+        1. **Pre-Process**: Execute operations for adequating the data for
            analysis.
-        #. **Apply Strategies**: Run the strategies defined. Each one is run
-           individually from each other.
-        #. **Arbitrate**: Combined the results from all the different strategies
+        2. **Parameters calculation**: Calculate basic parameters from the
+           signals which are necessary for follow-up methods and strategies.
+        3. **Apply Strategies**: Run the strategies defined. Each one is run
+           individually from each other. The strategy themselves have inclusive
+           prediction techniques.
+        4. **Arbitrate**: Combined the results from all the different strategies
            into a final outcome.
+
+        Parameters
+        ----------
+            None
+                This method will use attributes from them class ``Analysis``
+                and no parameter is explicitly passed to it.
+
+        Returns
+        -------
+            analysis_results: `dictionary`
+                Summary from the results from the ticker.
+            ohlc_dataset: `Pandas Dataframe`
+                Complete dataframe from the analysis from ticker.
 
         """
 
@@ -156,21 +185,43 @@ class Analysis(Crash, MACD, RSI_SMA, RSI_EMA, BOLLINGER_BANDS, CombinedStrategy,
         # ----------------------------------------------------------------------
         #   Final decision based on the previous BSH (Buy-Sell-Hold)
         # ----------------------------------------------------------------------
-        self.arbitrate()
+        self.decision = self.arbitrate()
 
         # ----------------------------------------------------------------------
-        #   Export the dataframe for storage.
+        #   Export the dataframe for storage in an Excel file.
         # ----------------------------------------------------------------------
         if self.save_analysis:
             today_string = datetime.today().strftime('%Y-%m-%d')
-            file_export = f"Data_{today_string}.xlsx"
+            file_export = f"Analysis data_{today_string}.xlsx"
             file_export = Path.cwd().resolve() / "export" / "analysis" / \
                 today_string / file_export
             self.ohlc_dataset.to_excel(file_export)
 
-        return (self.analysis_results, self.ohlc_dataset)
+        return (self.decision, self.analysis_results, self.ohlc_dataset)
 
     def calc_parameters(self):
+        """Calculates basic parameters from the time series. The focus of this
+        method are general parameters which can be used to support defining the
+        better strategy when combining results.
+
+        Parameters calculated:
+
+        .. list-table:: Parameters
+            :widths: 25 50
+            :header-rows: 1
+
+            * - Parameter
+              - Description
+            * - Up movement
+              - Sum of all the positive changes in consecutive entries in the
+                dataframe for the defined column.
+            * - Down movement
+              - Sum of all the negative changes in consecutive entries in the
+                dataframe for the defined column. The final value is absolute.
+            * - Ratio up/down
+              - Ratio between `Up movement` and `Down movement`.
+
+        """
 
         self.calc_change(dataframe=self.ohlc_dataset,
                          source_column="Close Final",

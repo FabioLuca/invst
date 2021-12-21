@@ -119,6 +119,47 @@ columns for it. The new column is named “Close Final”.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="src.lib_analysis.preprocessing.PreProcessing.define_past_time">
+<span class="sig-name descname"><span class="pre">define_past_time</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.lib_analysis.preprocessing.PreProcessing.define_past_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Populates all the initial available data as <cite>Real data</cite>. This
+information is relevant to the dataset, as any data from prediction
+(future) will be tagged as <cite>Predict data</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>None</strong> – No parameters are used by this method.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Result is done directly to the <code class="docutils literal notranslate"><span class="pre">ohlc_dataset</span></code> dataframe,
+by adding a new column named <code class="docutils literal notranslate"><span class="pre">Data</span> <span class="pre">Type</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.lib_analysis.preprocessing.PreProcessing.extend_time_range">
+<span class="sig-name descname"><span class="pre">extend_time_range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.lib_analysis.preprocessing.PreProcessing.extend_time_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Populates the Pandas dataframe with dates following the next day for
+predictions. The list skips weekends, however holidays are not taken
+into account, so not skipped.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>length</strong> (<em>int</em>) – Length of the list of dates.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Populated new index with dates on the
+<code class="docutils literal notranslate"><span class="pre">ohlc_dataset_prediction</span></code> dataframe, with a sequence of dates
+incrementing one by one. Weekends are skipped in the list.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="src.lib_analysis.preprocessing.PreProcessing.truncate_range">
 <span class="sig-name descname"><span class="pre">truncate_range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shift_last</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.lib_analysis.preprocessing.PreProcessing.truncate_range" title="Permalink to this definition">¶</a></dt>
 <dd><p>Limit the data to a proper length, always keeping the latest data
