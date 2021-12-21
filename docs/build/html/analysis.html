@@ -101,12 +101,13 @@
             
   <section id="module-src.analysis">
 <span id="data-analysis"></span><h1>Data Analysis<a class="headerlink" href="#module-src.analysis" title="Permalink to this headline">¶</a></h1>
+<p>Data analysis and decision taking module.</p>
 <div class="toctree-wrapper compound">
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="src.analysis.Analysis">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.analysis.</span></span><span class="sig-name descname"><span class="pre">Analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ohlc_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">analysis_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stopgain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stoploss</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operation_cost</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tax_percentage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">display_analysis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_analysis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.analysis.Analysis" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.lib_analysis.methods.crash.Crash</span></code>, <a class="reference internal" href="macd.html#src.lib_analysis.methods.macd.MACD" title="src.lib_analysis.methods.macd.MACD"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.lib_analysis.methods.macd.MACD</span></code></a>, <a class="reference internal" href="rsi_sma.html#src.lib_analysis.methods.rsi_sma.RSI_SMA" title="src.lib_analysis.methods.rsi_sma.RSI_SMA"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.lib_analysis.methods.rsi_sma.RSI_SMA</span></code></a>, <a class="reference internal" href="rsi_ema.html#src.lib_analysis.methods.rsi_ema.RSI_EMA" title="src.lib_analysis.methods.rsi_ema.RSI_EMA"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.lib_analysis.methods.rsi_ema.RSI_EMA</span></code></a>, <a class="reference internal" href="bbands.html#src.lib_analysis.methods.bollinger_band.BOLLINGER_BANDS" title="src.lib_analysis.methods.bollinger_band.BOLLINGER_BANDS"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.lib_analysis.methods.bollinger_band.BOLLINGER_BANDS</span></code></a>, <a class="reference internal" href="macd_advanced.html#src.lib_analysis.methods.macd_advanced.MACDAdvanced" title="src.lib_analysis.methods.macd_advanced.MACDAdvanced"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.lib_analysis.methods.macd_advanced.MACDAdvanced</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">src.lib_analysis.methods.arima.ARIMA</span></code>, <a class="reference internal" href="lstm.html#src.lib_analysis.methods.lstm.LSTM" title="src.lib_analysis.methods.lstm.LSTM"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.lib_analysis.methods.lstm.LSTM</span></code></a>, <a class="reference internal" href="combined.html#src.lib_analysis.methods.combined.CombinedStrategy" title="src.lib_analysis.methods.combined.CombinedStrategy"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.lib_analysis.methods.combined.CombinedStrategy</span></code></a>, <a class="reference internal" href="preprocessing.html#src.lib_analysis.preprocessing.PreProcessing" title="src.lib_analysis.preprocessing.PreProcessing"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.lib_analysis.preprocessing.PreProcessing</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.lib_analysis.methods.crash.Crash</span></code>, <a class="reference internal" href="macd.html#src.lib_analysis.methods.macd.MACD" title="src.lib_analysis.methods.macd.MACD"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.lib_analysis.methods.macd.MACD</span></code></a>, <a class="reference internal" href="rsi_sma.html#src.lib_analysis.methods.rsi_sma.RSI_SMA" title="src.lib_analysis.methods.rsi_sma.RSI_SMA"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.lib_analysis.methods.rsi_sma.RSI_SMA</span></code></a>, <a class="reference internal" href="rsi_ema.html#src.lib_analysis.methods.rsi_ema.RSI_EMA" title="src.lib_analysis.methods.rsi_ema.RSI_EMA"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.lib_analysis.methods.rsi_ema.RSI_EMA</span></code></a>, <a class="reference internal" href="bbands.html#src.lib_analysis.methods.bollinger_band.BOLLINGER_BANDS" title="src.lib_analysis.methods.bollinger_band.BOLLINGER_BANDS"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.lib_analysis.methods.bollinger_band.BOLLINGER_BANDS</span></code></a>, <a class="reference internal" href="combined.html#src.lib_analysis.methods.combined.CombinedStrategy" title="src.lib_analysis.methods.combined.CombinedStrategy"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.lib_analysis.methods.combined.CombinedStrategy</span></code></a>, <a class="reference internal" href="preprocessing.html#src.lib_analysis.preprocessing.PreProcessing" title="src.lib_analysis.preprocessing.PreProcessing"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.lib_analysis.preprocessing.PreProcessing</span></code></a></p>
 <p>Data analysis class.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="src.analysis.Analysis.symbol">
@@ -133,13 +134,70 @@
 <dl class="py attribute">
 <dt class="sig sig-object py" id="src.analysis.Analysis.decision">
 <span class="sig-name descname"><span class="pre">decision</span></span><a class="headerlink" href="#src.analysis.Analysis.decision" title="Permalink to this definition">¶</a></dt>
-<dd><p>An integere which holds the final outcome of the analysis. The value
-is enumerated as:</p>
+<dd><p>An integere which holds the <strong>final outcome</strong> of the analysis. The
+value is enumerated as:</p>
 <ul class="simple">
-<li><p><strong>BUY</strong> = 1</p></li>
-<li><p><strong>SELL</strong> = -1</p></li>
-<li><p><strong>HOLD</strong> = 0</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BUY</span></code> = 1</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SELL</span></code> = -1</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HOLD</span></code> = 0</p></li>
 </ul>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>int</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.analysis.Analysis.analysis_length_pre">
+<span class="sig-name descname"><span class="pre">analysis_length_pre</span></span><a class="headerlink" href="#src.analysis.Analysis.analysis_length_pre" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of samples to be used for the analysis. This number is the
+one applied on the initial steps of the analysis, when truncating
+the dataset. Afterwards the truncated dataset is immediatelly used
+for the methods and predictions. For the methods themselves, this
+number shouldn’t be too high, since using older data doesn’t
+bring performance improvement to them. However, for the neural
+netoworks, a higher value can bring benefits since it means a larger
+dataset for learning. The downside on using al the available data
+is that it may take a considerable time to adjust the neural network
+if <code class="docutils literal notranslate"><span class="pre">analysis_length_pre</span></code> is too high.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>int</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.analysis.Analysis.analysis_length_post">
+<span class="sig-name descname"><span class="pre">analysis_length_post</span></span><a class="headerlink" href="#src.analysis.Analysis.analysis_length_post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of samples to be used for simulation and comparison. The
+analysis themselves use the <code class="docutils literal notranslate"><span class="pre">analysis_length_pre</span></code> parameter. This
+parameter is applies for final comparison.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>int</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.analysis.Analysis.sequence_length">
+<span class="sig-name descname"><span class="pre">sequence_length</span></span><a class="headerlink" href="#src.analysis.Analysis.sequence_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of samples to be used as sequence for input to the RNN /
+LSTM.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>int</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.analysis.Analysis.prediction_length">
+<span class="sig-name descname"><span class="pre">prediction_length</span></span><a class="headerlink" href="#src.analysis.Analysis.prediction_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of samples to be used as sequence for output in the RNN /
+LSTM.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p><cite>int</cite></p>
@@ -185,22 +243,68 @@ it should be saved or not. The chart will be saved for <cite>true</cite>.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="src.analysis.Analysis.analyze">
 <span class="sig-name descname"><span class="pre">analyze</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.analysis.Analysis.analyze" title="Permalink to this definition">¶</a></dt>
-<dd><p>Performs the complete analysis of the data.</p>
+<dd><p>Performs the complete analysis of the data for a determined symbol /
+ticker.</p>
 <p>The basic operation of this method is:</p>
 <ol class="arabic simple">
 <li><p><strong>Pre-Process</strong>: Execute operations for adequating the data for
 analysis.</p></li>
+<li><p><strong>Parameters calculation</strong>: Calculate basic parameters from the
+signals which are necessary for follow-up methods and strategies.</p></li>
 <li><p><strong>Apply Strategies</strong>: Run the strategies defined. Each one is run
-individually from each other.</p></li>
+individually from each other. The strategy themselves have inclusive
+prediction techniques.</p></li>
 <li><p><strong>Arbitrate</strong>: Combined the results from all the different strategies
 into a final outcome.</p></li>
 </ol>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>None</strong> – This method will use attributes from them class <code class="docutils literal notranslate"><span class="pre">Analysis</span></code>
+and no parameter is explicitly passed to it.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>analysis_results</strong> (<cite>dictionary</cite>) – Summary from the results from the ticker.</p></li>
+<li><p><strong>ohlc_dataset</strong> (<cite>Pandas Dataframe</cite>) – Complete dataframe from the analysis from ticker.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.analysis.Analysis.calc_parameters">
 <span class="sig-name descname"><span class="pre">calc_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.analysis.Analysis.calc_parameters" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Calculates basic parameters from the time series. The focus of this
+method are general parameters which can be used to support defining the
+better strategy when combining results.</p>
+<p>Parameters calculated:</p>
+<table class="colwidths-given docutils align-default" id="id1">
+<caption><span class="caption-text">Parameters</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 67%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Up movement</p></td>
+<td><p>Sum of all the positive changes in consecutive entries in the
+dataframe for the defined column.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Down movement</p></td>
+<td><p>Sum of all the negative changes in consecutive entries in the
+dataframe for the defined column. The final value is absolute.</p></td>
+</tr>
+<tr class="row-even"><td><p>Ratio up/down</p></td>
+<td><p>Ratio between <cite>Up movement</cite> and <cite>Down movement</cite>.</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 

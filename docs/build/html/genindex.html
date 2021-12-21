@@ -131,10 +131,14 @@
 </li>
       <li><a href="analysis.html#src.analysis.Analysis">Analysis (class in src.analysis)</a>
 </li>
-      <li><a href="analysis.html#src.analysis.Analysis.analyze">analyze() (src.analysis.Analysis method)</a>
+      <li><a href="analysis.html#src.analysis.Analysis.analysis_length_post">analysis_length_post (src.analysis.Analysis attribute)</a>
+</li>
+      <li><a href="analysis.html#src.analysis.Analysis.analysis_length_pre">analysis_length_pre (src.analysis.Analysis attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="analysis.html#src.analysis.Analysis.analyze">analyze() (src.analysis.Analysis method)</a>
+</li>
       <li><a href="arbitration.html#src.lib_analysis.arbitration.Arbitration.arbitrate">arbitrate() (src.lib_analysis.arbitration.Arbitration method)</a>
 </li>
       <li><a href="arbitration.html#src.lib_analysis.arbitration.Arbitration">Arbitration (class in src.lib_analysis.arbitration)</a>
@@ -200,18 +204,16 @@
 </li>
       <li><a href="macd.html#src.lib_analysis.methods.macd.MACD.calc_MACD">calc_MACD() (src.lib_analysis.methods.macd.MACD method)</a>
 </li>
-      <li><a href="macd_advanced.html#src.lib_analysis.methods.macd_advanced.MACDAdvanced.calc_MACD_Advanced">calc_MACD_Advanced() (src.lib_analysis.methods.macd_advanced.MACDAdvanced method)</a>
-</li>
       <li><a href="basic.html#src.lib_analysis.basic.Basic.calc_maximum">calc_maximum() (src.lib_analysis.basic.Basic method)</a>
 </li>
       <li><a href="basic.html#src.lib_analysis.basic.Basic.calc_minimum">calc_minimum() (src.lib_analysis.basic.Basic method)</a>
 </li>
       <li><a href="basic.html#src.lib_analysis.basic.Basic.calc_MovingStdDev">calc_MovingStdDev() (src.lib_analysis.basic.Basic method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="basic.html#src.lib_analysis.basic.Basic.calc_multiplication">calc_multiplication() (src.lib_analysis.basic.Basic method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="analysis.html#src.analysis.Analysis.calc_parameters">calc_parameters() (src.analysis.Analysis method)</a>
 </li>
       <li><a href="rsi_ema.html#src.lib_analysis.methods.rsi_ema.RSI_EMA.calc_RSI_EMA">calc_RSI_EMA() (src.lib_analysis.methods.rsi_ema.RSI_EMA method)</a>
@@ -256,11 +258,13 @@
 </li>
       <li><a href="analysis.html#src.analysis.Analysis.decision">decision (src.analysis.Analysis attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="arbitration.html#src.lib_analysis.arbitration.Arbitration.define_actions">define_actions() (src.lib_analysis.arbitration.Arbitration method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="preprocessing.html#src.lib_analysis.preprocessing.PreProcessing.define_closure">define_closure() (src.lib_analysis.preprocessing.PreProcessing method)</a>
+</li>
+      <li><a href="preprocessing.html#src.lib_analysis.preprocessing.PreProcessing.define_past_time">define_past_time() (src.lib_analysis.preprocessing.PreProcessing method)</a>
 </li>
       <li><a href="depots.html#src.lib_comdirect.depots.Depots">Depots (class in src.lib_comdirect.depots)</a>
 </li>
@@ -276,8 +280,6 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="data_access.html#src.data_access.DataAccess.end">end (src.data_access.DataAccess attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     example
 
@@ -285,6 +287,10 @@
         <li><a href="example.html#module-example">module</a>, <a href="index.html#module-example">[1]</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="preprocessing.html#src.lib_analysis.preprocessing.PreProcessing.extend_time_range">extend_time_range() (src.lib_analysis.preprocessing.PreProcessing method)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -353,8 +359,6 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="macd.html#src.lib_analysis.methods.macd.MACD">MACD (class in src.lib_analysis.methods.macd)</a>
 </li>
-      <li><a href="macd_advanced.html#src.lib_analysis.methods.macd_advanced.MACDAdvanced">MACDAdvanced (class in src.lib_analysis.methods.macd_advanced)</a>
-</li>
       <li><a href="orders.html#src.lib_comdirect.orders.Orders.make_order">make_order() (src.lib_comdirect.orders.Orders method)</a>
 </li>
       <li>
@@ -392,8 +396,6 @@
         <li><a href="lstm.html#module-src.lib_analysis.methods.lstm">src.lib_analysis.methods.lstm</a>
 </li>
         <li><a href="macd.html#module-src.lib_analysis.methods.macd">src.lib_analysis.methods.macd</a>
-</li>
-        <li><a href="macd_advanced.html#module-src.lib_analysis.methods.macd_advanced">src.lib_analysis.methods.macd_advanced</a>
 </li>
         <li><a href="rsi_ema.html#module-src.lib_analysis.methods.rsi_ema">src.lib_analysis.methods.rsi_ema</a>
 </li>
@@ -434,9 +436,11 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="performance_simulation.html#src.lib_analysis.performance_simulation.PerformanceSimulation">PerformanceSimulation (class in src.lib_analysis.performance_simulation)</a>
 </li>
+      <li><a href="data_access.html#src.data_access.DataAccess.period">period (src.data_access.DataAccess attribute)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="data_access.html#src.data_access.DataAccess.period">period (src.data_access.DataAccess attribute)</a>
+      <li><a href="analysis.html#src.analysis.Analysis.prediction_length">prediction_length (src.analysis.Analysis attribute)</a>
 </li>
       <li><a href="preprocessing.html#src.lib_analysis.preprocessing.PreProcessing">PreProcessing (class in src.lib_analysis.preprocessing)</a>
 </li>
@@ -465,6 +469,8 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="analysis.html#src.analysis.Analysis.save_analysis">save_analysis (src.analysis.Analysis attribute)</a>
+</li>
+      <li><a href="analysis.html#src.analysis.Analysis.sequence_length">sequence_length (src.analysis.Analysis attribute)</a>
 </li>
       <li><a href="session.html#src.session.Session">Session (class in src.session)</a>
 </li>
@@ -560,13 +566,6 @@
 
       <ul>
         <li><a href="macd.html#module-src.lib_analysis.methods.macd">module</a>
-</li>
-      </ul></li>
-      <li>
-    src.lib_analysis.methods.macd_advanced
-
-      <ul>
-        <li><a href="macd_advanced.html#module-src.lib_analysis.methods.macd_advanced">module</a>
 </li>
       </ul></li>
       <li>
