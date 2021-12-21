@@ -90,8 +90,8 @@ class MACD (LSTM, Basic, Arbitration, PerformanceSimulation, ReportAnalysis, Sum
 
         self.recommend_threshold_cross(
             source_column="MACD Histogram",
-            threshold_upper=0.15,
-            threshold_lower=0.15,
+            threshold_upper=0.0,  # 0.15
+            threshold_lower=0.0,  # 0.15
             mode="norm",
             values_upper_mid_lower=(
                 "BUY", "HOLD", "SELL"),
