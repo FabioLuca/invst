@@ -16,6 +16,7 @@ from dash import html
 from dash import dcc
 from dash import dash_table
 from dash_table.Format import Format, Group, Prefix, Scheme, Symbol, Align, Sign
+from PIL import ImageColor
 import dash
 import pandas as pd
 import numpy as np
@@ -383,6 +384,19 @@ def create_page():
 
     ### CHARTS #################################################################
 
+    marker_size = 1
+    line_width = 4
+    color_line_total = "#FFBD35"
+    color_line_total_marker = color_line_total
+    color_line_total_history = color_line_total
+    color_line_total_history_marker = color_line_total_history
+
+    opacity_area = 0.5
+    color_fill_depot = f"rgba(0,217,126,{opacity_area})"
+    color_fill_balance = f"rgba(0,242,141,{opacity_area})"
+    color_fill_depot_history = color_fill_depot
+    color_fill_balance_history = color_fill_balance
+
     layout_charts = go.Layout(
         autosize=True,
         height=600,
@@ -434,44 +448,86 @@ def create_page():
         # paper_bgcolor="LightSteelBlue"
     )
 
-    fig_aggregated_current_value = px.line(
-        df_aggregated,
-        x="Date",
-        y="Account Total Value",
-        markers=False)
+    # --------------------------------------------------------------------------
+    #   CHART 1
+    # --------------------------------------------------------------------------
+    fig_aggregated_current_value = go.Figure()
 
-    marker_size = 1
-    line_width = 3
-    color_line_actual = "#337d05"
-    color_line_actual_marker = "#68ab3e"
-    color_line_history = color_line_actual  # "#10946f"
-    color_line_history_marker = color_line_actual_marker  # "#44cfa8"
-    opacity_history = 0.8
+    # --------------------------------------------------------------------------
+    #   Add the filled area below the lines.
+    # --------------------------------------------------------------------------
+    fig_aggregated_current_value.add_trace(go.Scatter(
+        name='Depot',
+        x=df_aggregated["Date"],
+        y=df_aggregated["Depot Aggregated Current Value"],
+        stackgroup='one',
+        mode="none",
+        fillcolor=color_fill_depot,
+        showlegend=True,
+    ))
 
-    fig_aggregated_current_value.update_traces(
-        line=dict(color=color_line_actual,
+    fig_aggregated_current_value.add_trace(go.Scatter(
+        name='Balance',
+        x=df_balances["Date"],
+        y=df_balances["Balance Value"],
+        stackgroup='one',
+        mode="none",
+        fillcolor=color_fill_balance,
+        showlegend=True,
+    ))
+
+    fig_aggregated_current_value.add_trace(go.Scatter(
+        x=df_aggregated["Date"],
+        y=df_aggregated["Account Total Value"],
+        name='Total',
+        mode="lines",
+        showlegend=True,
+        line=dict(color=color_line_total,
                   width=line_width),
         marker=dict(size=marker_size,
-                    color=color_line_actual_marker,
+                    color=color_line_total_marker,
                     line=dict(width=line_width,
-                              color=color_line_actual)),
-        # selector=dict(mode='markers')
-    )
+                              color=color_line_total))
+    ))
 
+    # --------------------------------------------------------------------------
+    #   Add the filled area below the lines for the historical data. The line
+    #   is the last one added, so it stays on top of the others.
+    # --------------------------------------------------------------------------
     if df_aggregated_history is not None:
-        fig_aggregated_current_value.add_scatter(
+        fig_aggregated_current_value.add_trace(go.Scatter(
+            name='Historical depot',
+            x=df_aggregated_history["Date"],
+            y=df_aggregated_history["Value Depot"],
+            stackgroup='one',
+            mode="none",
+            fillcolor=color_fill_depot_history,
+            showlegend=False,
+        ))
+
+        fig_aggregated_current_value.add_trace(go.Scatter(
+            name='Historical balance',
+            x=df_aggregated_history["Date"],
+            y=df_aggregated_history["Value Account"],
+            stackgroup='one',
+            mode="none",
+            fillcolor=color_fill_balance_history,
+            showlegend=False,
+        ))
+
+        fig_aggregated_current_value.add_trace(go.Scatter(
             x=df_aggregated_history["Date"],
             y=df_aggregated_history["Account Total Value"],
-            name='History',
-            mode="lines",  # +markers",
-            opacity=opacity_history,
-            line=dict(color=color_line_history,
+            name='Historical total',
+            mode="lines",
+            showlegend=False,
+            line=dict(color=color_line_total_history,
                       width=line_width),
             marker=dict(size=marker_size,
-                        color=color_line_history_marker,
+                        color=color_line_total_history_marker,
                         line=dict(width=line_width,
-                                  color=color_line_history))
-        )
+                                  color=color_line_total_history))
+        ))
 
     fig_aggregated_current_value.update_layout(
         xaxis_title="Date",
@@ -480,12 +536,53 @@ def create_page():
     )
     fig_aggregated_current_value.update_layout(layout_charts)
 
-    fig_depots_current_value = px.area(
-        df_depots,
-        x="Date",
-        y="Current Value",
-        # olor_discrete_sequence=px.colors.sequential.Rainbow,
-        color="WKN")
+    # --------------------------------------------------------------------------
+    #   CHART 2 -- Stacked individual tickers
+    # --------------------------------------------------------------------------
+    opacity_elements = 0.6
+    color_sequence = [
+        "#E26A2C",
+        "#FF8243",
+        "#FDA65D",
+        "#FFD07F",
+        "#fdfa66",
+        "#E6DD3B",
+        "#29BB89",
+        "#289672",
+        "#1E6F5C",
+        "#132743",
+        "#2F86A6",
+        "#009DAE",
+        "#71DFE7",
+        "#FCDADA",
+        "#FFA5A5",
+        "#E5707E",
+        "#EF4F4F",
+    ]
+
+    color_sequence_rgba = []
+    for color in color_sequence:
+        color_rgba = (*ImageColor.getcolor(color, "RGB"), opacity_elements)
+        color_rgba = f"rgba{color_rgba}"
+        color_sequence_rgba.append(color_rgba)
+
+    fig_depots_current_value = go.Figure()
+
+    i = 0
+    for wkn in sorted(df_depots["WKN"].unique()):
+        fig_depots_current_value.add_trace(go.Scatter(
+            name=wkn,
+            x=df_depots[df_depots["WKN"] == wkn]["Date"],
+            y=df_depots[df_depots["WKN"] == wkn]["Current Value"],
+            stackgroup='one',
+            text=f"WKN: {wkn}",
+            line=dict(color=middle_tint,
+                      width=1.5),
+            # mode="none",
+            fillcolor=color_sequence_rgba[i],
+            showlegend=True,
+        ))
+        i = i + 1
 
     fig_depots_current_value.update_layout(
         xaxis_title="Date",
@@ -493,8 +590,42 @@ def create_page():
         # legend_title="Legend"
     )
     fig_depots_current_value.update_layout(layout_charts)
-    fig_depots_current_value.for_each_trace(
-        lambda trace: trace.update(fillcolor=trace.line.color))
+
+    # --------------------------------------------------------------------------
+    #   CHART 3 -- Relative gain individual tickers
+    # --------------------------------------------------------------------------
+    opacity_elements = 1
+    color_sequence_rgba = []
+    for color in color_sequence:
+        color_rgba = (*ImageColor.getcolor(color, "RGB"), opacity_elements)
+        color_rgba = f"rgba{color_rgba}"
+        color_sequence_rgba.append(color_rgba)
+
+    fig_depots_current_value_line = go.Figure()
+
+    i = 0
+    for wkn in sorted(df_depots["WKN"].unique()):
+        fig_depots_current_value_line.add_trace(go.Scatter(
+            name=wkn,
+            x=df_depots[df_depots["WKN"] == wkn]["Date"],
+            y=df_depots[df_depots["WKN"] ==
+                        wkn]["Profit/Loss Purchase Relative"],
+            # stackgroup='one',
+            text=f"WKN: {wkn}",
+            line=dict(color=color_sequence_rgba[i],
+                      width=2.5),
+            mode="lines",
+            fillcolor=color_sequence_rgba[i],
+            showlegend=True,
+        ))
+        i = i + 1
+
+    fig_depots_current_value_line.update_layout(
+        xaxis_title="Date",
+        yaxis_title="Value (EUR)",
+        # legend_title="Legend"
+    )
+    fig_depots_current_value_line.update_layout(layout_charts)
 
     app.layout = html.Div(
         children=[
@@ -512,10 +643,20 @@ def create_page():
             ################ CHART 2 ###########################################
             html.Div(
                 [
-                    html.H3(children='Split depots current values'),
+                    html.H3(children='Depots current values'),
                     dcc.Graph(
                         id='fig_depots_current_value',
                         figure=fig_depots_current_value
+                    )
+                ]
+            ),
+            ################ CHART 3 ###########################################
+            html.Div(
+                [
+                    html.H3(children='Split depots current values'),
+                    dcc.Graph(
+                        id='fig_depots_current_value_line',
+                        figure=fig_depots_current_value_line
                     )
                 ]
             ),
@@ -634,8 +775,8 @@ if __name__ == "__main__":
 
         df_aggregated_history["Account Total Value Unit"] = "EUR"
 
-        df_aggregated_history.drop(columns=["Value Depot", "Value Account"],
-                                   inplace=True)
+        # df_aggregated_history.drop(columns=["Value Depot", "Value Account"],
+        #                            inplace=True)
 
         df_aggregated_history.rename(
             columns={
@@ -686,6 +827,7 @@ if __name__ == "__main__":
     files = list(filter(Path.is_file, folder.glob('**/Export_Comdirect_*')))
 
     df_depots = pd.DataFrame()
+    df_balances = pd.DataFrame()
     df_aggregated = pd.DataFrame()
 
     df_file_aggregated = pd.read_excel(
@@ -696,20 +838,22 @@ if __name__ == "__main__":
 
         df_file_aggregated = pd.read_excel(
             file, sheet_name="Depot Positions Aggregated")
-        df_file_aggregated_balance = pd.read_excel(
+        df_file_balance = pd.read_excel(
             file, sheet_name="Balance")
         df_file_depots = pd.read_excel(
             file, sheet_name="Depot Positions")
 
         df_file_aggregated["Account Total Value"] = df_file_aggregated["Depot Aggregated Current Value"] + \
-            df_file_aggregated_balance["Balance Value"].iloc[-1]
+            df_file_balance["Balance Value"].iloc[-1]
         df_file_aggregated["Account Total Value Unit"] = "EUR"
 
         if i == 0:
             df_aggregated = df_file_aggregated
+            df_balances = df_file_balance
             df_depots = df_file_depots
         else:
             df_aggregated = df_aggregated.append(df_file_aggregated)
+            df_balances = df_balances.append(df_file_balance)
             df_depots = df_depots.append(df_file_depots)
 
         i = i + 1
@@ -721,6 +865,21 @@ if __name__ == "__main__":
     df_aggregated["Date"] = pd.to_datetime(
         df_aggregated["Date"], format="%Y-%m-%d")
     df_aggregated["Date"] = df_aggregated["Date"].dt.date
+
+    df_balances["Date"] = pd.to_datetime(
+        df_balances["Date"], format="%Y-%m-%d")
+    df_balances["Date"] = df_balances["Date"].dt.date
+
+    # print(df_depots)
+    # print(df_depots.columns)
+
+    # # df_depots['Cumulative Profit/Loss Purchase Relative'] =
+    df_depots['Delta Profit/Loss Purchase Relative'] = df_depots.sort_values(by=['Date', "WKN"]).groupby(
+        ['Depot ID', 'WKN'])['Profit/Loss Purchase Relative'].diff()  # cumsum()  # ['Profit/Loss Purchase Relative'].rolling(2).sum().fillna(0)  # diff()  # .fillna(0)
+
+    # print(df_cumulative.head(500))
+
+    # print(df_depots['Cumulative Profit/Loss Purchase Relative'])
 
     app = create_page()
 
