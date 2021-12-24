@@ -18,6 +18,7 @@ from dash import dash_table
 from dash_table.Format import Format, Group, Prefix, Scheme, Symbol, Align, Sign
 import dash
 import pandas as pd
+import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 
@@ -436,16 +437,61 @@ def create_page():
     fig_aggregated_current_value = px.line(
         df_aggregated,
         x="Date",
-        y="Depot Aggregated Current Value")
+        y="Account Total Value",
+        markers=False)
 
+    marker_size = 1
+    line_width = 3
+    color_line_actual = "#337d05"
+    color_line_actual_marker = "#68ab3e"
+    color_line_history = color_line_actual  # "#10946f"
+    color_line_history_marker = color_line_actual_marker  # "#44cfa8"
+    opacity_history = 0.8
+
+    fig_aggregated_current_value.update_traces(
+        line=dict(color=color_line_actual,
+                  width=line_width),
+        marker=dict(size=marker_size,
+                    color=color_line_actual_marker,
+                    line=dict(width=line_width,
+                              color=color_line_actual)),
+        # selector=dict(mode='markers')
+    )
+
+    if df_aggregated_history is not None:
+        fig_aggregated_current_value.add_scatter(
+            x=df_aggregated_history["Date"],
+            y=df_aggregated_history["Account Total Value"],
+            name='History',
+            mode="lines",  # +markers",
+            opacity=opacity_history,
+            line=dict(color=color_line_history,
+                      width=line_width),
+            marker=dict(size=marker_size,
+                        color=color_line_history_marker,
+                        line=dict(width=line_width,
+                                  color=color_line_history))
+        )
+
+    fig_aggregated_current_value.update_layout(
+        xaxis_title="Date",
+        yaxis_title="Value (EUR)",
+        # legend_title="Legend"
+    )
     fig_aggregated_current_value.update_layout(layout_charts)
 
     fig_depots_current_value = px.area(
         df_depots,
         x="Date",
         y="Current Value",
+        # olor_discrete_sequence=px.colors.sequential.Rainbow,
         color="WKN")
 
+    fig_depots_current_value.update_layout(
+        xaxis_title="Date",
+        yaxis_title="Value (EUR)",
+        # legend_title="Legend"
+    )
     fig_depots_current_value.update_layout(layout_charts)
     fig_depots_current_value.for_each_trace(
         lambda trace: trace.update(fillcolor=trace.line.color))
@@ -456,9 +502,7 @@ def create_page():
             ################ CHART 1 ###########################################
             html.Div(
                 [
-                    html.H3(children='Aggregated depots current value'),
-                    # html.Div(
-                    #    children='Dash: A web application framework for Python.'),
+                    html.H3(children='Total account balance'),
                     dcc.Graph(
                         id='fig_aggregated_current_value',
                         figure=fig_aggregated_current_value
@@ -469,8 +513,6 @@ def create_page():
             html.Div(
                 [
                     html.H3(children='Split depots current values'),
-                    # html.Div(
-                    #    children='Dash: A web application framework for Python.'),
                     dcc.Graph(
                         id='fig_depots_current_value',
                         figure=fig_depots_current_value
@@ -562,12 +604,85 @@ def create_page():
 
 if __name__ == "__main__":
 
+    folder = Path.cwd().resolve() / "export"
+
+    # --------------------------------------------------------------------------
+    #   Loads first any historical data which was stored before the scripts /
+    #   project to be available. For the historical data, information is
+    #   expected as a .csv file. Only the aggregated value of the account is
+    #   supported for it. The cav file must be named "History_Aggregated" and
+    #   also be located in the "Export" folder.
+    # --------------------------------------------------------------------------
+    historical_file = folder / "History_Aggregated.csv"
+    if historical_file.is_file():
+        df_aggregated_history = pd.read_csv(historical_file,
+                                            header=0,
+                                            quotechar='"',
+                                            skipinitialspace=True,
+                                            decimal=",",
+                                            delimiter=';',
+                                            thousands='.',
+                                            parse_dates=[1],
+                                            )
+
+        df_aggregated_history["Date"] = pd.to_datetime(
+            df_aggregated_history["Date"], format="%d-%m-%Y")
+        df_aggregated_history["Date"] = df_aggregated_history["Date"].dt.date
+
+        df_aggregated_history["Account Total Value"] = df_aggregated_history["Value Depot"] + \
+            df_aggregated_history["Value Account"]
+
+        df_aggregated_history["Account Total Value Unit"] = "EUR"
+
+        df_aggregated_history.drop(columns=["Value Depot", "Value Account"],
+                                   inplace=True)
+
+        df_aggregated_history.rename(
+            columns={
+                "Depot ID": "Depot Aggregated ID",
+                "Unit": "Depot Aggregated Current Value Unit"
+            },
+            inplace=True
+        )
+
+        if 'Depot Aggregated Purchase Value' not in df_aggregated_history.columns:
+            df_aggregated_history['Depot Aggregated Purchase Value'] = np.nan
+
+        if 'Depot Aggregated Purchase Value Unit' not in df_aggregated_history.columns:
+            df_aggregated_history['Depot Aggregated Purchase Value Unit'] = "EUR"
+
+        if 'Depot Aggregated Current Value' not in df_aggregated_history.columns:
+            df_aggregated_history['Depot Aggregated Current Value'] = np.nan
+
+        if 'Depot Aggregated Current Value Unit' not in df_aggregated_history.columns:
+            df_aggregated_history['Depot Aggregated Current Value Unit'] = "EUR"
+
+        if 'Depot Aggregated Profit/Loss Purchase Absolute Value' not in df_aggregated_history.columns:
+            df_aggregated_history['Depot Aggregated Profit/Loss Purchase Absolute Value'] = np.nan
+
+        if 'Depot Aggregated Profit/Loss Purchase Absolute Unit' not in df_aggregated_history.columns:
+            df_aggregated_history['Depot Aggregated Profit/Loss Purchase Absolute Unit'] = "EUR"
+
+        if 'Depot Aggregated Profit/Loss Purchase Relative' not in df_aggregated_history.columns:
+            df_aggregated_history['Depot Aggregated Profit/Loss Purchase Relative'] = np.nan
+
+        if 'Depot Aggregated Profit/Loss Previous Day Absolute Value' not in df_aggregated_history.columns:
+            df_aggregated_history['Depot Aggregated Profit/Loss Previous Day Absolute Value'] = np.nan
+
+        if 'Depot Aggregated Profit/Loss Previous Day Absolute Unit' not in df_aggregated_history.columns:
+            df_aggregated_history['Depot Aggregated Profit/Loss Previous Day Absolute Unit'] = "EUR"
+
+        if 'Depot Aggregated Profit/Loss Previous Day Relative' not in df_aggregated_history.columns:
+            df_aggregated_history['Depot Aggregated Profit/Loss Previous Day Relative'] = np.nan
+
+    else:
+        df_aggregated_history = None
+
     # --------------------------------------------------------------------------
     #   Get all the files which contain data to be displayed. The files must be
     #   all in the "export" folder, and named with the pattern
     #   "Export_Comdirect_" to be included in the analysis.
     # --------------------------------------------------------------------------
-    folder = Path.cwd().resolve() / "export"
     files = list(filter(Path.is_file, folder.glob('**/Export_Comdirect_*')))
 
     df_depots = pd.DataFrame()
@@ -581,8 +696,14 @@ if __name__ == "__main__":
 
         df_file_aggregated = pd.read_excel(
             file, sheet_name="Depot Positions Aggregated")
+        df_file_aggregated_balance = pd.read_excel(
+            file, sheet_name="Balance")
         df_file_depots = pd.read_excel(
             file, sheet_name="Depot Positions")
+
+        df_file_aggregated["Account Total Value"] = df_file_aggregated["Depot Aggregated Current Value"] + \
+            df_file_aggregated_balance["Balance Value"].iloc[-1]
+        df_file_aggregated["Account Total Value Unit"] = "EUR"
 
         if i == 0:
             df_aggregated = df_file_aggregated
@@ -594,7 +715,12 @@ if __name__ == "__main__":
         i = i + 1
 
     today_string = datetime.today().strftime('%Y-%m-%d')
+    today_np = pd.to_datetime(today_string, format='%Y-%m-%d')
     df_depots_today = df_depots[df_depots['Date'] == today_string]
+
+    df_aggregated["Date"] = pd.to_datetime(
+        df_aggregated["Date"], format="%Y-%m-%d")
+    df_aggregated["Date"] = df_aggregated["Date"].dt.date
 
     app = create_page()
 
