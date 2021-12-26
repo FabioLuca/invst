@@ -532,9 +532,6 @@ df_aggregated_history = create_historical_aggregated_dataframe(folder=folder)
  df_depots_today) = create_combined_dataframes(folder=folder,
                                                date_today=today_string)
 
-print(df_depots.dtypes)
-print(df_depots_today.dtypes)
-
 # ------------------------------------------------------------------------------
 #   Make a Dash application for displaying the charts. Dash will
 #   automatically load the .css which are in the assets folder, so there is
