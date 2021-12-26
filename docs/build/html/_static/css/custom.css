@@ -11,6 +11,18 @@
     /* background-color: rgb(216, 237, 227); 193, 230, 212); */
 }
 
+.py.function .sig.sig-object.py {
+    padding-top: 16px;
+    padding-bottom: 16px;
+    padding-left: 4px;
+    padding-right: 0px;
+    margin-top: 60px;
+    margin-bottom: 20px;
+    border-top: 2px solid rgb(168, 168, 168);
+    border-bottom: 1px solid rgb(168, 168, 168);
+    /* background-color: rgb(216, 237, 227); 193, 230, 212); */
+}
+
 .py.attribute .sig.sig-object.py {
     padding-top: 2px;
     padding-bottom: 2px;

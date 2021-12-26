@@ -48,7 +48,17 @@ comdirect_status_report.py
    :members:
    :undoc-members:
    :show-inheritance:
-   :exclude-members: create_page
+   :exclude-members:
+      create_page,
+      convert_hex_to_rgba,
+      create_chart_account_aggregated_values,
+      create_chart_depots_current_values,
+      create_chart_depots_relative_values,
+      create_combined_dataframes,
+      create_filtered_depots_dataframe,
+      create_historical_aggregated_dataframe,
+      define_timespam,
+      update_output
 
 comdirect_status_update.py
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

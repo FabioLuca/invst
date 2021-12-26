@@ -26,7 +26,6 @@ Analysis methods
    :maxdepth: 1
 
    macd
-   .. macd_advanced
    rsi_sma
    rsi_ema
    bbands

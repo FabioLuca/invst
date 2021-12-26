@@ -101,22 +101,142 @@
             
   <section id="module-automation.comdirect_status_report">
 <span id="comdirect-status-report-py"></span><h1>comdirect_status_report.py<a class="headerlink" href="#module-automation.comdirect_status_report" title="Permalink to this headline">¶</a></h1>
-<p>Automation script to display charts and reports of the data collected and
-stored in the Excel files in the <cite>export</cite> folder. The script will parse the
-Excel data in the files.</p>
+<p>Automation script to present the data collected from Comdirect. The data
+used are the Excel files stored in the <cite>export</cite> folder. To keep compatibility
+with older data stored, historical data stored in a CSV file, in the same folder
+and named <cite>History_Aggregated.csv</cite>, will also be parsed and used. For the former
+part, only the files matching the pattern <cite>Export_Comdirect_</cite> are evaluated,
+so any other files in the folder will be ignored.</p>
+<p>The script has an approach of parsing the data supplied and aggregate them,
+forming longer and multiple dataframes.</p>
+<p>The end goal is to summarize the data in the dashboard by using charts or
+tables, to best present the information. The elements composing the page are:</p>
+<ol class="arabic simple">
+<li><p>Chart with the complete aggregated from the account.</p></li>
+<li><p>Chart with split current values for all the depots.</p></li>
+<li><p>Chart with relative gains/loses for each depot, based on a starting point
+in time, to which the value is zeroed and calculated relative to it. For
+this chart, a dropdown menu is available, so the user can select the
+timespam for analysis.</p></li>
+<li><p>Table with the complete aggregated from the account.</p></li>
+<li><p>Table with split current values for all the depots for the current day.</p></li>
+<li><p>Table with split current values for all the depots.</p></li>
+</ol>
 <p>This script is based on Dash and Plotly, and the execution will result into a
 server which can be accessed by the addressed informed on the console, for
 example: <a class="reference external" href="http://127.0.0.1:8050/">http://127.0.0.1:8050/</a></p>
-<p>Only the files matching the pattern <cite>Export_Comdirect_</cite> are evaluated, so any
-other files in the folder will be ignored.</p>
 <dl class="py function">
-<dt class="sig sig-object py" id="automation.comdirect_status_report.create_page">
-<span class="sig-prename descclassname"><span class="pre">automation.comdirect_status_report.</span></span><span class="sig-name descname"><span class="pre">create_page</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#automation.comdirect_status_report.create_page" title="Permalink to this definition">¶</a></dt>
-<dd><p>Make a Dash application for displaying the charts. Dash will
-automatically load the .css which are in the assets folder, so there is
-no need to pass them. For that, this method of calling the app is
-necessary: app = dash.Dash(__name__)</p>
+<dt class="sig sig-object py" id="automation.comdirect_status_report.convert_hex_to_rgba">
+<span class="sig-prename descclassname"><span class="pre">automation.comdirect_status_report.</span></span><span class="sig-name descname"><span class="pre">convert_hex_to_rgba</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">color_sequence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opacity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#automation.comdirect_status_report.convert_hex_to_rgba" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a list of Hex based values to a RGBA equivalent list. The alpha
+channel component is provenient from the <code class="docutils literal notranslate"><span class="pre">opacity</span></code> input.</p>
 </dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="automation.comdirect_status_report.create_chart_account_aggregated_values">
+<span class="sig-prename descclassname"><span class="pre">automation.comdirect_status_report.</span></span><span class="sig-name descname"><span class="pre">create_chart_account_aggregated_values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#automation.comdirect_status_report.create_chart_account_aggregated_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a chart with all the account aggregated values. If the dataframe
+for the historical data is available (different from <code class="docutils literal notranslate"><span class="pre">None</span></code>) it will also
+be plotted, otherwise it is not included.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>None</strong> – This method uses data available from the script, created outside the
+method.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>figure</strong> – Resulting graph with data and configuration.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>Plotly Graph Object</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="automation.comdirect_status_report.create_combined_dataframes">
+<span class="sig-prename descclassname"><span class="pre">automation.comdirect_status_report.</span></span><span class="sig-name descname"><span class="pre">create_combined_dataframes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date_today</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#automation.comdirect_status_report.create_combined_dataframes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="automation.comdirect_status_report.create_filtered_depots_dataframe">
+<span class="sig-prename descclassname"><span class="pre">automation.comdirect_status_report.</span></span><span class="sig-name descname"><span class="pre">create_filtered_depots_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timespam</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#automation.comdirect_status_report.create_filtered_depots_dataframe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates the percentual incremental dataframe. This dataframe will start
+each signal from 0 value (gain/loss) and then produce incremental steps
+based on the daily gain or loss.</p>
+<p>This method is used a callback since it needs to be called for the dropdown
+menu in the Dash dashboard.</p>
+<p>The operation takes a few steps:</p>
+<ol class="arabic simple">
+<li><p>Copy of the Depot dataframe</p></li>
+<li><p>Cut-off (filter out) data before a desidered target. This step is
+important, since the data will be displayed in reference to the new
+start.</p></li>
+<li><p>Add a new row to cover for cases when the first invesrtiment comes
+after the cut-off date, otherwise they will have an offset in the
+operation due to losing the first entry.</p></li>
+<li><p>Builds up the list of changes to add to the dataframe.</p></li>
+</ol>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="automation.comdirect_status_report.create_historical_aggregated_dataframe">
+<span class="sig-prename descclassname"><span class="pre">automation.comdirect_status_report.</span></span><span class="sig-name descname"><span class="pre">create_historical_aggregated_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#automation.comdirect_status_report.create_historical_aggregated_dataframe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="automation.comdirect_status_report.create_line_chart">
+<span class="sig-prename descclassname"><span class="pre">automation.comdirect_status_report.</span></span><span class="sig-name descname"><span class="pre">create_line_chart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_by</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_lines</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_fills</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opacity_lines</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opacity_fills</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stack_group</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#automation.comdirect_status_report.create_line_chart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a line chart.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataframe</strong> (<cite>Pandas Dataframe</cite>) – Dataframe with the data to be plotted.</p></li>
+<li><p><strong>group_by</strong> (<cite>str</cite>) – Name of the column in the Dataframe to be used a grouper.</p></li>
+<li><p><strong>x_column</strong> (<cite>str</cite>) – Name of the column in the Dataframe to be used as X data.</p></li>
+<li><p><strong>y_column</strong> (<cite>str</cite>) – Name of the column in the Dataframe to be used as Y data.</p></li>
+<li><p><strong>color_lines</strong> (<cite>List of str</cite>) – List of strings with the hex values represening the colors to be
+used in sequence for the lines. Each color need to represented by a
+hash symbol (#) followed by 3 pairs of characters, to represent the
+RGB information.</p></li>
+<li><p><strong>color_fills</strong> (<cite>List of str</cite>) – List of strings with the hex values represening the colors to be
+used in sequence for the fills. Each color need to represented by a
+hash symbol (#) followed by 3 pairs of characters, to represent the
+RGB information.</p></li>
+<li><p><strong>opacity_lines</strong> (<cite>float</cite>) – Value between 0 and 1 to define the opacity of the colors for the
+lines. This is the alpha channel. A value of 0 means full
+transparency, while the value 1 means full opaque.</p></li>
+<li><p><strong>opacity_fills</strong> (<cite>float</cite>) – Value between 0 and 1 to define the opacity of the colors for the
+fills. This is the alpha channel. A value of 0 means full
+transparency, while the value 1 means full opaque.</p></li>
+<li><p><strong>line_width</strong> (<cite>float</cite>) – Width of the lines in plot.</p></li>
+<li><p><strong>x_label</strong> (<cite>str</cite>) – String with the name of label to be used as the title for the X
+axis.</p></li>
+<li><p><strong>y_label</strong> (<cite>str</cite>) – String with the name of label to be used as the title for the Y
+axis.</p></li>
+<li><p><strong>stack_group</strong> (<cite>str</cite>, optional) – Name of the group to stack the plots. If no stacking is desired,
+value <code class="docutils literal notranslate"><span class="pre">`None</span></code> need to be assigned.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>figure</strong> – Resulting graph with data and configuration.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>Plotly Graph Object</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="automation.comdirect_status_report.define_timespam">
+<span class="sig-prename descclassname"><span class="pre">automation.comdirect_status_report.</span></span><span class="sig-name descname"><span class="pre">define_timespam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timespam</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#automation.comdirect_status_report.define_timespam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a string input with a timespam and returns the start date from
+today.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="automation.comdirect_status_report.update_output">
+<span class="sig-prename descclassname"><span class="pre">automation.comdirect_status_report.</span></span><span class="sig-name descname"><span class="pre">update_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#automation.comdirect_status_report.update_output" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </section>
 
