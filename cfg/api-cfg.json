@@ -44,6 +44,15 @@
                     "url_depot_position": "https://api.comdirect.de/api/brokerage/v3/depots/[DEPOT_ID]/positions"
                 }
             }
+        },
+        "communicating": {
+            "selection": "Twilio",
+            "Twilio": {
+                "access_data": {
+                    "from_phone": "whatsapp:+14155238886",
+                    "to_phone": "whatsapp:+4915127137592"
+                }
+            }
         }
     }
 }

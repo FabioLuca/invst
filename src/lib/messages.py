@@ -180,7 +180,26 @@ MESSAGE = {
         "Level": C.ERROR,
         "Message": "No source of data was define for trading %s."
     },
-
+    "Comm_SendMessage_Fail": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "Failure to send message."
+    },
+    "Comm_SendMessage_Success": {
+        "Flag": C.SUCCESS,
+        "Level": C.INFO,
+        "Message": "Success to send message."
+    },
+    "Comm_ReceiveMessage_Fail": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "Failure to receive message."
+    },
+    "Comm_ReceiveMessage_Success": {
+        "Flag": C.SUCCESS,
+        "Level": C.INFO,
+        "Message": "Success to receive message."
+    },
 }
 
 
