@@ -50,7 +50,10 @@
             "Twilio": {
                 "access_data": {
                     "from_phone": "whatsapp:+14155238886",
-                    "to_phone": "whatsapp:+4915127137592"
+                    "to_phone": "whatsapp:+4915127137592",
+                    "count_messages": 40,
+                    "request_tries": 100,
+                    "pause_between_tries": 2
                 }
             }
         }
