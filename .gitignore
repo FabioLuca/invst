@@ -146,5 +146,10 @@ logs/
 Export*xlsx
 export/
 
+# Temporary files from Office
+*~$*.xlsx
+*~$*.pptx
+*~$*.docx
+
 # Remove the models from keras
 models/
