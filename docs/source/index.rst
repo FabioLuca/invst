@@ -58,7 +58,8 @@ comdirect_status_report.py
       create_filtered_depots_dataframe,
       create_historical_aggregated_dataframe,
       define_timespam,
-      update_output
+      update_output,
+      create_line_chart,
 
 comdirect_status_update.py
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -28,10 +28,24 @@ and tools available.
 
 This project is split into a few major elements or steps:
 
-1.  Fetch market data series (history)
-2.  Analyze data for taking decisions (hold, buy, sell)
-3.  Automatic execute an order into a broker
-4.  Fetch account status
+1. Fetch market data series (history)
+2. Analyze data for taking decisions (hold, buy, sell)
+3. Automatic execute an order into a broker
+4. Fetch account status
+
+In addition, there are 2 other steps which are part of the project, and
+secondary in the complete project:
+
+1. Request user aggreement per Whatsapp
+2. Present a final report of performance to the user
+
+The flowchart below illustrates the relation between the steps and also to the
+core component behind them:
+
+.. image:: _static/images/flowchart.png
+    :width: 400
+    :align: center
+    :alt: Core flowchart
 
 Fetch market data series (history)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

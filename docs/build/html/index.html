@@ -172,6 +172,15 @@ and tools available.</p>
 <li><p>Automatic execute an order into a broker</p></li>
 <li><p>Fetch account status</p></li>
 </ol>
+<p>In addition, there are 2 other steps which are part of the project, and
+secondary in the complete project:</p>
+<ol class="arabic simple">
+<li><p>Request user aggreement per Whatsapp</p></li>
+<li><p>Present a final report of performance to the user</p></li>
+</ol>
+<p>The flowchart below illustrates the relation between the steps and also to the
+core component behind them:</p>
+<a class="reference internal image-reference" href="_images/flowchart.png"><img alt="Core flowchart" class="align-center" src="_images/flowchart.png" style="width: 400px;" /></a>
 <section id="fetch-market-data-series-history">
 <h3>Fetch market data series (history)<a class="headerlink" href="#fetch-market-data-series-history" title="Permalink to this headline">¶</a></h3>
 <p>The first element is to provide an encapsulation for accessing trading values
@@ -851,49 +860,6 @@ timespam for analysis.</p></li>
 <p>This script is based on Dash and Plotly, and the execution will result into a
 server which can be accessed by the addressed informed on the console, for
 example: <a class="reference external" href="http://127.0.0.1:8050/">http://127.0.0.1:8050/</a></p>
-<dl class="py function">
-<dt class="sig sig-object py" id="automation.comdirect_status_report.create_line_chart">
-<span class="sig-prename descclassname"><span class="pre">automation.comdirect_status_report.</span></span><span class="sig-name descname"><span class="pre">create_line_chart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_by</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_lines</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_fills</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opacity_lines</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opacity_fills</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stack_group</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#automation.comdirect_status_report.create_line_chart" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a line chart.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dataframe</strong> (<cite>Pandas Dataframe</cite>) – Dataframe with the data to be plotted.</p></li>
-<li><p><strong>group_by</strong> (<cite>str</cite>) – Name of the column in the Dataframe to be used a grouper.</p></li>
-<li><p><strong>x_column</strong> (<cite>str</cite>) – Name of the column in the Dataframe to be used as X data.</p></li>
-<li><p><strong>y_column</strong> (<cite>str</cite>) – Name of the column in the Dataframe to be used as Y data.</p></li>
-<li><p><strong>color_lines</strong> (<cite>List of str</cite>) – List of strings with the hex values represening the colors to be
-used in sequence for the lines. Each color need to represented by a
-hash symbol (#) followed by 3 pairs of characters, to represent the
-RGB information.</p></li>
-<li><p><strong>color_fills</strong> (<cite>List of str</cite>) – List of strings with the hex values represening the colors to be
-used in sequence for the fills. Each color need to represented by a
-hash symbol (#) followed by 3 pairs of characters, to represent the
-RGB information.</p></li>
-<li><p><strong>opacity_lines</strong> (<cite>float</cite>) – Value between 0 and 1 to define the opacity of the colors for the
-lines. This is the alpha channel. A value of 0 means full
-transparency, while the value 1 means full opaque.</p></li>
-<li><p><strong>opacity_fills</strong> (<cite>float</cite>) – Value between 0 and 1 to define the opacity of the colors for the
-fills. This is the alpha channel. A value of 0 means full
-transparency, while the value 1 means full opaque.</p></li>
-<li><p><strong>line_width</strong> (<cite>float</cite>) – Width of the lines in plot.</p></li>
-<li><p><strong>x_label</strong> (<cite>str</cite>) – String with the name of label to be used as the title for the X
-axis.</p></li>
-<li><p><strong>y_label</strong> (<cite>str</cite>) – String with the name of label to be used as the title for the Y
-axis.</p></li>
-<li><p><strong>stack_group</strong> (<cite>str</cite>, optional) – Name of the group to stack the plots. If no stacking is desired,
-value <code class="docutils literal notranslate"><span class="pre">`None</span></code> need to be assigned.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>figure</strong> – Resulting graph with data and configuration.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><cite>Plotly Graph Object</cite></p>
-</dd>
-</dl>
-</dd></dl>
-
 </section>
 <section id="module-automation.comdirect_status_update">
 <span id="comdirect-status-update-py"></span><h3>comdirect_status_update.py<a class="headerlink" href="#module-automation.comdirect_status_update" title="Permalink to this headline">¶</a></h3>
