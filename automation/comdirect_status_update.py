@@ -8,6 +8,7 @@ from datetime import datetime
 import pandas as pd
 from src.lib.config import Config
 from src.session import Session
+from src.lib.communication import Whatsapp
 from src.lib.invst_const import constants as C
 
 LOGGER_NAME = "invst.comdirect_status_update"
@@ -50,9 +51,20 @@ if __name__ == "__main__":
 
     config = Config(logger_name=LOGGER_NAME)
     config_dictionary = config.load_config(filename=config_access_file)
-
     config_access_userdata = config.load_config(
         filename=config_access_userdata_file)
+
+    # --------------------------------------------------------------------------
+    #   Starts the whatsapp communication and send a message to notify.
+    # --------------------------------------------------------------------------
+    whatsapp = Whatsapp(
+        access_config=config.data_source_comm_access_data,
+        access_userdata=config.data_source_comm_user_data,
+        logger_name=LOGGER_NAME
+    )
+
+    whatsapp.send_message(
+        body=f"Starting data update from Comdirect.\nReference: {datetime.now().strftime('%H:%M:%S')}")
 
     # --------------------------------------------------------------------------
     #   Example of accessing a Comdirect account and fetching information.

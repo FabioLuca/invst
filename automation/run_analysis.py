@@ -9,6 +9,7 @@ from datetime import datetime
 from src.lib.config import Config
 from src.data_access import DataAccess
 from src.analysis import Analysis
+from src.lib.communication import Whatsapp
 from src.lib import print_table as pt
 
 LOGGER_NAME = "invst.run_analysis"
@@ -50,10 +51,22 @@ if __name__ == "__main__":
         "api-cfg-access.json"
 
     config = Config(logger_name=LOGGER_NAME)
-    config_dictionary = config.load_config(filename=config_access_file)
-
+    config_dictionary = config.load_config(
+        filename=config_access_file)
     config_access_userdata = config.load_config(
         filename=config_access_userdata_file)
+
+    # --------------------------------------------------------------------------
+    #   Starts the whatsapp communication and send a message to notify.
+    # --------------------------------------------------------------------------
+    whatsapp = Whatsapp(
+        access_config=config.data_source_comm_access_data,
+        access_userdata=config.data_source_comm_user_data,
+        logger_name=LOGGER_NAME
+    )
+
+    whatsapp.send_message(
+        body=f"Starting analysis of tickers.\nReference: {datetime.now().strftime('%H:%M:%S')}")
 
     # --------------------------------------------------------------------------
     #   List of tickers and sequence analysis.
