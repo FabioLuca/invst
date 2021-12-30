@@ -269,7 +269,7 @@ is running by a tag `(<name_of_virtualenv>)`.
 After started the virtual environement, the necessary packages for this project
 can be installed by the command::
 
-    pip install -r src/Requirements.txt
+    pip install -r requirements.txt
 
 Later, the environmenet can be deactivate when necessary by the command::
 
