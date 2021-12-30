@@ -16,8 +16,8 @@ class Whatsapp:
 
         self.account_sid = self.access_userdata["account_sid"]
         self.auth_token = self.access_userdata["auth_token"]
-        self.from_phone = self.access_config["from_phone"]
-        self.to_phone = self.access_config["to_phone"]
+        self.from_phone = self.access_userdata["from_phone"]
+        self.to_phone = self.access_userdata["to_phone"]
 
         self.count_messages = self.access_config["count_messages"]
         self.tries = self.access_config["request_tries"]
