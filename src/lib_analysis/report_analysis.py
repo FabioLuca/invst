@@ -5,6 +5,9 @@ import json
 from datetime import datetime
 from pathlib import Path
 from plotly.subplots import make_subplots
+from src.lib.config import Config
+
+LOGGER_NAME = "invst.report_analysis"
 
 
 class ReportAnalysis:
@@ -36,6 +39,11 @@ class ReportAnalysis:
 
         self.name = self.config_general["display_name"]
         self.savename = self.config_general["save_name"]
+
+        config_local_file = Path.cwd().resolve() / "cfg" / "local.json"
+        config = Config(logger_name=LOGGER_NAME)
+        config.load_config(filename=config_local_file)
+        self.store_folder = Path(config.local_config["paths"]["data_storage"])
 
     def present_analysis(self):
         """Creates a HTML report with the timeseries data (candlestick), with the
@@ -440,7 +448,7 @@ class ReportAnalysis:
         #   Set up the path to save the file and save the document if necessary.
         # ----------------------------------------------------------------------
         if self.save_analysis:
-            save_file_path = Path.cwd().resolve() / "export" / "analysis" / today_string / \
+            save_file_path = self.store_folder / "analysis" / today_string / \
                 f"Analysis {self.savename} {self.symbol}.html"
             self.create_location(save_file_path.parent.resolve())
             fig_subplot.write_html(save_file_path)

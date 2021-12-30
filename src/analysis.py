@@ -5,6 +5,7 @@ import logging
 from datetime import datetime
 from pathlib import Path
 import pandas as pd
+from src.lib.config import Config
 from .lib_analysis.preprocessing import PreProcessing
 from .lib_analysis.methods.crash import Crash
 from .lib_analysis.methods.macd import MACD
@@ -12,6 +13,8 @@ from .lib_analysis.methods.rsi_sma import RSI_SMA
 from .lib_analysis.methods.rsi_ema import RSI_EMA
 from .lib_analysis.methods.bollinger_band import BOLLINGER_BANDS
 from .lib_analysis.methods.combined import CombinedStrategy
+
+LOGGER_NAME = "invst.analysis"
 
 
 class Analysis(Crash, MACD, RSI_SMA, RSI_EMA, BOLLINGER_BANDS, CombinedStrategy, PreProcessing):
@@ -125,6 +128,14 @@ class Analysis(Crash, MACD, RSI_SMA, RSI_EMA, BOLLINGER_BANDS, CombinedStrategy,
         self.logger = logging.getLogger(self.logger_name)
         self.logger.info("Initializing analysis.")
 
+        # --------------------------------------------------------------------------
+        #   Defines the location of the files with configurations and load them.
+        # --------------------------------------------------------------------------
+        config_local_file = Path.cwd().resolve() / "cfg" / "local.json"
+
+        self.config = Config(logger_name=LOGGER_NAME)
+        self.config.load_config(filename=config_local_file)
+
     def analyze(self):
         """Performs the complete analysis of the data for a determined symbol / 
         ticker.
@@ -192,9 +203,9 @@ class Analysis(Crash, MACD, RSI_SMA, RSI_EMA, BOLLINGER_BANDS, CombinedStrategy,
         # ----------------------------------------------------------------------
         if self.save_analysis:
             today_string = datetime.today().strftime('%Y-%m-%d')
+            folder = Path(self.config.local_config["paths"]["data_storage"])
             file_export = f"Analysis data_{today_string}.xlsx"
-            file_export = Path.cwd().resolve() / "export" / "analysis" / \
-                today_string / file_export
+            file_export = folder / "analysis" / today_string / file_export
             self.ohlc_dataset.to_excel(file_export)
 
         return (self.decision, self.analysis_results, self.ohlc_dataset)

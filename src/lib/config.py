@@ -55,6 +55,8 @@ class Config:
         self.data_source_comm_access_data = None
         self.data_source_comm_user_data = None
 
+        self.local_config = None
+
         # ----------------------------------------------------------------------
         #   Defines the logger to output the information and also
         #   add an entry for the start of the class
@@ -133,17 +135,23 @@ class Config:
             self.data_source_comm_user_data = self.json_data[
                 "api"]["communicating"][self.data_source_comm_name]["user_data"]
 
+        elif filename.stem == "local":
+            # ------------------------------------------------------------------
+            #   Configuration related to local paramters.
+            # ------------------------------------------------------------------
+            self.local_config = self.json_data
+
         result = None
         flag, level, message = M.get_status(
             self.logger_name, "Config_Load_Success", filename)
         return result, flag, level, message
 
-    def get_dictonary(self):
+    def get_dictionary(self):
         """Returns the complete dictionary of configuration"""
         return self.json_data
 
     def load_config_file(self):
         """Loads the Json file where the configuration is stored and returns
         the content in a dictionary format"""
-        with open(self.filename) as self.json_file:
+        with open(self.filename, encoding="utf-8") as self.json_file:
             self.json_data = json.load(self.json_file)

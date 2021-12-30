@@ -38,6 +38,7 @@ import dash
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
+from src.lib.config import Config
 
 
 def create_chart_account_aggregated_values():
@@ -557,9 +558,24 @@ def create_combined_dataframes(folder: Path, date_today: str):
 ################################################################################
 
 
+LOGGER_NAME = "invst.comdirect_status_report"
+
 today_string = datetime.today().strftime('%Y-%m-%d')
 
-folder = Path.cwd().resolve() / "export"
+# --------------------------------------------------------------------------
+#   Defines the location of the files with configurations and load them.
+# --------------------------------------------------------------------------
+config_access_file = Path.cwd().resolve() / "cfg" / "api-cfg.json"
+config_access_userdata_file = Path.cwd().resolve() / "cfg" / \
+    "api-cfg-access.json"
+config_local_file = Path.cwd().resolve() / "cfg" / "local.json"
+
+config = Config(logger_name=LOGGER_NAME)
+config.load_config(filename=config_access_file)
+config.load_config(filename=config_access_userdata_file)
+config.load_config(filename=config_local_file)
+folder = Path(config.local_config["paths"]["data_storage"])
+# folder = Path.cwd().resolve() / "export"
 
 df_aggregated_history = create_historical_aggregated_dataframe(folder=folder)
 
