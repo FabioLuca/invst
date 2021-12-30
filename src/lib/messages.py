@@ -33,6 +33,12 @@ MESSAGE = {
         "Message": "Positive response but with improper content due to "
                    "the fast access to API."
     },
+    "API_200_Premium_Err": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "Positive response but the request demands a premium "
+                   "account from Alpha Vantage."
+    },
     "API_200_Success": {
         "Flag": C.SUCCESS,
         "Level": C.INFO,

@@ -307,6 +307,10 @@ class DataAccess:
                 result = response
                 flag, level, message = M.get_status(
                     self.logger_name, "API_200_Content_Err")
+            elif str(response)[0:78] == "{'Information': 'Thank you for using Alpha Vantage! This is a premium endpoint":
+                result = response
+                flag, level, message = M.get_status(
+                    self.logger_name, "API_200_Premium_Err")
             else:
                 result = response
                 flag, level, message = M.get_status(
