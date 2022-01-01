@@ -1,4 +1,4 @@
-"""Module for managing the communication to the user."""
+"""Module for managing the Whatsapp communication to the user."""
 import logging
 import time
 import re
@@ -9,29 +9,9 @@ from src.lib import messages as M
 
 class Whatsapp:
 
-    def __init__(self, access_config: dict, access_userdata: dict, logger_name: str) -> None:
+    def wapp_initialize(self):
 
-        self.access_config = access_config
-        self.access_userdata = access_userdata
-
-        self.account_sid = self.access_userdata["account_sid"]
-        self.auth_token = self.access_userdata["auth_token"]
-        self.from_phone = self.access_userdata["from_phone"]
-        self.to_phone = self.access_userdata["to_phone"]
-
-        self.count_messages = self.access_config["count_messages"]
-        self.tries = self.access_config["request_tries"]
-        self.pause = self.access_config["pause_between_tries"]
-
-        # ----------------------------------------------------------------------
-        #   Defines the logger to output the information and also
-        #   add an entry for the start of the class
-        # ----------------------------------------------------------------------
-        self.logger_name = logger_name + ".communication"
-        self.logger = logging.getLogger(self.logger_name)
-        self.logger.info("Initializing communication.")
-
-        self.client = Client(self.account_sid, self.auth_token)
+        self.client = Client(self.wapp_account_sid, self.wapp_auth_token)
 
     def clear_string(self, input_string: str, keep_spaces: bool = False, keep_special: bool = False):
 
@@ -50,8 +30,8 @@ class Whatsapp:
 
         msg_content = self.client.messages.create(
             body=body,
-            from_=self.from_phone,
-            to=self.to_phone
+            from_=self.wapp_from_phone,
+            to=self.wapp_to_phone
         )
 
         if msg_content.error_code == "null":
@@ -87,9 +67,9 @@ class Whatsapp:
         if direction == "both":
             to_list = None
         elif direction == "received_only":
-            to_list = self.from_phone
+            to_list = self.wapp_from_phone
         elif direction == "sent_only":
-            to_list = self.to_phone
+            to_list = self.wapp_to_phone
 
         messages = self.client.messages.list(
             limit=count_limit, to=to_list)
@@ -126,10 +106,10 @@ class Whatsapp:
 
         message_status = {}
 
-        for j in range(self.tries):
+        for j in range(self.wapp_tries):
 
             messages, flag, level, message = self.receive_messages(
-                count_limit=self.count_messages, direction="both")
+                count_limit=self.wapp_count_messages, direction="both")
 
             # print("")
             # print(message_status)
@@ -213,7 +193,7 @@ class Whatsapp:
                 self.send_message(
                     f"Tried to get response: {j+1} / {self.tries}")
 
-            time.sleep(self.pause)
+            time.sleep(self.wapp_pause)
 
         return response, flag, level, message
 

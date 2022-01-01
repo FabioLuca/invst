@@ -52,12 +52,23 @@
             }
         },
         "communicating": {
-            "selection": "Twilio",
-            "Twilio": {
-                "access_data": {
-                    "count_messages": 40,
-                    "request_tries": 100,
-                    "pause_between_tries": 2
+            "whatsapp": {
+                "selection": "Twilio",
+                "Twilio": {
+                    "access_data": {
+                        "count_messages": 40,
+                        "request_tries": 100,
+                        "pause_between_tries": 2
+                    }
+                }
+            },
+            "email": {
+                "selection": "MailGun",
+                "MailGun": {
+                    "access_data": {
+                        "URL_BASE": "https://api.mailgun.net/v3/",
+                        "URL_MESSAGE": "/messages"
+                    }
                 }
             }
         }
