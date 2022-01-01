@@ -8,7 +8,7 @@ from src.lib import messages as M
 class YahooFinance:
 
     def access_yahoofinance(self):
-        """Fetchs Json data from the Yahoo Finance API.
+        """Fetches Json data from the Yahoo Finance API.
 
         The data is requested with daily interval for 10 years long. Requesting
         for the `max` long will return the data not in day-interval, but
