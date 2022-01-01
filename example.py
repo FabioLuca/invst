@@ -73,12 +73,12 @@ if __name__ == "__main__":
     config_access_file = Path.cwd().resolve() / "cfg" / "api-cfg.json"
     config_access_userdata_file = Path.cwd().resolve() / "cfg" / \
         "api-cfg-access.json"
+    config_local_file = Path.cwd().resolve() / "cfg" / "local.json"
 
     config = Config(logger_name=LOGGER_NAME)
-    config_dictionary = config.load_config(filename=config_access_file)
-
-    config_access_userdata = config.load_config(
-        filename=config_access_userdata_file)
+    config.load_config(filename=config_access_file)
+    config.load_config(filename=config_access_userdata_file)
+    config.load_config(filename=config_local_file)
 
     # --------------------------------------------------------------------------
     #   Examples of a wrong call, for GOOG2 which doesn't exists. Followed by
@@ -145,7 +145,10 @@ if __name__ == "__main__":
     # --------------------------------------------------------------------------
     today_string = datetime.today().strftime('%Y-%m-%d')
     file_export_trade = f"Export_Comdirect_{today_string}.xlsx"
-    file_export_trade = Path.cwd().resolve() / "export" / file_export_trade
+    folder = Path(config.local_config["paths"]["data_storage"])
+    if not folder.exists():
+        folder.mkdir(parents=True, exist_ok=True)
+    file_export_trade = folder / file_export_trade
     writer_trade = pd.ExcelWriter(file_export_trade, engine='xlsxwriter')
     balance.to_excel(writer_trade, sheet_name='Balance')
     depots.to_excel(writer_trade, sheet_name='Depots')

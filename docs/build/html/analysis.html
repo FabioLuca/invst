@@ -16,8 +16,8 @@
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Trading session (Comdirect)" href="session.html" />
-    <link rel="prev" title="Data Access (AlphaVantage)" href="data_access.html" />
+    <link rel="next" title="Pre-Processing" href="preprocessing.html" />
+    <link rel="prev" title="Yahoo Finance API" href="yahoofinance.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -55,6 +55,7 @@
 <h3>Navigation</h3>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#fetching-data">Fetching data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html#trading-analysis">Trading analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html#analysis-methods">Analysis methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html#trader-automation">Trader automation</a></li>
@@ -67,8 +68,8 @@
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
   <li><a href="modules.html">Core</a><ul>
-      <li>Previous: <a href="data_access.html" title="previous chapter">Data Access (AlphaVantage)</a></li>
-      <li>Next: <a href="session.html" title="next chapter">Trading session (Comdirect)</a></li>
+      <li>Previous: <a href="yahoofinance.html" title="previous chapter">Yahoo Finance API</a></li>
+      <li>Next: <a href="preprocessing.html" title="next chapter">Pre-Processing</a></li>
   </ul></li>
   </ul></li>
 </ul>
@@ -103,6 +104,20 @@
 <span id="data-analysis"></span><h1>Data Analysis<a class="headerlink" href="#module-src.analysis" title="Permalink to this headline">¶</a></h1>
 <p>Data analysis and decision taking module.</p>
 <div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="preprocessing.html">Pre-Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic.html">Basic operations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="macd.html">MACD (Moving Average Convergence Divergence)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rsi_sma.html">RSI SMA (Relative Strength Index)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rsi_ema.html">RSI EMA (Relative Strength Index)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bbands.html">Bollinger Bands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="combined.html">Combined strategy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lstm.html">LSTM (Long Short-Term Memory)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="arbitration.html">Arbitration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="performance_simulation.html">Performance Simulation</a></li>
+</ul>
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="src.analysis.Analysis">
@@ -321,7 +336,7 @@ dataframe for the defined column. The final value is absolute.</p></td>
       &copy;2021, Fabio de Luca.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

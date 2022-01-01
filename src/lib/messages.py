@@ -33,6 +33,12 @@ MESSAGE = {
         "Message": "Positive response but with improper content due to "
                    "the fast access to API."
     },
+    "API_200_Premium_Err": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "Positive response but the request demands a premium "
+                   "account from Alpha Vantage."
+    },
     "API_200_Success": {
         "Flag": C.SUCCESS,
         "Level": C.INFO,
@@ -180,7 +186,26 @@ MESSAGE = {
         "Level": C.ERROR,
         "Message": "No source of data was define for trading %s."
     },
-
+    "Comm_SendMessage_Fail": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "Failure to send message."
+    },
+    "Comm_SendMessage_Success": {
+        "Flag": C.SUCCESS,
+        "Level": C.INFO,
+        "Message": "Success to send message."
+    },
+    "Comm_ReceiveMessage_Fail": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "Failure to receive message."
+    },
+    "Comm_ReceiveMessage_Success": {
+        "Flag": C.SUCCESS,
+        "Level": C.INFO,
+        "Message": "Success to receive message."
+    },
 }
 
 

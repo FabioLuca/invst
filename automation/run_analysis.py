@@ -7,8 +7,10 @@ import time
 from pathlib import Path
 from datetime import datetime
 from src.lib.config import Config
+from src.lib.invst_const import constants as C
 from src.data_access import DataAccess
 from src.analysis import Analysis
+from src.lib.communication import Whatsapp
 from src.lib import print_table as pt
 
 LOGGER_NAME = "invst.run_analysis"
@@ -48,12 +50,25 @@ if __name__ == "__main__":
     config_access_file = Path.cwd().resolve() / "cfg" / "api-cfg.json"
     config_access_userdata_file = Path.cwd().resolve() / "cfg" / \
         "api-cfg-access.json"
+    config_local_file = Path.cwd().resolve() / "cfg" / \
+        "local.json"
 
     config = Config(logger_name=LOGGER_NAME)
-    config_dictionary = config.load_config(filename=config_access_file)
+    config.load_config(filename=config_access_file)
+    config.load_config(filename=config_access_userdata_file)
+    config.load_config(filename=config_local_file)
 
-    config_access_userdata = config.load_config(
-        filename=config_access_userdata_file)
+    # --------------------------------------------------------------------------
+    #   Starts the whatsapp communication and send a message to notify.
+    # --------------------------------------------------------------------------
+    whatsapp = Whatsapp(
+        access_config=config.data_source_comm_access_data,
+        access_userdata=config.data_source_comm_user_data,
+        logger_name=LOGGER_NAME
+    )
+
+    whatsapp.send_message(
+        body=f"Starting analysis of tickers.\nReference: {datetime.now().strftime('%H:%M:%S')}")
 
     # --------------------------------------------------------------------------
     #   List of tickers and sequence analysis.
@@ -106,32 +121,38 @@ if __name__ == "__main__":
             type_series="TIMESERIES", period="DAILY"
         )
 
-        results_data.append(result)
+        if flag == C.SUCCESS:
 
-        # --------------------------------------------------------------------------
-        #   Perform analysis of the data.
-        # --------------------------------------------------------------------------
-        analysis = Analysis(symbol=ticker,
-                            ohlc_data=result_values,
-                            analysis_length=750,
-                            initial_value=10000,
-                            stopgain=1.4,
-                            stoploss=0.85,
-                            operation_cost=5,
-                            tax_percentage=0.1,
-                            logger_name=LOGGER_NAME,
-                            display_analysis=False,
-                            save_analysis=True)
-        decision = analysis.analyze()
+            results_data.append(result)
 
-        results_analysis.append(analysis)
-        results_summary.append({ticker: analysis.analysis_results})
+            # --------------------------------------------------------------------------
+            #   Perform analysis of the data.
+            # --------------------------------------------------------------------------
+            analysis = Analysis(symbol=ticker,
+                                ohlc_data=result_values,
+                                analysis_length=750,
+                                initial_value=10000,
+                                stopgain=1.4,
+                                stoploss=0.85,
+                                operation_cost=5,
+                                tax_percentage=0.1,
+                                logger_name=LOGGER_NAME,
+                                display_analysis=False,
+                                save_analysis=True)
+            decision = analysis.analyze()
 
-        analysis = None
-        result = None
+            results_analysis.append(analysis)
+            results_summary.append({ticker: analysis.analysis_results})
 
-    today_string = datetime.today().strftime('%Y-%m-%d')
-    file_export_summary = f"Export_Summary_{today_string}.xlsx"
-    file_export_summary = Path.cwd().resolve() / "export" / file_export_summary
+            analysis = None
+            result = None
 
-    df_results_summary = pt.summary_table(results_summary, file_export_summary)
+    if len(results_summary) > 1 and len(results_summary) > 1:
+        today_string = datetime.today().strftime('%Y-%m-%d')
+        file_export_summary = f"Export_Summary_{today_string}.xlsx"
+        folder = Path(config.local_config["paths"]["data_storage"])
+        if not folder.exists():
+            folder.mkdir(parents=True, exist_ok=True)
+        file_export_summary = folder / file_export_summary
+        df_results_summary = pt.summary_table(
+            results_summary, file_export_summary)

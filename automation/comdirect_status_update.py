@@ -8,6 +8,7 @@ from datetime import datetime
 import pandas as pd
 from src.lib.config import Config
 from src.session import Session
+from src.lib.communication import Whatsapp
 from src.lib.invst_const import constants as C
 
 LOGGER_NAME = "invst.comdirect_status_update"
@@ -47,12 +48,24 @@ if __name__ == "__main__":
     config_access_file = Path.cwd().resolve() / "cfg" / "api-cfg.json"
     config_access_userdata_file = Path.cwd().resolve() / "cfg" / \
         "api-cfg-access.json"
+    config_local_file = Path.cwd().resolve() / "cfg" / "local.json"
 
     config = Config(logger_name=LOGGER_NAME)
-    config_dictionary = config.load_config(filename=config_access_file)
+    config.load_config(filename=config_access_file)
+    config.load_config(filename=config_access_userdata_file)
+    config.load_config(filename=config_local_file)
 
-    config_access_userdata = config.load_config(
-        filename=config_access_userdata_file)
+    # --------------------------------------------------------------------------
+    #   Starts the whatsapp communication and send a message to notify.
+    # --------------------------------------------------------------------------
+    whatsapp = Whatsapp(
+        access_config=config.data_source_comm_access_data,
+        access_userdata=config.data_source_comm_user_data,
+        logger_name=LOGGER_NAME
+    )
+
+    whatsapp.send_message(
+        body=f"Starting data update from Comdirect.\nReference: {datetime.now().strftime('%H:%M:%S')}")
 
     # --------------------------------------------------------------------------
     #   Example of accessing a Comdirect account and fetching information.
@@ -75,7 +88,10 @@ if __name__ == "__main__":
     # --------------------------------------------------------------------------
     today_string = datetime.today().strftime('%Y-%m-%d')
     file_export_trade = f"Export_Comdirect_{today_string}.xlsx"
-    file_export_trade = Path.cwd().resolve() / "export" / file_export_trade
+    folder = Path(config.local_config["paths"]["data_storage"])
+    file_export_trade = folder / file_export_trade
+    if not folder.exists():
+        folder.mkdir(parents=True, exist_ok=True)
     writer_trade = pd.ExcelWriter(file_export_trade, engine='xlsxwriter')
     balance.to_excel(writer_trade, sheet_name='Balance')
     depots.to_excel(writer_trade, sheet_name='Depots')

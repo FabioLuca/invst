@@ -52,6 +52,7 @@
 <h3>Navigation</h3>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#fetching-data">Fetching data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html#trading-analysis">Trading analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html#analysis-methods">Analysis methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html#trader-automation">Trader automation</a></li>
@@ -112,6 +113,7 @@
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
  | <a href="#U"><strong>U</strong></a>
+ | <a href="#Y"><strong>Y</strong></a>
  
 </div>
 <h2 id="A">A</h2>
@@ -119,29 +121,35 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="access.html#src.lib_comdirect.access.Access">Access (class in src.lib_comdirect.access)</a>
 </li>
-      <li><a href="data_access.html#src.data_access.DataAccess.access_alphavantage">access_alphavantage() (src.data_access.DataAccess method)</a>
+      <li><a href="alphavantage.html#src.lib_data_access.alphavantage.AlphaVantage.access_alphavantage">access_alphavantage() (src.lib_data_access.alphavantage.AlphaVantage method)</a>
 </li>
       <li><a href="data_access.html#src.data_access.DataAccess.access_config">access_config (src.data_access.DataAccess attribute)</a>
 </li>
       <li><a href="data_access.html#src.data_access.DataAccess.access_userdata">access_userdata (src.data_access.DataAccess attribute)</a>
 </li>
+      <li><a href="yahoofinance.html#src.lib_data_access.yahoofinance.YahooFinance.access_yahoofinance">access_yahoofinance() (src.lib_data_access.yahoofinance.YahooFinance method)</a>
+</li>
       <li><a href="accounts.html#src.lib_comdirect.accounts.Accounts">Accounts (class in src.lib_comdirect.accounts)</a>
 </li>
       <li><a href="data_access.html#src.data_access.DataAccess.adjusted">adjusted (src.data_access.DataAccess attribute)</a>
+</li>
+      <li><a href="alphavantage.html#src.lib_data_access.alphavantage.AlphaVantage">AlphaVantage (class in src.lib_data_access.alphavantage)</a>
 </li>
       <li><a href="analysis.html#src.analysis.Analysis">Analysis (class in src.analysis)</a>
 </li>
       <li><a href="analysis.html#src.analysis.Analysis.analysis_length_post">analysis_length_post (src.analysis.Analysis attribute)</a>
 </li>
-      <li><a href="analysis.html#src.analysis.Analysis.analysis_length_pre">analysis_length_pre (src.analysis.Analysis attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="analysis.html#src.analysis.Analysis.analysis_length_pre">analysis_length_pre (src.analysis.Analysis attribute)</a>
+</li>
       <li><a href="analysis.html#src.analysis.Analysis.analyze">analyze() (src.analysis.Analysis method)</a>
 </li>
       <li><a href="arbitration.html#src.lib_analysis.arbitration.Arbitration.arbitrate">arbitrate() (src.lib_analysis.arbitration.Arbitration method)</a>
 </li>
       <li><a href="arbitration.html#src.lib_analysis.arbitration.Arbitration">Arbitration (class in src.lib_analysis.arbitration)</a>
+</li>
+      <li><a href="config.html#src.lib.config.Config.assert_filename">assert_filename() (src.lib.config.Config method)</a>
 </li>
       <li>
     automation.comdirect_status_report
@@ -250,7 +258,7 @@
 </li>
       <li><a href="comdirect_status_report.html#automation.comdirect_status_report.create_historical_aggregated_dataframe">create_historical_aggregated_dataframe() (in module automation.comdirect_status_report)</a>
 </li>
-      <li><a href="comdirect_status_report.html#automation.comdirect_status_report.create_line_chart">create_line_chart() (in module automation.comdirect_status_report)</a>, <a href="index.html#automation.comdirect_status_report.create_line_chart">[1]</a>
+      <li><a href="comdirect_status_report.html#automation.comdirect_status_report.create_line_chart">create_line_chart() (in module automation.comdirect_status_report)</a>
 </li>
       <li><a href="lstm.html#src.lib_analysis.methods.lstm.LSTM.create_lstm_model">create_lstm_model() (src.lib_analysis.methods.lstm.LSTM method)</a>
 </li>
@@ -270,17 +278,19 @@
 </li>
       <li><a href="arbitration.html#src.lib_analysis.arbitration.Arbitration.define_actions">define_actions() (src.lib_analysis.arbitration.Arbitration method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="preprocessing.html#src.lib_analysis.preprocessing.PreProcessing.define_closure">define_closure() (src.lib_analysis.preprocessing.PreProcessing method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="preprocessing.html#src.lib_analysis.preprocessing.PreProcessing.define_past_time">define_past_time() (src.lib_analysis.preprocessing.PreProcessing method)</a>
 </li>
       <li><a href="comdirect_status_report.html#automation.comdirect_status_report.define_timespam">define_timespam() (in module automation.comdirect_status_report)</a>
 </li>
       <li><a href="depots.html#src.lib_comdirect.depots.Depots">Depots (class in src.lib_comdirect.depots)</a>
 </li>
-      <li><a href="data_access.html#src.data_access.DataAccess.dict_to_pandas_alphavantage">dict_to_pandas_alphavantage() (src.data_access.DataAccess method)</a>
+      <li><a href="alphavantage.html#src.lib_data_access.alphavantage.AlphaVantage.dict_to_pandas_alphavantage">dict_to_pandas_alphavantage() (src.lib_data_access.alphavantage.AlphaVantage method)</a>
+</li>
+      <li><a href="yahoofinance.html#src.lib_data_access.yahoofinance.YahooFinance.dict_to_pandas_yahoofinance">dict_to_pandas_yahoofinance() (src.lib_data_access.yahoofinance.YahooFinance method)</a>
 </li>
       <li><a href="analysis.html#src.analysis.Analysis.display_analysis">display_analysis (src.analysis.Analysis attribute)</a>
 </li>
@@ -327,7 +337,7 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="config.html#src.lib.config.Config.get_dictonary">get_dictonary() (src.lib.config.Config method)</a>
+      <li><a href="config.html#src.lib.config.Config.get_dictionary">get_dictionary() (src.lib.config.Config method)</a>
 </li>
       <li><a href="session.html#src.session.Session.get_request_id">get_request_id() (src.session.Session method)</a>
 </li>
@@ -424,6 +434,10 @@
         <li><a href="depots.html#module-src.lib_comdirect.depots">src.lib_comdirect.depots</a>
 </li>
         <li><a href="orders.html#module-src.lib_comdirect.orders">src.lib_comdirect.orders</a>
+</li>
+        <li><a href="alphavantage.html#module-src.lib_data_access.alphavantage">src.lib_data_access.alphavantage</a>
+</li>
+        <li><a href="yahoofinance.html#module-src.lib_data_access.yahoofinance">src.lib_data_access.yahoofinance</a>
 </li>
         <li><a href="session.html#module-src.session">src.session</a>
 </li>
@@ -564,8 +578,6 @@
         <li><a href="combined.html#module-src.lib_analysis.methods.combined">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     src.lib_analysis.methods.lstm
 
@@ -573,6 +585,8 @@
         <li><a href="lstm.html#module-src.lib_analysis.methods.lstm">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     src.lib_analysis.methods.macd
 
@@ -637,6 +651,20 @@
 </li>
       </ul></li>
       <li>
+    src.lib_data_access.alphavantage
+
+      <ul>
+        <li><a href="alphavantage.html#module-src.lib_data_access.alphavantage">module</a>
+</li>
+      </ul></li>
+      <li>
+    src.lib_data_access.yahoofinance
+
+      <ul>
+        <li><a href="yahoofinance.html#module-src.lib_data_access.yahoofinance">module</a>
+</li>
+      </ul></li>
+      <li>
     src.session
 
       <ul>
@@ -680,6 +708,14 @@
   </ul></td>
 </tr></table>
 
+<h2 id="Y">Y</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="yahoofinance.html#src.lib_data_access.yahoofinance.YahooFinance">YahooFinance (class in src.lib_data_access.yahoofinance)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 
 
           </div>
@@ -692,7 +728,7 @@
       &copy;2021, Fabio de Luca.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

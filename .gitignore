@@ -132,6 +132,7 @@ dmypy.json
 
 # User access
 /cfg/api-cfg-access.json
+/cfg/local.json
 
 ### VisualStudioCode ###
 .vscode/*
@@ -145,6 +146,11 @@ logs/
 # Any kind of export from the script
 Export*xlsx
 export/
+
+# Temporary files from Office
+*~$*.xlsx
+*~$*.pptx
+*~$*.docx
 
 # Remove the models from keras
 models/

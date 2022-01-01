@@ -19,14 +19,20 @@
     },
     "api": {
         "fetching": {
-            "selection": "AlphaVantage",
+            "selection": "YahooFinance",
             "AlphaVantage": {
                 "access_data": {
                     "URL_TIMESERIES_DAILY": "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=[TICKER]&outputsize=full&apikey=[APIKEY]",
                     "URL_TIMESERIES_DAILY_ADJUSTED": "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=[TICKER]&outputsize=full&apikey=[APIKEY]"
                 }
             },
-            "YahooFinance": {},
+            "YahooFinance": {
+                "access_data": {
+                    "BASE_URL": "https://yfapi.net",
+                    "URL_QUOTE": "/v6/finance/quote",
+                    "URL_CHART": "/v8/finance/chart"
+                }
+            },
             "Quandl": {}
         },
         "trading": {
@@ -42,6 +48,16 @@
                     "url_accounts_balance": "https://api.comdirect.de/api/banking/clients/user/v2/accounts/balances",
                     "url_depots": "https://api.comdirect.de/api/brokerage/clients/user/v3/depots",
                     "url_depot_position": "https://api.comdirect.de/api/brokerage/v3/depots/[DEPOT_ID]/positions"
+                }
+            }
+        },
+        "communicating": {
+            "selection": "Twilio",
+            "Twilio": {
+                "access_data": {
+                    "count_messages": 40,
+                    "request_tries": 100,
+                    "pause_between_tries": 2
                 }
             }
         }
