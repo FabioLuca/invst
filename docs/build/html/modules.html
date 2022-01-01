@@ -16,7 +16,7 @@
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Data Access (AlphaVantage)" href="data_access.html" />
+    <link rel="next" title="OHLC Data Access" href="data_access.html" />
     <link rel="prev" title="Welcome to INVST documentation!" href="index.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -55,6 +55,7 @@
 <h3>Navigation</h3>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#fetching-data">Fetching data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#trading-analysis">Trading analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#analysis-methods">Analysis methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#trader-automation">Trader automation</a></li>
@@ -67,7 +68,7 @@
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="index.html" title="previous chapter">Welcome to INVST documentation!</a></li>
-      <li>Next: <a href="data_access.html" title="next chapter">Data Access (AlphaVantage)</a></li>
+      <li>Next: <a href="data_access.html" title="next chapter">OHLC Data Access</a></li>
   </ul></li>
 </ul>
 </div>
@@ -101,9 +102,18 @@
 <h1>Core<a class="headerlink" href="#core" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="data_access.html">Data Access (AlphaVantage)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_access.html">OHLC Data Access</a></li>
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Data Analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="session.html">Trading session (Comdirect)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="session.html">Order execution and account status (Comdirect)</a></li>
+</ul>
+</div>
+</section>
+<section id="fetching-data">
+<h1>Fetching data<a class="headerlink" href="#fetching-data" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="alphavantage.html">Alpha Vantage API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yahoofinance.html">Yahoo Finance API</a></li>
 </ul>
 </div>
 </section>
@@ -135,7 +145,7 @@
 <h1>Trader automation<a class="headerlink" href="#trader-automation" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="access.html">Access module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="access.html">Session access</a></li>
 <li class="toctree-l1"><a class="reference internal" href="accounts.html">Accounts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="depots.html">Depots</a></li>
 <li class="toctree-l1"><a class="reference internal" href="orders.html">Orders</a></li>
@@ -176,7 +186,7 @@
       &copy;2021, Fabio de Luca.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

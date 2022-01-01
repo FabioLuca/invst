@@ -7,4 +7,9 @@ Data Analysis
    :show-inheritance:
 
    .. toctree::
-      :maxdepth: 4
+      :maxdepth: 2
+
+      preprocessing
+      basic
+      arbitration
+      performance_simulation

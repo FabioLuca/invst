@@ -4,6 +4,8 @@
 import json
 import logging
 import inspect
+import glob
+from pathlib import Path
 from . import messages as M
 from .invst_const import constants as C
 
@@ -65,7 +67,26 @@ class Config:
         self.logger = logging.getLogger(self.logger_name)
         self.logger.info("Initializing configuration.")
 
+    def assert_filename(self, filename):
+        """Verifies if the file passed for the configuration exists. In case it
+        doesn't exist, the application will search for a file with the same name
+        and extension, starting from 1 folder above (not more). This is intended
+        to support with some operations from the project, where the starting
+        folder is different from the main application, for example, creating
+        docs in Sphinx.
+        """
+
+        foundfiles = None
+        if not filename.exists():
+            for path in Path('..').rglob(filename.name):
+                foundfiles = path
+                break
+            return foundfiles
+        return filename
+
     def load_config(self, filename):
+
+        filename = self.assert_filename(filename=filename)
 
         flag, level, message = M.get_status(
             self.logger_name, "Config_Load_Config", filename)

@@ -54,6 +54,7 @@
 <h3>Navigation</h3>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#fetching-data">Fetching data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html#trading-analysis">Trading analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html#analysis-methods">Analysis methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html#trader-automation">Trader automation</a></li>
@@ -102,6 +103,7 @@
 <div class="toctree-wrapper compound" id="mastertoc">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#fetching-data">Fetching data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html#trading-analysis">Trading analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html#analysis-methods">Analysis methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html#trader-automation">Trader automation</a></li>
@@ -157,12 +159,12 @@ responded.</p>
 <section id="project-goals">
 <h2>Project goals<a class="headerlink" href="#project-goals" title="Permalink to this headline">¶</a></h2>
 <p>This project goal is to automate the operation of trading in the market, such as
-stocks or ETF’s (Exchange Traded Fund). In priciple the same approach can be
+stocks or ETF’s (Exchange Traded Fund). In principle the same approach can be
 adopted and extended to Cryptocurrencies, where the limitation is on the
 trading platformed used, if it permits such operations or not.</p>
 <p>The goal is not to operate as high-frequency trading, but like a regular trader.
 The aimed advantages for the project is then on the potential of analysing a
-bigger amount of data (different stocks or products) at a short time; apply
+bigger amount of data (different stocks or products) in a shorter time; apply
 consistent mathematical and physical models, due to the major amount of data
 and tools available.</p>
 <p>This project is split into a few major elements or steps:</p>
@@ -184,15 +186,44 @@ core component behind them:</p>
 <section id="fetch-market-data-series-history">
 <h3>Fetch market data series (history)<a class="headerlink" href="#fetch-market-data-series-history" title="Permalink to this headline">¶</a></h3>
 <p>The first element is to provide an encapsulation for accessing trading values
-history for a given ticker by using the <a class="reference external" href="https://www.alphavantage.co/">AlphaVantage API</a>. Although othernnsources are possible, they
-were not completely implemented yet. The output forna chosen ticker (stock) is a
-Pandas dataframe containing the open-high-low-closennvalues, also known as OHLC.
-More data is also available in the dataframe, as thenvolume and adjusted close
-values, for example.</p>
-<p>To work with the project an API key to AlphaVantage is necessary. Please follow
-the instructions on their website to acquire one. Once available, a file named
+history for a given ticker by using the <a class="reference external" href="https://www.alphavantage.co/">Alpha Vantage API</a> or <a class="reference external" href="https://www.yahoofinanceapi.com/">Yahoo Finance API</a> . Both API access are not complete
+implemented, but only the necessary parts for this project. Additional
+sources are also possible, and could be included in the future.</p>
+<p>A note about the API’s is regarding their continuity. Eventually the providers
+might stop doing it, or might change their business model, moving fully or
+partly to paid services, as happened for example to Alpha Vantage access to the
+<cite>Adjusted Close</cite> value. In such cases, the user needs to migrate into a paid
+service or pursue a different provider.</p>
+<p>To mitigate the changes when a new provider is assigned or included, the output
+from the abstraction layer (interface) is similar as much as possible. Mandatory
+data of course will be equivalent, but some additional ones, such as <cite>Dividends
+payments</cite>, could possibly not be available on certain providers.</p>
+<p>The operation is commononized so all the requests are meant for a single symbol
+per time. For the API implementation, the requests are always to the maximum
+amount of data available, so all the historical data supported by the API is
+used.</p>
+<p>The output from a chosen ticker (stock) is a Pandas dataframe containing the
+open-high-low-close values, also known as OHLC. More data is also available in
+the dataframe, as the volume and adjusted close values, for example. The name of
+the columns in the dataframe are:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Date</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Open</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">High</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Low</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Close</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Close</span> <span class="pre">Final</span></code>: Meaning the adjusted close value.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Volume</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Dividend</span> <span class="pre">Amount</span></code>: Possibly not available information, but also not
+necessary the project application.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Split</span> <span class="pre">Coefficient</span></code>: Possibly not available information, but also not
+necessary the project application.</p></li>
+</ol>
+<p>The API’s applied in the project will need authentication. For that, an account
+must be created. Please follow the instructions from the chosen provider on
+their respective website to acquire one. Once available, a file named
 <code class="docutils literal notranslate"><span class="pre">api-cfg-access.json</span></code> need to be placed directly in the <code class="docutils literal notranslate"><span class="pre">cfg</span></code> folder. The
-structure of the Json data follows the template below, where <cite>&lt;YOUR API KEY&gt;</cite>
+structure of the JSON data follows the template below, where <cite>&lt;YOUR API KEY&gt;</cite>
 needs to be replaced by the string provided as API key:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="s2">&quot;api&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -207,7 +238,35 @@ needs to be replaced by the string provided as API key:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>For this goal, the core implementation is done in the <code class="docutils literal notranslate"><span class="pre">data_access.py</span></code> file.</p>
+<p>For Yahoo Finance:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;api&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;fetching&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;YahooFinance&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;user_data&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;APIKEY&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;YOUR API KEY&gt;&quot;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Both can be defined at the same time in the dictionary. Attention must be taken
+that the value for the key <cite>api / fetching / selection</cite> in the <code class="docutils literal notranslate"><span class="pre">api-cfg.json</span></code>
+file (also in the <code class="docutils literal notranslate"><span class="pre">cfg</span></code> folder) determines which provider to use. So for
+example, if Yahoo Finance is the desired one, the following entry is necessary:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;api&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;fetching&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;selection&quot;</span><span class="p">:</span> <span class="s2">&quot;YahooFinance&quot;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>For this data fetching goal, the core implementation is done in the
+<code class="docutils literal notranslate"><span class="pre">data_access.py</span></code> module.</p>
 </section>
 <section id="analyze-data-for-taking-decisions-hold-buy-sell">
 <h3>Analyze data for taking decisions (hold, buy, sell)<a class="headerlink" href="#analyze-data-for-taking-decisions-hold-buy-sell" title="Permalink to this headline">¶</a></h3>
@@ -215,12 +274,18 @@ needs to be replaced by the string provided as API key:</p>
 straight forward, since there are plural methodologies available, on many
 levels of commplexity and success rate. See the section “Strategy Principles”
 for more information.</p>
-<p>The goal is not to expect very high success rate in the gains, but at least
-have consistent improvements from a buy-hold strategy.</p>
-<p>The very initial implementation is based on a simple MACD (Moving Average
-Convergence Divergence) method. However the basic framework around is intended
-to cover more general cases. The framework consists of:</p>
-<ol class="arabic simple">
+<p>The goal is not to expect very high success rate in the gains, which would mean
+that the algorithm is always correct in decision and timing, having a “perfect”
+strategy. In this scenario, one would have all the ups from a ticker, and none
+of the lows from it. Rather, the goal is to have a result between this “perfect”
+strategy and a buy-hold one, where one purchases a stock and holds it for a
+longer time spam.</p>
+<p>After analysis from the individual methods, such as, MACD (Moving Average
+Convergence Divergence), Bollinger Bands and RSI (Relative Strength
+Index), the initial implementation is based on the MACD alone. However the
+basic framework around is intended to cover more general cases. The framework
+consists of:</p>
+<ol class="arabic">
 <li><p><strong>Pre-Process data</strong>: Adequate or fix data sets before analysis.</p></li>
 <li><p><strong>Apply individual methods</strong>: Any possible method of analysis can be applied
 independent from each other. The target is that each one produces its own
@@ -231,6 +296,8 @@ analysis:</p>
 <li><p>RSI (Relative Strength Index)</p></li>
 <li><p>Bollinger Bands</p></li>
 </ul>
+<p>At this point, predictions can be used. For example, the MACD analysis is
+supported by RNN (LSTM) prediction for the MACD histrogram signal.</p>
 </li>
 <li><p><strong>Arbitration</strong>: Evaluate all the previous recommendations and produces a
 final recommendation.</p></li>
@@ -758,7 +825,7 @@ name definied on the previous step. for Linux:</p>
 is running by a tag <cite>(&lt;name_of_virtualenv&gt;)</cite>.</p>
 <p>After started the virtual environement, the necessary packages for this project
 can be installed by the command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">src</span><span class="o">/</span><span class="n">Requirements</span><span class="o">.</span><span class="n">txt</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
 </pre></div>
 </div>
 <p>Later, the environmenet can be deactivate when necessary by the command:</p>
@@ -893,7 +960,7 @@ a report of the overall results for performance evaluation.</p>
       &copy;2021, Fabio de Luca.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

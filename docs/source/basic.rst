@@ -5,3 +5,13 @@ Basic operations
    :members:
    :undoc-members:
    :show-inheritance:
+
+   .. toctree::
+      :maxdepth: 1
+
+      macd
+      rsi_sma
+      rsi_ema
+      bbands
+      combined
+      lstm

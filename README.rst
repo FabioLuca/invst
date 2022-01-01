@@ -16,13 +16,13 @@ Project goals
 --------------------------------------------------------------------------------
 
 This project goal is to automate the operation of trading in the market, such as
-stocks or ETF's (Exchange Traded Fund). In priciple the same approach can be
+stocks or ETF's (Exchange Traded Fund). In principle the same approach can be
 adopted and extended to Cryptocurrencies, where the limitation is on the 
 trading platformed used, if it permits such operations or not.
 
 The goal is not to operate as high-frequency trading, but like a regular trader.
 The aimed advantages for the project is then on the potential of analysing a
-bigger amount of data (different stocks or products) at a short time; apply 
+bigger amount of data (different stocks or products) in a shorter time; apply 
 consistent mathematical and physical models, due to the major amount of data
 and tools available.
 
@@ -51,17 +51,50 @@ Fetch market data series (history)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The first element is to provide an encapsulation for accessing trading values
-history for a given ticker by using the `AlphaVantage API
-<https://www.alphavantage.co/>`_. Although othernnsources are possible, they
-were not completely implemented yet. The output forna chosen ticker (stock) is a
-Pandas dataframe containing the open-high-low-closennvalues, also known as OHLC.
-More data is also available in the dataframe, as thenvolume and adjusted close
-values, for example.
+history for a given ticker by using the `Alpha Vantage API
+<https://www.alphavantage.co/>`_ or `Yahoo Finance API
+<https://www.yahoofinanceapi.com/>`_ . Both API access are not complete
+implemented, but only the necessary parts for this project. Additional
+sources are also possible, and could be included in the future.
 
-To work with the project an API key to AlphaVantage is necessary. Please follow
-the instructions on their website to acquire one. Once available, a file named
+A note about the API's is regarding their continuity. Eventually the providers
+might stop doing it, or might change their business model, moving fully or
+partly to paid services, as happened for example to Alpha Vantage access to the
+`Adjusted Close` value. In such cases, the user needs to migrate into a paid
+service or pursue a different provider.
+
+To mitigate the changes when a new provider is assigned or included, the output
+from the abstraction layer (interface) is similar as much as possible. Mandatory
+data of course will be equivalent, but some additional ones, such as `Dividends
+payments`, could possibly not be available on certain providers.
+
+The operation is commononized so all the requests are meant for a single symbol
+per time. For the API implementation, the requests are always to the maximum
+amount of data available, so all the historical data supported by the API is 
+used.
+
+The output from a chosen ticker (stock) is a Pandas dataframe containing the
+open-high-low-close values, also known as OHLC. More data is also available in
+the dataframe, as the volume and adjusted close values, for example. The name of
+the columns in the dataframe are:
+
+1. ``Date``
+2. ``Open``
+3. ``High``
+4. ``Low``
+5. ``Close``
+6. ``Close Final``: Meaning the adjusted close value.
+7. ``Volume``
+8. ``Dividend Amount``: Possibly not available information, but also not
+   necessary the project application.
+9. ``Split Coefficient``: Possibly not available information, but also not
+   necessary the project application.
+
+The API's applied in the project will need authentication. For that, an account
+must be created. Please follow the instructions from the chosen provider on
+their respective website to acquire one. Once available, a file named
 ``api-cfg-access.json`` need to be placed directly in the ``cfg`` folder. The
-structure of the Json data follows the template below, where `<YOUR API KEY>`
+structure of the JSON data follows the template below, where `<YOUR API KEY>`
 needs to be replaced by the string provided as API key::
 
     {
@@ -76,8 +109,35 @@ needs to be replaced by the string provided as API key::
         }
     }
 
+For Yahoo Finance::
 
-For this goal, the core implementation is done in the ``data_access.py`` file.
+    {
+        "api": {
+            "fetching": {
+                "YahooFinance": {
+                    "user_data": {
+                        "APIKEY": "<YOUR API KEY>"
+                    }
+                }
+            }
+        }
+    }
+
+Both can be defined at the same time in the dictionary. Attention must be taken
+that the value for the key `api / fetching / selection` in the ``api-cfg.json``
+file (also in the ``cfg`` folder) determines which provider to use. So for
+example, if Yahoo Finance is the desired one, the following entry is necessary::
+
+    {
+        "api": {
+            "fetching": {
+                "selection": "YahooFinance"
+            }
+        }
+    }
+
+For this data fetching goal, the core implementation is done in the
+``data_access.py`` module.
 
 Analyze data for taking decisions (hold, buy, sell)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -87,12 +147,18 @@ straight forward, since there are plural methodologies available, on many
 levels of commplexity and success rate. See the section "Strategy Principles"
 for more information.
 
-The goal is not to expect very high success rate in the gains, but at least
-have consistent improvements from a buy-hold strategy.
+The goal is not to expect very high success rate in the gains, which would mean
+that the algorithm is always correct in decision and timing, having a "perfect"
+strategy. In this scenario, one would have all the ups from a ticker, and none
+of the lows from it. Rather, the goal is to have a result between this "perfect"
+strategy and a buy-hold one, where one purchases a stock and holds it for a
+longer time spam.
 
-The very initial implementation is based on a simple MACD (Moving Average
-Convergence Divergence) method. However the basic framework around is intended
-to cover more general cases. The framework consists of:
+After analysis from the individual methods, such as, MACD (Moving Average
+Convergence Divergence), Bollinger Bands and RSI (Relative Strength
+Index), the initial implementation is based on the MACD alone. However the
+basic framework around is intended to cover more general cases. The framework
+consists of:
 
 1. **Pre-Process data**: Adequate or fix data sets before analysis.
 2. **Apply individual methods**: Any possible method of analysis can be applied
@@ -103,6 +169,9 @@ to cover more general cases. The framework consists of:
    * MACD (Moving Average Convergence Divergence)
    * RSI (Relative Strength Index)
    * Bollinger Bands
+
+   At this point, predictions can be used. For example, the MACD analysis is
+   supported by RNN (LSTM) prediction for the MACD histrogram signal.
 
 3. **Arbitration**: Evaluate all the previous recommendations and produces a
    final recommendation.

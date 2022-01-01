@@ -8,6 +8,15 @@ Core
    analysis
    session
 
+Fetching data
+================================================================================
+
+.. toctree::
+   :maxdepth: 1
+
+   alphavantage
+   yahoofinance
+
 Trading analysis
 ================================================================================
 
