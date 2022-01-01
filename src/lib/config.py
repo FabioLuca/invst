@@ -53,7 +53,14 @@ class Config:
         self.data_source_trade_access_data = None
         self.data_source_trade_user_data = None
 
-        self.data_source_comm_name = None
+        self.data_source_wapp_name = None
+        self.data_source_wapp_access_data = None
+        self.data_source_wapp_user_data = None
+
+        self.data_source_mail_name = None
+        self.data_source_mail_access_data = None
+        self.data_source_mail_user_data = None
+
         self.data_source_comm_access_data = None
         self.data_source_comm_user_data = None
 
@@ -123,10 +130,19 @@ class Config:
                 "api"]["trading"]["selection"]
             self.data_source_trade_access_data = self.json_data[
                 "api"]["trading"][self.data_source_trade_name]["access_data"]
-            self.data_source_comm_name = self.json_data[
-                "api"]["communicating"]["selection"]
-            self.data_source_comm_access_data = self.json_data[
-                "api"]["communicating"][self.data_source_comm_name]["access_data"]
+            self.data_source_wapp_name = self.json_data[
+                "api"]["communicating"]["whatsapp"]["selection"]
+            self.data_source_wapp_access_data = self.json_data[
+                "api"]["communicating"]["whatsapp"][self.data_source_wapp_name]["access_data"]
+            self.data_source_mail_name = self.json_data[
+                "api"]["communicating"]["email"]["selection"]
+            self.data_source_mail_access_data = self.json_data[
+                "api"]["communicating"]["email"][self.data_source_mail_name]["access_data"]
+
+            self.data_source_comm_access_data = {
+                "whatsapp": self.data_source_wapp_access_data,
+                "email": self.data_source_mail_access_data
+            }
 
         elif filename.stem == "api-cfg-access":
 
@@ -153,8 +169,15 @@ class Config:
                 "api"]["fetching"][self.data_source_fetch_name]["user_data"]
             self.data_source_trade_user_data = self.json_data[
                 "api"]["trading"][self.data_source_trade_name]["user_data"]
-            self.data_source_comm_user_data = self.json_data[
-                "api"]["communicating"][self.data_source_comm_name]["user_data"]
+            self.data_source_wapp_user_data = self.json_data[
+                "api"]["communicating"]["whatsapp"][self.data_source_wapp_name]["user_data"]
+            self.data_source_mail_user_data = self.json_data[
+                "api"]["communicating"]["email"][self.data_source_mail_name]["user_data"]
+
+            self.data_source_comm_user_data = {
+                "whatsapp": self.data_source_wapp_user_data,
+                "email": self.data_source_mail_user_data
+            }
 
         elif filename.stem == "local":
             # ------------------------------------------------------------------

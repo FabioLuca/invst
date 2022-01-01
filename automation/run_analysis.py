@@ -6,11 +6,11 @@ import logging
 import time
 from pathlib import Path
 from datetime import datetime
+from src.communication import Communication
 from src.lib.config import Config
 from src.lib.invst_const import constants as C
 from src.data_access import DataAccess
 from src.analysis import Analysis
-from src.lib.communication import Whatsapp
 from src.lib import print_table as pt
 
 LOGGER_NAME = "invst.run_analysis"
@@ -47,11 +47,10 @@ if __name__ == "__main__":
     # --------------------------------------------------------------------------
     #   Defines the location of the files with configurations and load them.
     # --------------------------------------------------------------------------
-    config_access_file = Path.cwd().resolve() / "cfg" / "api-cfg.json"
-    config_access_userdata_file = Path.cwd().resolve() / "cfg" / \
-        "api-cfg-access.json"
-    config_local_file = Path.cwd().resolve() / "cfg" / \
-        "local.json"
+    config_base_path = Path.cwd().resolve() / "cfg"
+    config_access_file = config_base_path / "api-cfg.json"
+    config_access_userdata_file = config_base_path / "api-cfg-access.json"
+    config_local_file = config_base_path / "local.json"
 
     config = Config(logger_name=LOGGER_NAME)
     config.load_config(filename=config_access_file)
@@ -59,16 +58,20 @@ if __name__ == "__main__":
     config.load_config(filename=config_local_file)
 
     # --------------------------------------------------------------------------
-    #   Starts the whatsapp communication and send a message to notify.
+    #   Starts the communication and send a message to notify.
     # --------------------------------------------------------------------------
-    whatsapp = Whatsapp(
+    communication = Communication(
         access_config=config.data_source_comm_access_data,
         access_userdata=config.data_source_comm_user_data,
         logger_name=LOGGER_NAME
     )
 
-    whatsapp.send_message(
+    communication.send_message(
         body=f"Starting analysis of tickers.\nReference: {datetime.now().strftime('%H:%M:%S')}")
+
+    communication.send_email(
+        subject=f"Starting analysis of tickers ({datetime.now().strftime('%H:%M:%S')})",
+        body_html=f"Starting analysis of tickers.\nReference: {datetime.now().strftime('%H:%M:%S')}")
 
     # --------------------------------------------------------------------------
     #   List of tickers and sequence analysis.
