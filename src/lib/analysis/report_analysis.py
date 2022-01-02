@@ -28,7 +28,7 @@ class ReportAnalysis:
         module_split = module.__name__.split(".")
         method = module_split[-1]
 
-        config_file = Path.cwd().resolve() / "src" / "lib_analysis" / "methods" / "display_config" / \
+        config_file = Path.cwd().resolve() / "src" / "lib" / "analysis" / "methods" / "display_config" / \
             f"{method}.json"
 
         with open(config_file) as json_file:

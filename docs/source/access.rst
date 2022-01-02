@@ -1,7 +1,7 @@
 Session access
 --------------------------------------------------------------------------------
 
-.. automodule:: src.lib_comdirect.access
+.. automodule:: src.lib.comdirect.access
    :members:
    :undoc-members:
    :show-inheritance:

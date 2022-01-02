@@ -59,8 +59,8 @@ if __name__ == "__main__":
     #   Starts the communication and send a message to notify.
     # --------------------------------------------------------------------------
     communication = Communication(
-        access_config=config.data_source_wapp_access_data,
-        access_userdata=config.data_source_wapp_user_data,
+        access_config=config.data_source_comm_access_data,
+        access_userdata=config.data_source_comm_user_data,
         logger_name=LOGGER_NAME
     )
 

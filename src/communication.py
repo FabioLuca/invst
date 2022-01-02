@@ -1,10 +1,11 @@
 """Module for managing the communication to the user."""
 import logging
-from src.lib_communication.mail import Mail
-from src.lib_communication.whatsapp import Whatsapp
+from src.lib.communication.mail import Mail
+from src.lib.communication.mail_formatter import MailFormatter
+from src.lib.communication.whatsapp import Whatsapp
 
 
-class Communication (Whatsapp, Mail):
+class Communication (Whatsapp, Mail, MailFormatter):
 
     def __init__(self, access_config: dict, access_userdata: dict, logger_name: str) -> None:
 

@@ -143,13 +143,13 @@ responded.</p>
 </li>
 <li><p><a class="reference internal" href="#use-examples" id="id14">Use examples</a></p>
 <ul>
-<li><p><a class="reference internal" href="#module-example" id="id15">example.py</a></p></li>
+<li><p><a class="reference internal" href="#example-py" id="id15">example.py</a></p></li>
 </ul>
 </li>
 <li><p><a class="reference internal" href="#automation" id="id16">Automation</a></p>
 <ul>
 <li><p><a class="reference internal" href="#module-automation.comdirect_status_report" id="id17">comdirect_status_report.py</a></p></li>
-<li><p><a class="reference internal" href="#module-automation.comdirect_status_update" id="id18">comdirect_status_update.py</a></p></li>
+<li><p><a class="reference internal" href="#comdirect-status-update-py" id="id18">comdirect_status_update.py</a></p></li>
 <li><p><a class="reference internal" href="#module-automation.run_analysis" id="id19">run_analysis.py</a></p></li>
 </ul>
 </li>
@@ -865,31 +865,8 @@ the command:</p>
 </section>
 <section id="use-examples">
 <h2>Use examples<a class="headerlink" href="#use-examples" title="Permalink to this headline">¶</a></h2>
-<section id="module-example">
-<span id="example-py"></span><h3>example.py<a class="headerlink" href="#module-example" title="Permalink to this headline">¶</a></h3>
-<p>Example for the use of the project. The following steps are taken:</p>
-<ol class="arabic simple">
-<li><p><strong>Create a logger</strong>, so all the steps during the execution are presented,
-either to have information of the current status to the user, or to support
-debugging. By default, the display to the user is done with <cite>info</cite> level,
-whilst the storrage in the log files are done with <cite>debug</cite> level.</p></li>
-<li><p><strong>Load the configurations</strong>, since the project depends on configuration
-input for the access of the API’s, the <cite>.json</cite> files are loaded and the
-content stored in dictionaries to be used by the next steps.</p></li>
-<li><p><strong>Fetch ticker data</strong> from AlphaVantage API. For example purpose, two cases
-are done, first trying to fetch from an invalid ticker (<cite>GOOG2</cite>) and then
-in sequence trying to fetch for a list of valid symbols.</p></li>
-<li><p><strong>Perform analysis</strong> per symbol, producing a result for each one. See the
-documentation for the strategy analysis for more details.</p></li>
-<li><p><strong>Display</strong> on the console an overview of the results.</p></li>
-<li><p><strong>Fetch depot status</strong> from Comdirect account, where for each available
-element in the depot account, its values (e.g. current price, purchase price)
-are returned to be used for performance tracking.</p></li>
-<li><p><strong>Store the results</strong> in Microsoft Excel files, saving a different file per
-day (current date is used in the filename), and each data having a separate
-sheet in the <cite>.xlsx</cite> file.</p></li>
-</ol>
-<p>Other files in the automation folder can be used as examples.</p>
+<section id="example-py">
+<h3>example.py<a class="headerlink" href="#example-py" title="Permalink to this headline">¶</a></h3>
 </section>
 </section>
 <section id="automation">
@@ -928,10 +905,8 @@ timespam for analysis.</p></li>
 server which can be accessed by the addressed informed on the console, for
 example: <a class="reference external" href="http://127.0.0.1:8050/">http://127.0.0.1:8050/</a></p>
 </section>
-<section id="module-automation.comdirect_status_update">
-<span id="comdirect-status-update-py"></span><h3>comdirect_status_update.py<a class="headerlink" href="#module-automation.comdirect_status_update" title="Permalink to this headline">¶</a></h3>
-<p>Script for getting the current values from Comdirect and storing into Excel
-files, to be used as a tracker.</p>
+<section id="comdirect-status-update-py">
+<h3>comdirect_status_update.py<a class="headerlink" href="#comdirect-status-update-py" title="Permalink to this headline">¶</a></h3>
 </section>
 <section id="module-automation.run_analysis">
 <span id="run-analysis-py"></span><h3>run_analysis.py<a class="headerlink" href="#module-automation.run_analysis" title="Permalink to this headline">¶</a></h3>

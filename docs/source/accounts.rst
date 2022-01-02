@@ -1,7 +1,7 @@
 Accounts
 --------------------------------------------------------------------------------
 
-.. automodule:: src.lib_comdirect.accounts
+.. automodule:: src.lib.comdirect.accounts
    :members:
    :undoc-members:
    :show-inheritance:

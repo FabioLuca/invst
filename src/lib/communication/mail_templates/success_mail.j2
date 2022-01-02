@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Success email</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="styles.css">
+    <style type="text/css">
+        {% include "styles.css"%}
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <p>Completed analysis of tickers with success!</p>
+        <p>Reference: {{value_timestamp}}</p>
+        <h1>Results</h1>
+        {{ dataframe_html | safe}}
+    </div>
+</body>
+
+</html>

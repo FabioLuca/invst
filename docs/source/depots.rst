@@ -1,7 +1,7 @@
 Depots
 --------------------------------------------------------------------------------
 
-.. automodule:: src.lib_comdirect.depots
+.. automodule:: src.lib.comdirect.depots
    :members:
    :undoc-members:
    :show-inheritance:

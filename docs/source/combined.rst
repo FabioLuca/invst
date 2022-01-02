@@ -1,7 +1,7 @@
 Combined strategy
 --------------------------------------------------------------------------------
 
-.. automodule:: src.lib_analysis.methods.combined
+.. automodule:: src.lib.analysis.methods.combined
    :members:
    :undoc-members:
    :show-inheritance:

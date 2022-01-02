@@ -2,10 +2,10 @@ import logging
 import json
 import uuid
 import time
-from .lib_comdirect.access import Access
-from .lib_comdirect.accounts import Accounts
-from .lib_comdirect.depots import Depots
-from .lib_comdirect.orders import Orders
+from src.lib.comdirect.access import Access
+from src.lib.comdirect.accounts import Accounts
+from src.lib.comdirect.depots import Depots
+from src.lib.comdirect.orders import Orders
 
 
 class Session (Access, Accounts, Depots, Orders):

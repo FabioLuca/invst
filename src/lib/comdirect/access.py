@@ -1,6 +1,6 @@
 import json
 import requests
-from ..lib import messages as M
+from src.lib import messages as M
 
 
 class Access:

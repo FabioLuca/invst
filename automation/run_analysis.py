@@ -69,10 +69,6 @@ if __name__ == "__main__":
     communication.send_message(
         body=f"Starting analysis of tickers.\nReference: {datetime.now().strftime('%H:%M:%S')}")
 
-    communication.send_email(
-        subject=f"Starting analysis of tickers ({datetime.now().strftime('%H:%M:%S')})",
-        body_html=f"Starting analysis of tickers.\nReference: {datetime.now().strftime('%H:%M:%S')}")
-
     # --------------------------------------------------------------------------
     #   List of tickers and sequence analysis.
     # --------------------------------------------------------------------------
@@ -133,7 +129,8 @@ if __name__ == "__main__":
             # --------------------------------------------------------------------------
             analysis = Analysis(symbol=ticker,
                                 ohlc_data=result_values,
-                                analysis_length=750,
+                                analysis_length_pre=750,
+                                analysis_length_post=250,
                                 initial_value=10000,
                                 stopgain=1.4,
                                 stoploss=0.85,
@@ -150,7 +147,7 @@ if __name__ == "__main__":
             analysis = None
             result = None
 
-    if len(results_summary) > 1 and len(results_summary) > 1:
+    if len(results_summary) >= 1 and len(results_summary) >= 1:
         today_string = datetime.today().strftime('%Y-%m-%d')
         file_export_summary = f"Export_Summary_{today_string}.xlsx"
         folder = Path(config.local_config["paths"]["data_storage"])
@@ -159,3 +156,10 @@ if __name__ == "__main__":
         file_export_summary = folder / file_export_summary
         df_results_summary = pt.summary_table(
             results_summary, file_export_summary)
+
+        email_subject, email_body = communication.format_email_success(
+            df_results_summary)
+    else:
+        email_subject, email_body = communication.format_email_fail_empty()
+
+    communication.send_email(subject=email_subject, body_html=email_body)

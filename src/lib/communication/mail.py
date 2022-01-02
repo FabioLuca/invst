@@ -1,4 +1,5 @@
 import requests
+from src.lib import messages as M
 
 
 class Mail:
@@ -31,15 +32,18 @@ class Mail:
                                     "text": body_plain})
 
         except Exception as e:
-            # status, msg, result = Log.Registro("Erro ao requisitar MailGun: " +
-            #                                    str(e), exception=str(e),
-            #                                    level=3, nome=__name__)
-            return False, "Falha ao acessar MailGun", str(e)
+            result = str(e)
+            flag, level, message = M.get_status(self.logger_name,
+                                                "Comm_SendEmail_API_Fail")
+
         if r.status_code == 200:
-            # Log.Registro(texto="Envio do email com sucesso",
-            #              level=1, nome=__name__)
-            return True, "OK", r.status_code
+            result = r
+            flag, level, message = M.get_status(self.logger_name,
+                                                "Comm_SendEmail_Success")
+
         else:
-            # Log.Registro(texto="Falha no envio de email: " + r.status_code,
-            #              level=3, nome=__name__)
-            return False, "Falha no envio de email", r.status_code
+            result = r
+            flag, level, message = M.get_status(self.logger_name,
+                                                "Comm_SendEmail_Fail")
+
+        return result, flag, level, message

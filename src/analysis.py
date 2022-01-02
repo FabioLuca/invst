@@ -6,13 +6,13 @@ from datetime import datetime
 from pathlib import Path
 import pandas as pd
 from src.lib.config import Config
-from .lib_analysis.preprocessing import PreProcessing
-from .lib_analysis.methods.crash import Crash
-from .lib_analysis.methods.macd import MACD
-from .lib_analysis.methods.rsi_sma import RSI_SMA
-from .lib_analysis.methods.rsi_ema import RSI_EMA
-from .lib_analysis.methods.bollinger_band import BOLLINGER_BANDS
-from .lib_analysis.methods.combined import CombinedStrategy
+from src.lib.analysis.preprocessing import PreProcessing
+from src.lib.analysis.methods.crash import Crash
+from src.lib.analysis.methods.macd import MACD
+from src.lib.analysis.methods.rsi_sma import RSI_SMA
+from src.lib.analysis.methods.rsi_ema import RSI_EMA
+from src.lib.analysis.methods.bollinger_band import BOLLINGER_BANDS
+from src.lib.analysis.methods.combined import CombinedStrategy
 
 LOGGER_NAME = "invst.analysis"
 
@@ -70,7 +70,8 @@ class Analysis(Crash, MACD, RSI_SMA, RSI_EMA, BOLLINGER_BANDS, CombinedStrategy,
     def __init__(self,
                  symbol: str,
                  ohlc_data: pd.DataFrame,
-                 analysis_length: int,
+                 analysis_length_pre: int,
+                 analysis_length_post: int,
                  initial_value: float,
                  stopgain: float,
                  stoploss: float,
@@ -92,8 +93,8 @@ class Analysis(Crash, MACD, RSI_SMA, RSI_EMA, BOLLINGER_BANDS, CombinedStrategy,
         # ----------------------------------------------------------------------
         #   Analysis related attributes.
         # ----------------------------------------------------------------------
-        self.analysis_length_pre = analysis_length
-        self.analysis_length_post = 250
+        self.analysis_length_pre = analysis_length_pre
+        self.analysis_length_post = analysis_length_post
         self.data_length = 0
         self.up_movement = 0
         self.down_movement = 0

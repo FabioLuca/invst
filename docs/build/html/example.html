@@ -100,31 +100,8 @@
 
           <div class="body" role="main">
             
-  <section id="module-example">
-<span id="example-py"></span><h1>example.py<a class="headerlink" href="#module-example" title="Permalink to this headline">¶</a></h1>
-<p>Example for the use of the project. The following steps are taken:</p>
-<ol class="arabic simple">
-<li><p><strong>Create a logger</strong>, so all the steps during the execution are presented,
-either to have information of the current status to the user, or to support
-debugging. By default, the display to the user is done with <cite>info</cite> level,
-whilst the storrage in the log files are done with <cite>debug</cite> level.</p></li>
-<li><p><strong>Load the configurations</strong>, since the project depends on configuration
-input for the access of the API’s, the <cite>.json</cite> files are loaded and the
-content stored in dictionaries to be used by the next steps.</p></li>
-<li><p><strong>Fetch ticker data</strong> from AlphaVantage API. For example purpose, two cases
-are done, first trying to fetch from an invalid ticker (<cite>GOOG2</cite>) and then
-in sequence trying to fetch for a list of valid symbols.</p></li>
-<li><p><strong>Perform analysis</strong> per symbol, producing a result for each one. See the
-documentation for the strategy analysis for more details.</p></li>
-<li><p><strong>Display</strong> on the console an overview of the results.</p></li>
-<li><p><strong>Fetch depot status</strong> from Comdirect account, where for each available
-element in the depot account, its values (e.g. current price, purchase price)
-are returned to be used for performance tracking.</p></li>
-<li><p><strong>Store the results</strong> in Microsoft Excel files, saving a different file per
-day (current date is used in the filename), and each data having a separate
-sheet in the <cite>.xlsx</cite> file.</p></li>
-</ol>
-<p>Other files in the automation folder can be used as examples.</p>
+  <section id="example-py">
+<h1>example.py<a class="headerlink" href="#example-py" title="Permalink to this headline">¶</a></h1>
 </section>
 
 
