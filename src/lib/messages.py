@@ -206,6 +206,22 @@ MESSAGE = {
         "Level": C.INFO,
         "Message": "Success to receive message."
     },
+    "Comm_SendEmail_Fail": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "Failure to send email."
+    },
+    "Comm_SendEmail_API_Fail": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "Failure to send email while acessing the API."
+    },
+    "Comm_SendEmail_Success": {
+        "Flag": C.SUCCESS,
+        "Level": C.INFO,
+        "Message": "Success to send email."
+    },
+
 }
 
 
