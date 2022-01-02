@@ -187,9 +187,12 @@ class Arbitration:
         prediction_dataframe = self.ohlc_dataset[self.ohlc_dataset['Data Type']
                                                  == "Prediction data"]
 
-        next_event_datetime = datetime.strptime(
-            self.analysis_results["MACD"]["Day Next Event"], '%Y-%m-%d')
-        next_event_datetime = next_event_datetime.date()
+        if self.analysis_results["MACD"]["Day Next Event"] == "No change":
+            next_event_datetime = "AAAA"
+        else:
+            next_event_datetime = datetime.strptime(
+                self.analysis_results["MACD"]["Day Next Event"], '%Y-%m-%d')
+            next_event_datetime = next_event_datetime.date()
         last_entry_datetime = datetime.strptime(
             str(real_dataframe.index[-1]), '%Y-%m-%d %H:%M:%S')
         last_entry_datetime = last_entry_datetime.date()

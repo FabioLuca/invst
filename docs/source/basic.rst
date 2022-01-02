@@ -1,7 +1,7 @@
 Basic operations
 --------------------------------------------------------------------------------
 
-.. automodule:: src.lib_analysis.basic
+.. automodule:: src.lib.analysis.basic
    :members:
    :undoc-members:
    :show-inheritance:

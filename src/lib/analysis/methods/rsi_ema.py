@@ -1,10 +1,10 @@
 import pandas as pd
 import numpy as np
-from src.lib_analysis.basic import Basic
-from src.lib_analysis.arbitration import Arbitration
-from src.lib_analysis.report_analysis import ReportAnalysis
-from src.lib_analysis.performance_simulation import PerformanceSimulation
-from src.lib_analysis.summary import Summary
+from src.lib.analysis.basic import Basic
+from src.lib.analysis.arbitration import Arbitration
+from src.lib.analysis.report_analysis import ReportAnalysis
+from src.lib.analysis.performance_simulation import PerformanceSimulation
+from src.lib.analysis.summary import Summary
 
 
 class RSI_EMA (Basic, Arbitration, PerformanceSimulation, ReportAnalysis, Summary):

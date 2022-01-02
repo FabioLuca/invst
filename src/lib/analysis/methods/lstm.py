@@ -19,7 +19,7 @@ from keras.layers import Dense
 from keras.layers import RepeatVector
 from keras.layers import TimeDistributed
 from keras.layers import Activation
-from src.lib_analysis.basic import Basic
+from src.lib.analysis.basic import Basic
 
 
 class LSTM (Basic):

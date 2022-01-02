@@ -7,8 +7,8 @@ import requests
 import pandas as pd
 import matplotlib.dates as mdates
 
-from .lib_data_access.alphavantage import AlphaVantage
-from .lib_data_access.yahoofinance import YahooFinance
+from src.lib.data_access.alphavantage import AlphaVantage
+from src.lib.data_access.yahoofinance import YahooFinance
 
 
 # ------------------------------------------------------------------------------
@@ -22,8 +22,8 @@ from .lib_data_access.yahoofinance import YahooFinance
 #       from lib import messages as M
 # ------------------------------------------------------------------------------
 
-from .lib.invst_const import constants as C
-from .lib import messages as M
+from src.lib.invst_const import constants as C
+from src.lib import messages as M
 
 
 class DataAccess (AlphaVantage, YahooFinance):

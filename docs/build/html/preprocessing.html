@@ -102,11 +102,11 @@
 
           <div class="body" role="main">
             
-  <section id="module-src.lib_analysis.preprocessing">
-<span id="pre-processing"></span><h1>Pre-Processing<a class="headerlink" href="#module-src.lib_analysis.preprocessing" title="Permalink to this headline">¶</a></h1>
+  <section id="module-src.lib.analysis.preprocessing">
+<span id="pre-processing"></span><h1>Pre-Processing<a class="headerlink" href="#module-src.lib.analysis.preprocessing" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="src.lib_analysis.preprocessing.PreProcessing">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.lib_analysis.preprocessing.</span></span><span class="sig-name descname"><span class="pre">PreProcessing</span></span><a class="headerlink" href="#src.lib_analysis.preprocessing.PreProcessing" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="src.lib.analysis.preprocessing.PreProcessing">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.lib.analysis.preprocessing.</span></span><span class="sig-name descname"><span class="pre">PreProcessing</span></span><a class="headerlink" href="#src.lib.analysis.preprocessing.PreProcessing" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Pre processing is intended to make initial operations to fix or adequate
 the data which is received from the API, fo example, limiting the amount of
@@ -114,16 +114,16 @@ data as eventually the series can have years of data, which is not
 necessary; or to define the the correct column for the closing price of the
 entry.</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="src.lib_analysis.preprocessing.PreProcessing.define_closure">
-<span class="sig-name descname"><span class="pre">define_closure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.lib_analysis.preprocessing.PreProcessing.define_closure" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="src.lib.analysis.preprocessing.PreProcessing.define_closure">
+<span class="sig-name descname"><span class="pre">define_closure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.lib.analysis.preprocessing.PreProcessing.define_closure" title="Permalink to this definition">¶</a></dt>
 <dd><p>Define the column for closure. This is necessary since depending on
 the source of data or on the configuration, there might be different
 columns for it. The new column is named “Close Final”.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="src.lib_analysis.preprocessing.PreProcessing.define_past_time">
-<span class="sig-name descname"><span class="pre">define_past_time</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.lib_analysis.preprocessing.PreProcessing.define_past_time" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="src.lib.analysis.preprocessing.PreProcessing.define_past_time">
+<span class="sig-name descname"><span class="pre">define_past_time</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.lib.analysis.preprocessing.PreProcessing.define_past_time" title="Permalink to this definition">¶</a></dt>
 <dd><p>Populates all the initial available data as <cite>Real data</cite>. This
 information is relevant to the dataset, as any data from prediction
 (future) will be tagged as <cite>Predict data</cite>.</p>
@@ -142,8 +142,8 @@ by adding a new column named <code class="docutils literal notranslate"><span cl
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="src.lib_analysis.preprocessing.PreProcessing.extend_time_range">
-<span class="sig-name descname"><span class="pre">extend_time_range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.lib_analysis.preprocessing.PreProcessing.extend_time_range" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="src.lib.analysis.preprocessing.PreProcessing.extend_time_range">
+<span class="sig-name descname"><span class="pre">extend_time_range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.lib.analysis.preprocessing.PreProcessing.extend_time_range" title="Permalink to this definition">¶</a></dt>
 <dd><p>Populates the Pandas dataframe with dates following the next day for
 predictions. The list skips weekends, however holidays are not taken
 into account, so not skipped.</p>
@@ -163,8 +163,8 @@ incrementing one by one. Weekends are skipped in the list.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="src.lib_analysis.preprocessing.PreProcessing.truncate_range">
-<span class="sig-name descname"><span class="pre">truncate_range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shift_last</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.lib_analysis.preprocessing.PreProcessing.truncate_range" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="src.lib.analysis.preprocessing.PreProcessing.truncate_range">
+<span class="sig-name descname"><span class="pre">truncate_range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shift_last</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.lib.analysis.preprocessing.PreProcessing.truncate_range" title="Permalink to this definition">¶</a></dt>
 <dd><p>Limit the data to a proper length, always keeping the latest data
 available.</p>
 <div class="admonition note">

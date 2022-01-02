@@ -293,7 +293,7 @@ def summary_table(results_summary, excel_filename):
     # --------------------------------------------------------------------------
     today_string = datetime.today().strftime('%Y-%m-%d')
     method_config_folder = Path.cwd().resolve() / "src" / \
-        "lib_analysis" / "methods" / "display_config"
+        "lib" / "analysis" / "methods" / "display_config"
     files = list(filter(Path.is_file, method_config_folder.glob('**/*.json')))
 
     method_savenames = {}

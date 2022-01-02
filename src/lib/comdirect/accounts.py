@@ -3,7 +3,7 @@ import json
 import requests
 import pandas as pd
 
-from ..lib import messages as M
+from src.lib import messages as M
 
 
 class Accounts:
