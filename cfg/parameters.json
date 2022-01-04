@@ -1,0 +1,49 @@
+{
+    "execution": {
+        "time_sleep": {
+            "value": 5,
+            "unit": "seconds",
+            "comment": "Sleeping time between runs (tickers)."
+        },
+        "display_analysis": {
+            "value": false,
+            "unit": "unitless"
+        },
+        "save_analysis": {
+            "value": true,
+            "unit": "unitless"
+        }
+    },
+    "analysis": {
+        "length_analysis": {
+            "value": 150,
+            "unit": "days"
+        }
+    },
+    "simulation": {
+        "length_analysis": {
+            "value": 250,
+            "unit": "days"
+        },
+        "starting_value": {
+            "value": 100000,
+            "unit": "money"
+        },
+        "stopgain": {
+            "value": 1.4,
+            "unit": "%"
+        },
+        "stoploss": {
+            "value": 0.85,
+            "unit": "%"
+        },
+        "operation_cost": {
+            "value": 5,
+            "unit": "money"
+        },
+        "tax_percentage": {
+            "value": 0.1,
+            "unit": "%"
+        }
+    }
+}

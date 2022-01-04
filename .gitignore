@@ -154,3 +154,6 @@ export/
 
 # Remove the models from keras
 models/
+
+# Remove the saved html for debugging
+content.html
