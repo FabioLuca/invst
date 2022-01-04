@@ -248,7 +248,7 @@ class Arbitration:
                                   tax_percentage=self.tax_percentage,
                                   result_column="Combined Simulation")
         self.calculate_reference(source_column_close="Close Final",
-                                 initial_value=10000,
+                                 initial_value=self.initial_value,
                                  result_column="Combined Simulation Reference")
 
         if self.display_analysis or self.save_analysis:

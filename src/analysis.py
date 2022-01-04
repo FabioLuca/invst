@@ -70,16 +70,7 @@ class Analysis(Crash, MACD, RSI_SMA, RSI_EMA, BOLLINGER_BANDS, CombinedStrategy,
     def __init__(self,
                  symbol: str,
                  ohlc_data: pd.DataFrame,
-                 analysis_length_pre: int,
-                 analysis_length_post: int,
-                 initial_value: float,
-                 stopgain: float,
-                 stoploss: float,
-                 operation_cost: float,
-                 tax_percentage: float,
-                 logger_name: str,
-                 display_analysis: bool = False,
-                 save_analysis: bool = False):
+                 logger_name: str):
 
         # ----------------------------------------------------------------------
         #   Results and data management related attributes.
@@ -91,10 +82,21 @@ class Analysis(Crash, MACD, RSI_SMA, RSI_EMA, BOLLINGER_BANDS, CombinedStrategy,
         self.decision = None
 
         # ----------------------------------------------------------------------
+        #   Defines the location of the files with configurations and load them.
+        # ----------------------------------------------------------------------
+        config_base_path = Path.cwd().resolve() / "cfg"
+        config_local_file = config_base_path / "local.json"
+        config_parameters_file = config_base_path / "parameters.json"
+
+        self.config = Config(logger_name=LOGGER_NAME)
+        self.config.load_config(filename=config_local_file)
+        self.config.load_config(filename=config_parameters_file)
+
+        # ----------------------------------------------------------------------
         #   Analysis related attributes.
         # ----------------------------------------------------------------------
-        self.analysis_length_pre = analysis_length_pre
-        self.analysis_length_post = analysis_length_post
+        self.analysis_length_pre = self.config.analysis_length_pre
+        self.analysis_length_post = self.config.analysis_length_post
         self.data_length = 0
         self.up_movement = 0
         self.down_movement = 0
@@ -103,23 +105,23 @@ class Analysis(Crash, MACD, RSI_SMA, RSI_EMA, BOLLINGER_BANDS, CombinedStrategy,
         # ----------------------------------------------------------------------
         #   RNN related attributes.
         # ----------------------------------------------------------------------
-        self.sequence_length = 50  # Represents 10 weeks (work-days)
-        self.prediction_length = 15  # Represents 3 weeks (work-days)
+        self.sequence_length = self.config.lstm_sequence_length
+        self.prediction_length = self.config.lstm_prediction_length
 
         # ----------------------------------------------------------------------
         #   Simulation related attributes.
         # ----------------------------------------------------------------------
-        self.initial_value = initial_value
-        self.stopgain = stopgain
-        self.stoploss = stoploss
-        self.operation_cost = operation_cost
-        self.tax_percentage = tax_percentage
+        self.initial_value = self.config.initial_value
+        self.stopgain = self.config.stopgain
+        self.stoploss = self.config.stoploss
+        self.operation_cost = self.config.operation_cost
+        self.tax_percentage = self.config.tax_percentage
 
         # ----------------------------------------------------------------------
         #   General configurations.
         # ----------------------------------------------------------------------
-        self.display_analysis = display_analysis
-        self.save_analysis = save_analysis
+        self.display_analysis = self.config.display_analysis
+        self.save_analysis = self.config.save_analysis
 
         # ----------------------------------------------------------------------
         #   Defines the logger to output the information and also
@@ -128,14 +130,6 @@ class Analysis(Crash, MACD, RSI_SMA, RSI_EMA, BOLLINGER_BANDS, CombinedStrategy,
         self.logger_name = logger_name + ".analysis"
         self.logger = logging.getLogger(self.logger_name)
         self.logger.info("Initializing analysis.")
-
-        # --------------------------------------------------------------------------
-        #   Defines the location of the files with configurations and load them.
-        # --------------------------------------------------------------------------
-        config_local_file = Path.cwd().resolve() / "cfg" / "local.json"
-
-        self.config = Config(logger_name=LOGGER_NAME)
-        self.config.load_config(filename=config_local_file)
 
     def analyze(self):
         """Performs the complete analysis of the data for a determined symbol / 

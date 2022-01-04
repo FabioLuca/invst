@@ -308,7 +308,7 @@ def summary_table(results_summary, excel_filename):
         symbol_value = df_pivot["Symbol"].iloc[row_num]
         method_value = df_pivot["Method"].iloc[row_num]
         method_file = method_savenames[method_value]
-        string_fomular = f'=HYPERLINK(_xlfn.CONCAT(LEFT(CELL("filename"),SEARCH("[",CELL("filename"))-1),"analysis\{today_string}\Analysis {method_file} {symbol_value}.html"), "{symbol_value}")'
+        string_fomular = f'=HYPERLINK(LEFT(CELL("filename"),SEARCH("[",CELL("filename"))-1) & "analysis\{today_string}\Analysis {method_file} {symbol_value}.html", "{symbol_value}")'
         worksheet.write_formula(f"B{row_num + 2}", string_fomular)
 
     writer.save()
