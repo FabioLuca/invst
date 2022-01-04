@@ -70,16 +70,7 @@ class Analysis(Crash, MACD, RSI_SMA, RSI_EMA, BOLLINGER_BANDS, CombinedStrategy,
     def __init__(self,
                  symbol: str,
                  ohlc_data: pd.DataFrame,
-                 analysis_length_pre: int,
-                 analysis_length_post: int,
-                 initial_value: float,
-                 stopgain: float,
-                 stoploss: float,
-                 operation_cost: float,
-                 tax_percentage: float,
-                 logger_name: str,
-                 display_analysis: bool = False,
-                 save_analysis: bool = False):
+                 logger_name: str):
 
         # ----------------------------------------------------------------------
         #   Results and data management related attributes.
@@ -120,17 +111,17 @@ class Analysis(Crash, MACD, RSI_SMA, RSI_EMA, BOLLINGER_BANDS, CombinedStrategy,
         # ----------------------------------------------------------------------
         #   Simulation related attributes.
         # ----------------------------------------------------------------------
-        self.initial_value = initial_value
-        self.stopgain = stopgain
-        self.stoploss = stoploss
-        self.operation_cost = operation_cost
-        self.tax_percentage = tax_percentage
+        self.initial_value = self.config.initial_value
+        self.stopgain = self.config.stopgain
+        self.stoploss = self.config.stoploss
+        self.operation_cost = self.config.operation_cost
+        self.tax_percentage = self.config.tax_percentage
 
         # ----------------------------------------------------------------------
         #   General configurations.
         # ----------------------------------------------------------------------
-        self.display_analysis = display_analysis
-        self.save_analysis = save_analysis
+        self.display_analysis = self.config.display_analysis
+        self.save_analysis = self.config.save_analysis
 
         # ----------------------------------------------------------------------
         #   Defines the logger to output the information and also

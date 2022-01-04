@@ -85,29 +85,29 @@ if __name__ == "__main__":
     #   List of tickers and sequence analysis.
     # --------------------------------------------------------------------------
     symbols = [
-        {"name": "Coca-Cola Co.", "symbol": "KO"},
-        {"name": "Alphabet Inc.", "symbol": "GOOG"},
-        {"name": "Tesla, Inc.", "symbol": "TSLA"},
-        {"name": "Boeing Co.", "symbol": "BA"},
-        #    {"name": "Daimler AG", "symbol": "DAI.DE"},
-        #    {"name": "Siemens AG", "symbol": "SIE.DE"},
-        {"name": "Apple", "symbol": "AAPL"},
-        {"name": "Amazon", "symbol": "AMZN"},
-        #    {"name": "Bristol-Meyers Squibb", "symbol": "BMY"},
-        #    {"name": "General Motors", "symbol": "GM"},
-        {"name": "AbbVie Inc.", "symbol": "ABBV"},
-        #    {"name": "AMERICAN EXPRESS CO.", "symbol": "AXP"},
-        {"name": "3M CO.", "symbol": "MMM"},
-        {"name": "CISCO INC.", "symbol": "CSCO"},
-        {"name": "IBM CORP.", "symbol": "IBM"},
-        #    {"name": "The Walt Disney Co.", "symbol": "DIS"},
-        {"name": "Johnson & Johnson", "symbol": "JNJ"},
-        {"name": "IDEX", "symbol": "IEX"},
-        {"name": "Akamai Technologies, Inc.", "symbol": "AKAM"},
-        {"name": "Telefonaktiebolaget LM Ericsson", "symbol": "ERIC"},
-        {"name": "Thermo Fisher Scientific Inc.", "symbol": "TMO"},
-        #    {"name": "Zscaler, Inc.", "symbol": "ZS"},
-        {"name": "Meta", "symbol": "FB"},
+        {"name": "Daimler AG", "symbol": "DAI.DE"},
+        # {"name": "Siemens AG", "symbol": "SIE.DE"},
+        # {"name": "Coca-Cola Co.", "symbol": "KO"},
+        # {"name": "Alphabet Inc.", "symbol": "GOOG"},
+        # {"name": "Tesla, Inc.", "symbol": "TSLA"},
+        # {"name": "Boeing Co.", "symbol": "BA"},
+        # {"name": "Apple", "symbol": "AAPL"},
+        # {"name": "Amazon", "symbol": "AMZN"},
+        # {"name": "Bristol-Meyers Squibb", "symbol": "BMY"},
+        # {"name": "General Motors", "symbol": "GM"},
+        # {"name": "AbbVie Inc.", "symbol": "ABBV"},
+        # {"name": "American Express CO.", "symbol": "AXP"},
+        # {"name": "3M CO.", "symbol": "MMM"},
+        # {"name": "CISCO INC.", "symbol": "CSCO"},
+        # {"name": "IBM CORP.", "symbol": "IBM"},
+        # {"name": "The Walt Disney Co.", "symbol": "DIS"},
+        # {"name": "Johnson & Johnson", "symbol": "JNJ"},
+        # {"name": "IDEX", "symbol": "IEX"},
+        # {"name": "Akamai Technologies, Inc.", "symbol": "AKAM"},
+        # {"name": "Telefonaktiebolaget LM Ericsson", "symbol": "ERIC"},
+        # {"name": "Thermo Fisher Scientific Inc.", "symbol": "TMO"},
+        # {"name": "Zscaler, Inc.", "symbol": "ZS"},
+        # {"name": "Meta", "symbol": "FB"},
     ]
     execution_data["execution"]["Symbols"] = symbols
 
@@ -142,16 +142,7 @@ if __name__ == "__main__":
             # ------------------------------------------------------------------
             analysis = Analysis(symbol=ticker,
                                 ohlc_data=result_values,
-                                analysis_length_pre=config.parameters["analysis"]["length_analysis"]["value"],
-                                analysis_length_post=config.parameters["simulation"]["length_analysis"]["value"],
-                                initial_value=config.parameters["simulation"]["starting_value"]["value"],
-                                stopgain=config.parameters["simulation"]["stopgain"]["value"],
-                                stoploss=config.parameters["simulation"]["stoploss"]["value"],
-                                operation_cost=config.parameters["simulation"]["operation_cost"]["value"],
-                                tax_percentage=config.parameters["simulation"]["tax_percentage"]["value"],
-                                logger_name=LOGGER_NAME,
-                                display_analysis=config.parameters["execution"]["display_analysis"]["value"],
-                                save_analysis=config.parameters["execution"]["save_analysis"]["value"])
+                                logger_name=LOGGER_NAME)
             decision = analysis.analyze()
 
             results_analysis.append(analysis)

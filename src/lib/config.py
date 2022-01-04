@@ -83,6 +83,12 @@ class Config:
         self.analysis_length_pre = None
         self.lstm_sequence_length = None
         self.lstm_prediction_length = None
+        self.lstm_number_blocks = None
+        self.lstm_number_features = None
+        self.lstm_hidden_neurons = None
+        self.lstm_epochs = None
+        self.lstm_normalization_lower = None
+        self.lstm_normalization_upper = None
 
         # ---------------- Simulation Block ------------------------------------
         self.analysis_length_post = None
@@ -234,6 +240,14 @@ class Config:
             self.analysis_length_pre = self.parameters["analysis"]["length_analysis"]["value"]
             self.lstm_sequence_length = self.parameters["analysis"]["lstm_sequence_length"]["value"]
             self.lstm_prediction_length = self.parameters["analysis"]["lstm_prediction_length"]["value"]
+            self.lstm_number_blocks = self.parameters["analysis"]["lstm_number_blocks"]["value"]
+            self.lstm_number_features = self.parameters["analysis"]["lstm_number_features"]["value"]
+            self.lstm_hidden_neurons = self.parameters["analysis"]["lstm_hidden_neurons"]["value"]
+            self.lstm_epochs = self.parameters["analysis"]["lstm_epochs"]["value"]
+            self.lstm_normalization_lower = self.parameters[
+                "analysis"]["lstm_normalization_lower"]["value"]
+            self.lstm_normalization_upper = self.parameters[
+                "analysis"]["lstm_normalization_upper"]["value"]
 
             # ---------------- Simulation Block --------------------------------
             self.analysis_length_post = self.parameters["simulation"]["length_analysis"]["value"]

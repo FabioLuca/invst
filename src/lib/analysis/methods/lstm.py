@@ -10,6 +10,7 @@ import pandas as pd
 import numpy as np
 from pathlib import Path
 import matplotlib.pyplot as plt
+import json
 from sklearn.preprocessing import MinMaxScaler
 from tensorflow import keras
 from keras.models import Sequential
@@ -20,6 +21,8 @@ from keras.layers import RepeatVector
 from keras.layers import TimeDistributed
 from keras.layers import Activation
 from src.lib.analysis.basic import Basic
+from deepdiff import DeepDiff
+from datetime import datetime, timezone
 
 
 class LSTM (Basic):
@@ -73,11 +76,12 @@ class LSTM (Basic):
                 for training.
 
         """
-        number_blocks = 200
-        number_features = 1
-        hidden_neurons = 300
-        epochs = 200
-        normalization_range = (-1, 1)
+        number_blocks = self.config.lstm_number_blocks
+        number_features = self.config.lstm_number_features
+        hidden_neurons = self.config.lstm_hidden_neurons
+        epochs = self.config.lstm_epochs
+        normalization_range = (
+            self.config.lstm_normalization_lower, self.config.lstm_normalization_upper)
 
         self.logger.info(
             "Performing LSTM analysis for %s for source %s", self.symbol, source_column)
@@ -157,7 +161,7 @@ class LSTM (Basic):
             prediction_length=prediction_length,
             number_features=number_features,
             hidden_neurons=hidden_neurons,
-            save_model=False,
+            save_model=True,
             source_column=source_column
         )
 
@@ -369,14 +373,14 @@ class LSTM (Basic):
                           prediction_length: int,
                           number_features: int,
                           hidden_neurons: int = 100,
-                          save_model: bool = False,
+                          save_model: bool = True,
                           source_column: str = ""):
         """Creates the LSTM model. The architecture can be different, depending
         on the inputs from the method. Basically 3 designs are possible:
 
-        #. Many to one
-        #. Many to many where the size of the input and output are the same
-        #. Many to many where the size of the input and output are different
+        # . Many to one
+        # . Many to many where the size of the input and output are the same
+        # . Many to many where the size of the input and output are different
 
         Pictured below:
 
@@ -395,88 +399,115 @@ class LSTM (Basic):
         load the stored model.
 
         """
-        model_name = f"{source_column}_{number_blocks}_{epochs}_{sequence_length}_{prediction_length}_{number_features}"
-        model_path = f"models/lstm_{model_name}"
+        model_name = f"{source_column}_{self.symbol}"
+        model_path = Path(f"models/lstm_{model_name}/model/")
+        parameters_path = Path(f"models/lstm_{model_name}/parameters.json")
 
-        if Path(model_path).is_dir() and save_model:
-            model = keras.models.load_model(model_path)
+        if model_path.exists() and parameters_path.exists() and save_model:
 
-        else:
+            last_change = parameters_path.stat().st_mtime
 
-            # ------------------------------------------------------------------
-            #   LSTM many to many with different sizes.
-            # ------------------------------------------------------------------
-            if prediction_length > 1 and sequence_length > 1 and sequence_length != prediction_length:
+            last_change = datetime.fromtimestamp(
+                last_change)  # , tz=timezone.utc)
 
-                self.logger.info(
-                    "LSTM analysis based on model many to many with different sides.")
+            time_difference = (datetime.today() - last_change).days
 
-                model = Sequential()
-                model.add(KerasLSTM(number_blocks,
-                                    input_shape=(sequence_length,
-                                                 number_features)
-                                    ))
-                model.add(RepeatVector(prediction_length))
-                model.add(KerasLSTM(number_blocks,
-                                    return_sequences=True
-                                    ))
-                model.add(TimeDistributed(Dense(number_features)))
-                model.add(Activation('linear'))
+            if time_difference < 7:
 
-            # ------------------------------------------------------------------
-            #   LSTM many to many with same sizes.
-            # ------------------------------------------------------------------
-            elif prediction_length > 1 and sequence_length == prediction_length:
+                with open(parameters_path) as json_file:
+                    stored_parameters = json.load(json_file)
 
-                self.logger.info(
-                    "LSTM analysis based on model many to many with same sizes.")
+                diff_param = DeepDiff(stored_parameters,
+                                      self.config.parameters["analysis"],
+                                      ignore_string_case=True)
 
-                model = Sequential()
-                model.add(KerasLSTM(number_blocks,
-                                    activation='relu',
-                                    input_shape=(sequence_length,
-                                                 number_features)
-                                    ))
-                model.add(RepeatVector(prediction_length))
-                model.add(KerasLSTM(number_blocks,
-                                    activation='relu',
-                                    return_sequences=True
-                                    ))
-                model.add(TimeDistributed(Dense(number_features)))
+                if len(diff_param) == 0:
 
-            # ------------------------------------------------------------------
-            #   LSTM many to one.
-            # ------------------------------------------------------------------
-            elif prediction_length == 1 and sequence_length > 1:
+                    self.logger.info("Using the stored model for LSTM.")
+                    model = keras.models.load_model(model_path)
 
-                self.logger.info(
-                    "LSTM analysis based on model many to one.")
-                model = Sequential()
-                model.add(KerasLSTM(number_blocks,
-                                    return_sequences=True,
-                                    input_shape=(sequence_length,
-                                                 number_features)
-                                    ))
-                model.add(KerasLSTM(units=number_blocks,
-                                    return_sequences=True
-                                    ))
-                model.add(Dropout(0.2))
+                    return model
 
-                model.add(KerasLSTM(units=number_blocks,
-                                    return_sequences=True
-                                    ))
-                model.add(Dropout(0.2))
+        self.logger.info("Creating a new model for LSTM.")
 
-                model.add(KerasLSTM(units=number_blocks))
-                model.add(Dropout(0.2))
+        # ------------------------------------------------------------------
+        #   LSTM many to many with different sizes.
+        # ------------------------------------------------------------------
+        if prediction_length > 1 and sequence_length > 1 and sequence_length != prediction_length:
 
-                model.add(Dense(units=1))
+            self.logger.info(
+                "LSTM analysis based on model many to many with different sides.")
 
-            model.compile(loss='mean_squared_error', optimizer='adam')
-            model.fit(X, Y, epochs=epochs, verbose=0)
+            model = Sequential()
+            model.add(KerasLSTM(number_blocks,
+                                input_shape=(sequence_length,
+                                             number_features)
+                                ))
+            model.add(RepeatVector(prediction_length))
+            model.add(KerasLSTM(number_blocks,
+                                return_sequences=True
+                                ))
+            model.add(TimeDistributed(Dense(number_features)))
+            model.add(Activation('linear'))
 
-            if save_model:
-                model.save(model_path)
+        # ------------------------------------------------------------------
+        #   LSTM many to many with same sizes.
+        # ------------------------------------------------------------------
+        elif prediction_length > 1 and sequence_length == prediction_length:
+
+            self.logger.info(
+                "LSTM analysis based on model many to many with same sizes.")
+
+            model = Sequential()
+            model.add(KerasLSTM(number_blocks,
+                                activation='relu',
+                                input_shape=(sequence_length,
+                                             number_features)
+                                ))
+            model.add(RepeatVector(prediction_length))
+            model.add(KerasLSTM(number_blocks,
+                                activation='relu',
+                                return_sequences=True
+                                ))
+            model.add(TimeDistributed(Dense(number_features)))
+
+        # ------------------------------------------------------------------
+        #   LSTM many to one.
+        # ------------------------------------------------------------------
+        elif prediction_length == 1 and sequence_length > 1:
+
+            self.logger.info(
+                "LSTM analysis based on model many to one.")
+            model = Sequential()
+            model.add(KerasLSTM(number_blocks,
+                                return_sequences=True,
+                                input_shape=(sequence_length,
+                                             number_features)
+                                ))
+            model.add(KerasLSTM(units=number_blocks,
+                                return_sequences=True
+                                ))
+            model.add(Dropout(0.2))
+
+            model.add(KerasLSTM(units=number_blocks,
+                                return_sequences=True
+                                ))
+            model.add(Dropout(0.2))
+
+            model.add(KerasLSTM(units=number_blocks))
+            model.add(Dropout(0.2))
+
+            model.add(Dense(units=1))
+
+        model.compile(loss='mean_squared_error', optimizer='adam')
+        model.fit(X, Y, epochs=epochs, verbose=0)
+
+        if save_model:
+            self.logger.info("Saving the model for LSTM.")
+            model.save(model_path)
+
+            with open(parameters_path, 'w') as fp:
+                json.dump(self.config.parameters["analysis"], fp,  indent=4)
 
         return model
 

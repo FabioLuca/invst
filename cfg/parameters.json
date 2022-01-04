@@ -26,6 +26,30 @@
         "lstm_prediction_length": {
             "value": 15,
             "unit": "days"
+        },
+        "lstm_number_blocks": {
+            "value": 200,
+            "unit": ""
+        },
+        "lstm_number_features": {
+            "value": 1,
+            "unit": ""
+        },
+        "lstm_hidden_neurons": {
+            "value": 300,
+            "unit": ""
+        },
+        "lstm_epochs": {
+            "value": 200,
+            "unit": ""
+        },
+        "lstm_normalization_lower": {
+            "value": -1,
+            "unit": ""
+        },
+        "lstm_normalization_upper": {
+            "value": 1,
+            "unit": ""
         }
     },
     "simulation": {
@@ -34,7 +58,7 @@
             "unit": "days"
         },
         "starting_value": {
-            "value": 100000,
+            "value": 10000,
             "unit": "money"
         },
         "stopgain": {
