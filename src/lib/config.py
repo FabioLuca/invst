@@ -81,6 +81,8 @@ class Config:
 
         # ---------------- Analysis Block --------------------------------------
         self.analysis_length_pre = None
+        self.lstm_sequence_length = None
+        self.lstm_prediction_length = None
 
         # ---------------- Simulation Block ------------------------------------
         self.analysis_length_post = None
@@ -230,6 +232,8 @@ class Config:
 
             # ---------------- Analysis Block ----------------------------------
             self.analysis_length_pre = self.parameters["analysis"]["length_analysis"]["value"]
+            self.lstm_sequence_length = self.parameters["analysis"]["lstm_sequence_length"]["value"]
+            self.lstm_prediction_length = self.parameters["analysis"]["lstm_prediction_length"]["value"]
 
             # ---------------- Simulation Block --------------------------------
             self.analysis_length_post = self.parameters["simulation"]["length_analysis"]["value"]

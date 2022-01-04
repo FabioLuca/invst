@@ -16,7 +16,15 @@
     },
     "analysis": {
         "length_analysis": {
-            "value": 150,
+            "value": 500,
+            "unit": "days"
+        },
+        "lstm_sequence_length": {
+            "value": 50,
+            "unit": "days"
+        },
+        "lstm_prediction_length": {
+            "value": 15,
             "unit": "days"
         }
     },
