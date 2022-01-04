@@ -8,7 +8,7 @@ from src.lib.invst_const import constants as C
 from src.lib import messages as M
 from src.data_access import DataAccess
 
-from src.lib.communication import Whatsapp
+from src.communication import Whatsapp
 
 LOGGER_NAME = "invst.test_communication"
 
