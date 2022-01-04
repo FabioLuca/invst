@@ -25,7 +25,7 @@ MESSAGE = {
         "Flag": C.FAIL,
         "Level": C.ERROR,
         "Message": "Positive response but with Error Message. "
-                   "Verify that the ticker and other parameters are valid.""",
+                   "Verify that the ticker and other parameters are valid.",
     },
     "API_200_Content_Err": {
         "Flag": C.FAIL,
@@ -175,6 +175,12 @@ MESSAGE = {
         "Flag": C.SUCCESS,
         "Level": C.INFO,
         "Message": "Successful loading the configuration from %s."
+    },
+    "Config_Load_Fail": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "Failure loading the configuration from %s. This file is "
+                   "not supported."
     },
     "Config_Error_No_Source_Fetching": {
         "Flag": C.FAIL,

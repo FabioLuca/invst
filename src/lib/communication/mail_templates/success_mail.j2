@@ -15,8 +15,206 @@
     <div class="container">
         <p>Completed analysis of tickers with success!</p>
         <p>Reference: {{value_timestamp}}</p>
+        <h1>Agenda</h1>
+        <table>
+            {% for item in agenda_days %}
+                <TR class="head">
+
+                    {% if item.mon.today -%}
+                        <TD class="head mon today">
+                    {%- else -%}
+                        <TD class="head mon"> 
+                    {%- endif %}
+                        <div class="head">
+                        {{item.mon.day}}</div></TD>
+
+                    {% if item.tue.today -%}
+                        <TD class="head tue today">
+                    {%- else -%}
+                        <TD class="head tue">
+                    {%- endif %}
+                        <div class="head">
+                        {{item.tue.day}}</div></TD>
+
+                    {% if item.wed.today -%}
+                        <TD class="head wed today">
+                    {%- else -%}
+                        <TD class="head wed">
+                    {%- endif %}
+                        <div class="head">
+                        {{item.wed.day}}</div></TD>
+                    
+                    {% if item.thu.today -%}
+                        <TD class="head thu today">
+                    {%- else -%}
+                        <TD class="head thu">
+                    {%- endif %}
+                        <div class="head">
+                        {{item.thu.day}}</div></TD>
+
+                    {% if item.fri.today -%}
+                        <TD class="head fri today">
+                    {%- else -%}
+                        <TD class="head fri">
+                    {%- endif %}
+                        <div class="head">
+                        {{item.fri.day}}</div></TD>
+
+                    {% if item.sat.today -%}
+                        <TD class="head sat today">
+                    {%- else -%}
+                        <TD class="head sat">
+                    {%- endif %}
+                        <div class="head">
+                        {{item.sat.day}}</div></TD>
+
+                    {% if item.sun.today -%}
+                        <TD class="head sun today">
+                    {%- else -%}
+                        <TD class="head sun">
+                    {%- endif %}
+                        <div class="head">
+                        {{item.sun.day}}</div></TD>
+                </TR>
+                <TR class="info">
+                    <TD class="info mon">
+                    
+                        <div class="info buy">
+                            {% for event_item in item.mon.info %}
+                                {% if event_item.event == "BUY" -%}
+                                    <p class="info buy">
+                                {% elif event_item.event == "SELL" -%}
+                                    <p class="info sell">
+                                {%- else -%}
+                                    <p class="info">
+                                {%- endif %}
+                                {{event_item.summary}}</p>
+                            {% endfor %}
+                        </div></TD>
+
+                    <TD class="info tue">
+
+                        <div class="info buy">
+                            {% for event_item in item.tue.info %}
+                                {% if event_item.event == "BUY" -%}
+                                    <p class="info buy">
+                                {% elif event_item.event == "SELL" -%}
+                                    <p class="info sell">
+                                {%- else -%}
+                                    <p class="info">
+                                {%- endif %}
+                                {{event_item.summary}}</p>
+                            {% endfor %}
+                        </div></TD>
+
+                    <TD class="info wed">
+
+                        <div class="info buy">
+                            {% for event_item in item.wed.info %}
+                                {% if event_item.event == "BUY" -%}
+                                    <p class="info buy">
+                                {% elif event_item.event == "SELL" -%}
+                                    <p class="info sell">
+                                {%- else -%}
+                                    <p class="info">
+                                {%- endif %}
+                                {{event_item.summary}}</p>
+                            {% endfor %}
+                        </div></TD>
+
+                    <TD class="info thu">
+
+                        <div class="info buy">
+                            {% for event_item in item.thu.info %}
+                                {% if event_item.event == "BUY" -%}
+                                    <p class="info buy">
+                                {% elif event_item.event == "SELL" -%}
+                                    <p class="info sell">
+                                {%- else -%}
+                                    <p class="info">
+                                {%- endif %}
+                                {{event_item.summary}}</p>
+                            {% endfor %}
+                        </div></TD>
+
+                    <TD class="info fri">
+
+                        <div class="info buy">
+                            {% for event_item in item.fri.info %}
+                                {% if event_item.event == "BUY" -%}
+                                    <p class="info buy">
+                                {% elif event_item.event == "SELL" -%}
+                                    <p class="info sell">
+                                {%- else -%}
+                                    <p class="info">
+                                {%- endif %}
+                                {{event_item.summary}}</p>
+                            {% endfor %}
+                        </div></TD>
+
+                    <TD class="info sat">
+
+                        <div class="info buy">
+                            {% for event_item in item.sat.info %}
+                                {% if event_item.event == "BUY" -%}
+                                    <p class="info buy">
+                                {% elif event_item.event == "SELL" -%}
+                                    <p class="info sell">
+                                {%- else -%}
+                                    <p class="info">
+                                {%- endif %}
+                                {{event_item.summary}}</p>
+                            {% endfor %}
+                        </div></TD>
+
+                    <TD class="info sun">
+
+                        <div class="info buy">
+                            {% for event_item in item.sun.info %}
+                                {% if event_item.event == "BUY" -%}
+                                    <p class="info buy">
+                                {% elif event_item.event == "SELL" -%}
+                                    <p class="info sell">
+                                {%- else -%}
+                                    <p class="info">
+                                {%- endif %}
+                                {{event_item.summary}}</p>
+                            {% endfor %}
+                        </div></TD>
+
+                </TR>
+            {% endfor %}
+        </table>
         <h1>Results</h1>
         {{ dataframe_html | safe}}
+
+        <h1>Status</h1>
+        <table class="stats">
+            {% for key in statistics %}
+                <tr>
+                    <td class="statsheader">{{ key }}</td>
+                    <td class="statsvalue">{{ statistics[key] }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <h1>Parameters</h1>
+        <table class="pgroups">
+            {% for key in parameters %}
+                <tr>
+                    <td class="pgroupheaderrow">{{ key }}</td>
+                    <td>
+                        <table class="parameters">
+                            {% for item in parameters[key] %}
+                                <tr>
+                                    <td>{{ item }}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
     </div>
 </body>
 

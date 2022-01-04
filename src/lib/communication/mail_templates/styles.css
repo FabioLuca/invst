@@ -1,5 +1,25 @@
+html *
+{
+   font-family: "Trebuchet MS", Helvetica, sans-serif;
+}
+
 p {
     color: black;
+}
+
+p.sell {
+    color: rgb(128, 0, 0);
+    font-weight: bold;
+}
+
+p.buy {
+    color: rgb(8, 99, 0);
+    font-weight: bold;
+}
+
+p.buy, p.sell {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
 }
 
 h1 {
@@ -14,6 +34,124 @@ table.dataframe, .dataframe th, .dataframe td {
     padding: 10px;
     margin-bottom: 40px;
     font-size: 0.9em;
+}
+
+table.agenda, .agenda th, .agenda td {
+    border: 1px solid #ffffff;
+	border-collapse: collapse;
+    text-align:left;
+    padding: 0px;
+    margin-bottom: 0px;
+    font-size: 0.8em;
+}
+
+table.pgroups, .pgroups th, .pgroups td {
+    border: 1px solid #ffffff;
+	border-collapse: collapse;
+    text-align:left;
+    vertical-align: middle;
+    padding: 0px;
+    margin-bottom: 0px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+table.parameters, .parameters th, .parameters td {
+    border: 1px solid #ffffff;
+	border-collapse: collapse;
+    text-align:left;
+    vertical-align: middle;
+    padding: 0px;
+    margin-bottom: 0px;
+    font-size: 11px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+    padding-left: 10px;
+    padding-right: 20px;
+    width: 400px;
+    background-color: #eeeeee;
+	font-weight: normal;
+}
+
+td.pgroupheaderrow {
+    background-color: #dddddd;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+table.stats, .stats th, .stats td {
+    border: 1px solid #ffffff;
+	border-collapse: collapse;
+    text-align:left;
+    vertical-align: middle;
+    padding: 0px;
+    margin-bottom: 0px;
+    font-size: 11px;
+	font-weight: normal;
+}
+
+td.statsheader {
+    background-color: #dddddd;
+	padding-top: 4px;
+	padding-bottom: 4px;
+    padding-left: 4px;
+    padding-right: 8px;
+    font-weight: bold;
+    min-width: 80px;
+}
+
+td.statsvalue {
+    background-color: #eeeeee;
+	padding-top: 4px;
+	padding-bottom: 4px;
+    padding-left: 10px;
+    padding-right: 20px;
+    min-width: 200px;
+}
+
+
+tr.head {
+    padding-top: 10px;
+}
+
+td.head {
+    text-align:center;
+	background-color: #cccccc;
+    vertical-align: middle;
+}
+
+td.info {
+    text-align:left;
+	background-color: #eeeeee;
+    vertical-align: top;
+}
+
+td.head.sun, td.head.sat{
+	background-color: #bbbbbb;
+}
+
+td.info.sun, td.info.sat{
+	background-color: #dddddd;
+}
+
+td.head.today {
+	background-color: #FF8C74;
+}
+
+div.head {
+    text-align:center;
+    font-size: 0.8em;
+    vertical-align: middle;
+	height: 18px;
+	width: 100px;
+    font-weight: bold;
+}
+div.info {
+    text-align:left;
+    font-size: 0.8em;
+    vertical-align: top;
+	min-height: 70px;
+    width: 100px;
 }
 
 .results th {

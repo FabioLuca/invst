@@ -4,10 +4,10 @@
 import json
 import logging
 import inspect
-import glob
+# import glob
 from pathlib import Path
-from . import messages as M
-from .invst_const import constants as C
+from src.lib import messages as M
+# from .invst_const import constants as C
 
 
 class Config:
@@ -66,6 +66,30 @@ class Config:
 
         self.local_config = None
 
+        self.parameters = None
+
+        # ----------------------------------------------------------------------
+        #   Shortened name for the variables, so the code looks more clean than
+        #   refering to a dictionary. At this point it is done only the
+        #   variables initialization.
+        # ----------------------------------------------------------------------
+
+        # ---------------- Execution Block -------------------------------------
+        self.time_sleep = None
+        self.display_analysis = None
+        self.save_analysis = None
+
+        # ---------------- Analysis Block --------------------------------------
+        self.analysis_length_pre = None
+
+        # ---------------- Simulation Block ------------------------------------
+        self.analysis_length_post = None
+        self.initial_value = None
+        self.stopgain = None
+        self.stoploss = None
+        self.operation_cost = None
+        self.tax_percentage = None
+
         # ----------------------------------------------------------------------
         #   Defines the logger to output the information and also
         #   add an entry for the start of the class
@@ -92,6 +116,8 @@ class Config:
         return filename
 
     def load_config(self, filename):
+        """Loads the content from the configuration file. The 
+        """
 
         filename = self.assert_filename(filename=filename)
 
@@ -181,9 +207,43 @@ class Config:
 
         elif filename.stem == "local":
             # ------------------------------------------------------------------
-            #   Configuration related to local paramters.
+            #   Configuration related to local parameters.
             # ------------------------------------------------------------------
             self.local_config = self.json_data
+
+        elif filename.stem == "parameters":
+            # ------------------------------------------------------------------
+            #   Configuration related to calculation parameters.
+            # ------------------------------------------------------------------
+            self.parameters = self.json_data
+
+            # ------------------------------------------------------------------
+            #   Shortened name for the variables, so the code looks more clean
+            #   than refering to a dictionary. At this point it is done only the
+            #   variables initialization.
+            # ------------------------------------------------------------------
+
+            # ---------------- Execution Block ---------------------------------
+            self.time_sleep = self.parameters["execution"]["time_sleep"]["value"]
+            self.display_analysis = self.parameters["execution"]["display_analysis"]["value"]
+            self.save_analysis = self.parameters["execution"]["save_analysis"]["value"]
+
+            # ---------------- Analysis Block ----------------------------------
+            self.analysis_length_pre = self.parameters["analysis"]["length_analysis"]["value"]
+
+            # ---------------- Simulation Block --------------------------------
+            self.analysis_length_post = self.parameters["simulation"]["length_analysis"]["value"]
+            self.initial_value = self.parameters["simulation"]["starting_value"]["value"]
+            self.stopgain = self.parameters["simulation"]["stopgain"]["value"]
+            self.stoploss = self.parameters["simulation"]["stoploss"]["value"]
+            self.operation_cost = self.parameters["simulation"]["operation_cost"]["value"]
+            self.tax_percentage = self.parameters["simulation"]["tax_percentage"]["value"]
+
+        else:
+            result = None
+            flag, level, message = M.get_status(
+                self.logger_name, "Config_Load_Fail", filename)
+            return result, flag, level, message
 
         result = None
         flag, level, message = M.get_status(

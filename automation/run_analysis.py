@@ -2,6 +2,7 @@
 a report of the overall results for performance evaluation.
 
 """
+import sys
 import logging
 import time
 from pathlib import Path
@@ -51,11 +52,22 @@ if __name__ == "__main__":
     config_access_file = config_base_path / "api-cfg.json"
     config_access_userdata_file = config_base_path / "api-cfg-access.json"
     config_local_file = config_base_path / "local.json"
+    config_parameters_file = config_base_path / "parameters.json"
 
     config = Config(logger_name=LOGGER_NAME)
     config.load_config(filename=config_access_file)
     config.load_config(filename=config_access_userdata_file)
     config.load_config(filename=config_local_file)
+    config.load_config(filename=config_parameters_file)
+
+    # --------------------------------------------------------------------------
+    #   Collects data about the execution.
+    # --------------------------------------------------------------------------
+    execution_data = {}
+    execution_data["parameters"] = config.parameters
+    execution_data["execution"] = {}
+    execution_data["execution"]["Time start"] = datetime.now().strftime(
+        '%Y.%m.%d %H:%M:%S')
 
     # --------------------------------------------------------------------------
     #   Starts the communication and send a message to notify.
@@ -74,29 +86,30 @@ if __name__ == "__main__":
     # --------------------------------------------------------------------------
     symbols = [
         {"name": "Coca-Cola Co.", "symbol": "KO"},
-        # {"name": "Alphabet Inc.", "symbol": "GOOG"},
-        #    {"name": "Tesla, Inc.", "symbol": "TSLA"},
-        #    {"name": "Boeing Co.", "symbol": "BA"},
+        {"name": "Alphabet Inc.", "symbol": "GOOG"},
+        {"name": "Tesla, Inc.", "symbol": "TSLA"},
+        {"name": "Boeing Co.", "symbol": "BA"},
         #    {"name": "Daimler AG", "symbol": "DAI.DE"},
         #    {"name": "Siemens AG", "symbol": "SIE.DE"},
-        #    {"name": "Apple", "symbol": "AAPL"},
-        #    {"name": "Amazon", "symbol": "AMZN"},
+        {"name": "Apple", "symbol": "AAPL"},
+        {"name": "Amazon", "symbol": "AMZN"},
         #    {"name": "Bristol-Meyers Squibb", "symbol": "BMY"},
         #    {"name": "General Motors", "symbol": "GM"},
-        #    {"name": "AbbVie Inc.", "symbol": "ABBV"},
+        {"name": "AbbVie Inc.", "symbol": "ABBV"},
         #    {"name": "AMERICAN EXPRESS CO.", "symbol": "AXP"},
-        #    {"name": "3M CO.", "symbol": "MMM"},
-        #    {"name": "CISCO INC.", "symbol": "CSCO"},
-        #    {"name": "IBM CORP.", "symbol": "IBM"},
+        {"name": "3M CO.", "symbol": "MMM"},
+        {"name": "CISCO INC.", "symbol": "CSCO"},
+        {"name": "IBM CORP.", "symbol": "IBM"},
         #    {"name": "The Walt Disney Co.", "symbol": "DIS"},
-        #    {"name": "Johnson & Johnson", "symbol": "JNJ"},
-        #    {"name": "IDEX", "symbol": "IEX"},
-        #    {"name": "Akamai Technologies, Inc.", "symbol": "AKAM"},
-        #    {"name": "Telefonaktiebolaget LM Ericsson", "symbol": "ERIC"},
-        #    {"name": "Thermo Fisher Scientific Inc.", "symbol": "TMO"},
+        {"name": "Johnson & Johnson", "symbol": "JNJ"},
+        {"name": "IDEX", "symbol": "IEX"},
+        {"name": "Akamai Technologies, Inc.", "symbol": "AKAM"},
+        {"name": "Telefonaktiebolaget LM Ericsson", "symbol": "ERIC"},
+        {"name": "Thermo Fisher Scientific Inc.", "symbol": "TMO"},
         #    {"name": "Zscaler, Inc.", "symbol": "ZS"},
-        #    {"name": "Meta", "symbol": "FB"},
+        {"name": "Meta", "symbol": "FB"},
     ]
+    execution_data["execution"]["Symbols"] = symbols
 
     results_data = []
     results_analysis = []
@@ -105,7 +118,7 @@ if __name__ == "__main__":
     for symbol in symbols:
 
         # Short pause between requests to avoid over-request to AlphaVantage
-        time.sleep(5)
+        time.sleep(config.parameters["execution"]["time_sleep"]["value"])
 
         ticker = symbol["symbol"]
 
@@ -124,21 +137,21 @@ if __name__ == "__main__":
 
             results_data.append(result)
 
-            # --------------------------------------------------------------------------
+            # ------------------------------------------------------------------
             #   Perform analysis of the data.
-            # --------------------------------------------------------------------------
+            # ------------------------------------------------------------------
             analysis = Analysis(symbol=ticker,
                                 ohlc_data=result_values,
-                                analysis_length_pre=750,
-                                analysis_length_post=250,
-                                initial_value=10000,
-                                stopgain=1.4,
-                                stoploss=0.85,
-                                operation_cost=5,
-                                tax_percentage=0.1,
+                                analysis_length_pre=config.parameters["analysis"]["length_analysis"]["value"],
+                                analysis_length_post=config.parameters["simulation"]["length_analysis"]["value"],
+                                initial_value=config.parameters["simulation"]["starting_value"]["value"],
+                                stopgain=config.parameters["simulation"]["stopgain"]["value"],
+                                stoploss=config.parameters["simulation"]["stoploss"]["value"],
+                                operation_cost=config.parameters["simulation"]["operation_cost"]["value"],
+                                tax_percentage=config.parameters["simulation"]["tax_percentage"]["value"],
                                 logger_name=LOGGER_NAME,
-                                display_analysis=False,
-                                save_analysis=True)
+                                display_analysis=config.parameters["execution"]["display_analysis"]["value"],
+                                save_analysis=config.parameters["execution"]["save_analysis"]["value"])
             decision = analysis.analyze()
 
             results_analysis.append(analysis)
@@ -147,19 +160,46 @@ if __name__ == "__main__":
             analysis = None
             result = None
 
-    if len(results_summary) >= 1 and len(results_summary) >= 1:
-        today_string = datetime.today().strftime('%Y-%m-%d')
-        file_export_summary = f"Export_Summary_{today_string}.xlsx"
-        folder = Path(config.local_config["paths"]["data_storage"])
-        if not folder.exists():
-            folder.mkdir(parents=True, exist_ok=True)
-        file_export_summary = folder / file_export_summary
-        df_results_summary = pt.summary_table(
-            results_summary, file_export_summary)
-
-        email_subject, email_body = communication.format_email_success(
-            df_results_summary)
-    else:
+    # --------------------------------------------------------------------------
+    #   Terminate the execution since there were only empty results. This is an
+    #   error to be catched.
+    # --------------------------------------------------------------------------
+    if len(results_summary) == 0 or len(results_summary) == 0:
+        execution_data["execution"]["Time end"] = datetime.now().strftime(
+            '%Y.%m.%d %H:%M:%S')
         email_subject, email_body = communication.format_email_fail_empty()
+        communication.send_email(subject=email_subject, body_html=email_body)
+        logger.info(
+            "======================= COMPLETED RUN =======================")
+        sys.exit()
 
-    communication.send_email(subject=email_subject, body_html=email_body)
+    # --------------------------------------------------------------------------
+    #   Builds up the final response to be presented to the user. Storing the
+    #   results in Microsoft Excel file and also preparing an
+    # --------------------------------------------------------------------------
+    today_string = datetime.today().strftime('%Y-%m-%d')
+    file_export_summary = f"Export_Summary_{today_string}.xlsx"
+    folder = Path(config.local_config["paths"]["data_storage"])
+    if not folder.exists():
+        folder.mkdir(parents=True, exist_ok=True)
+    file_export_summary = folder / file_export_summary
+    df_results_summary = pt.summary_table(
+        results_summary, file_export_summary)
+
+    print(df_results_summary.columns)
+    print(df_results_summary["Last Day Event"])
+
+    execution_data["execution"]["Time end"] = datetime.now().strftime(
+        '%Y.%m.%d %H:%M:%S')
+    execution_data["execution"]["Duration"] = (
+        datetime.strptime(execution_data["execution"]["Time end"], '%Y.%m.%d %H:%M:%S') -
+        datetime.strptime(execution_data["execution"]["Time start"], '%Y.%m.%d %H:%M:%S')).seconds / 60.0
+
+    email_subject, email_body = communication.format_email_success(
+        results=df_results_summary, execution_stat=execution_data)
+    communication.send_email(subject=email_subject,
+                             body_html=email_body,
+                             attachment=file_export_summary)
+
+    logger.info(
+        "======================= COMPLETED RUN =======================")
