@@ -31,11 +31,11 @@
         },
         "stopgain": {
             "value": 1.4,
-            "unit": "%"
+            "unit": "factor"
         },
         "stoploss": {
             "value": 0.85,
-            "unit": "%"
+            "unit": "factor"
         },
         "operation_cost": {
             "value": 5,
@@ -43,7 +43,7 @@
         },
         "tax_percentage": {
             "value": 0.1,
-            "unit": "%"
+            "unit": "factor"
         }
     }
 }
