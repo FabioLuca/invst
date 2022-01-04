@@ -42,12 +42,14 @@ class YahooFinance:
         #   Gets the access
         # ----------------------------------------------------------------------
         r = requests.request("GET", url, headers=headers, params=querystring)
-        response = json.loads(r.text)
+        self.logger.info(f"Response from request: {r.status_code}")
 
         # ----------------------------------------------------------------------
         #   Treats the response for errors.
         # ----------------------------------------------------------------------
         if r.status_code == 200:
+
+            response = json.loads(r.text)
 
             if (self.type_series == "INFORMATION" and response["quoteResponse"]["error"] is None) or \
                     (self.type_series == "TIMESERIES" and response["chart"]["error"] is None):
@@ -71,7 +73,7 @@ class YahooFinance:
             result = json.loads(r.text)
             flag, level, message = M.get_status(self.logger_name,
                                                 "API_Neg_Response",
-                                                (self.ticker))
+                                                (self.ticker, r.status_code, r.text))
             return result, flag, level, message
 
     def dict_to_pandas_yahoofinance(self):

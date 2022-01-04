@@ -42,12 +42,12 @@ MESSAGE = {
     "API_200_Success": {
         "Flag": C.SUCCESS,
         "Level": C.INFO,
-        "Message": "Positive response for ticker from AlphaVantage."
+        "Message": "Positive response for ticker from API."
     },
     "API_Neg_Response": {
         "Flag": C.FAIL,
         "Level": C.ERROR,
-        "Message": "Negative response for ticker %s from AlphaVantage."
+        "Message": "Negative response for ticker %s from API. Code: %s. Text: %s"
     },
     "API_ParamCheck_General": {
         "Flag": C.FAIL,
