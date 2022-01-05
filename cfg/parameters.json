@@ -16,7 +16,7 @@
     },
     "analysis": {
         "length_analysis": {
-            "value": 500,
+            "value": 750,
             "unit": "days"
         },
         "lstm_sequence_length": {
@@ -24,7 +24,7 @@
             "unit": "days"
         },
         "lstm_prediction_length": {
-            "value": 15,
+            "value": 25,
             "unit": "days"
         },
         "lstm_number_blocks": {
