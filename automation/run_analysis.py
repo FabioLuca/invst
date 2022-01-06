@@ -9,7 +9,7 @@ from pathlib import Path
 from datetime import datetime
 from src.communication import Communication
 from src.lib.config import Config
-from src.lib.invst_const import constants as C
+from src.lib import constants as C
 from src.data_access import DataAccess
 from src.analysis import Analysis
 from src.lib import print_table as pt
