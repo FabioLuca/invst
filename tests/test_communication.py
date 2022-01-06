@@ -8,7 +8,7 @@ from src.lib import constants as C
 from src.lib import messages as M
 from src.data_access import DataAccess
 
-from src.communication import Whatsapp
+from src.communication import Communication
 
 LOGGER_NAME = "invst.test_communication"
 
@@ -29,25 +29,28 @@ def config_preparation():
         config_access_file = Path.cwd().resolve()
         config_access_userdata_file = Path.cwd().resolve()
 
-    config_access_file = config_access_file / "cfg" / "api-cfg.json"
-    config_access_userdata_file = config_access_userdata_file / \
-        "cfg" / "api-cfg-access.json"
+    config_base_path = Path.cwd().resolve() / "cfg"
+    config_access_file = config_base_path / "api-cfg.json"
+    config_access_userdata_file = config_base_path / "api-cfg-access.json"
+    config_local_file = config_base_path / "local.json"
+    config_parameters_file = config_base_path / "parameters.json"
 
     config = Config(logger_name=LOGGER_NAME)
-    config_dictionary = config.load_config(filename=config_access_file)
-    config_access_userdata = config.load_config(
-        filename=config_access_userdata_file)
+    config.load_config(filename=config_access_file)
+    config.load_config(filename=config_access_userdata_file)
+    config.load_config(filename=config_local_file)
+    config.load_config(filename=config_parameters_file)
 
     # --------------------------------------------------------------------------
     #   ACT
     # --------------------------------------------------------------------------
-    test_whatsapp = Whatsapp(
-        access_config=config.data_source_wapp_access_data,
-        access_userdata=config.data_source_wapp_user_data,
+    test_communication = Communication(
+        access_config=config.data_source_comm_access_data,
+        access_userdata=config.data_source_comm_user_data,
         logger_name=LOGGER_NAME
     )
 
-    return test_whatsapp
+    return test_communication
 
 
 def test_send_message():

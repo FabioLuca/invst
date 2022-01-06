@@ -7,7 +7,7 @@ from src.lib import constants as C
 from src.lib import messages as M
 from src.data_access import DataAccess
 
-LOGGER_NAME = None
+LOGGER_NAME = "test_access"
 
 
 @pytest.fixture(autouse=True)
@@ -48,11 +48,11 @@ def data_access_preparation(ticker):
     # --------------------------------------------------------------------------
     test_instance = DataAccess(
         ticker=ticker,
-        source=config.data_source_name,
+        source=config.data_source_fetch_name,
         # config_dictionary, #config.data_source_access_data,
-        access_config=config.data_source_access_data,
+        access_config=config.data_source_fetch_access_data,
         # config_access_userdata, #config.data_source_user_data,
-        access_userdata=config.data_source_user_data,
+        access_userdata=config.data_source_fetch_user_data,
         logger_name=LOGGER_NAME)
 
     return test_instance
@@ -63,7 +63,9 @@ def test_valid_ticker():
     test_instance = data_access_preparation(ticker)
     result, flag, level, message = test_instance.update_values()
     flag_expected, level_expected, message_expected = M.get_status(
-        "Fetch_Convert_Success", ticker)
+        logger_name=LOGGER_NAME,
+        message_id="Fetch_Convert_Success",
+        param=(ticker))
     assert (flag == flag_expected and level ==
             level_expected and message == message_expected)
 
@@ -73,7 +75,8 @@ def test_invalid_ticker():
     test_instance = data_access_preparation(ticker)
     result, flag, level, message = test_instance.update_values()
     flag_expected, level_expected, message_expected = M.get_status(
-        "API_200_Msg_Err")
+        logger_name=LOGGER_NAME,
+        message_id="API_200_Msg_Err")
     assert (flag == flag_expected and level ==
             level_expected and message == message_expected)
 
@@ -84,7 +87,9 @@ def test_invalid_type_series_parameter():
     result, flag, level, message = test_instance.update_values(
         type_series="TIME")
     flag_expected, level_expected, message_expected = M.get_status(
-        "API_ParamCheck_TypeSeries", ticker)
+        logger_name=LOGGER_NAME,
+        message_id="API_ParamCheck_TypeSeries",
+        param=(ticker))
     assert (flag == flag_expected and level ==
             level_expected and message == message_expected)
 
@@ -94,7 +99,9 @@ def test_invalid_period_parameter():
     test_instance = data_access_preparation(ticker)
     result, flag, level, message = test_instance.update_values(period="DAY")
     flag_expected, level_expected, message_expected = M.get_status(
-        "API_ParamCheck_Period", ticker)
+        logger_name=LOGGER_NAME,
+        message_id="API_ParamCheck_Period",
+        param=(ticker))
     assert (flag == flag_expected and level ==
             level_expected and message == message_expected)
 
