@@ -6,6 +6,11 @@ app = Flask(__name__)
 
 
 @app.route("/")
+def basic():
+    return "Running"
+
+
+@app.route("/run")
 def call_run_analysis():
     return run_analysis.run_analysis()
 
