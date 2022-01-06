@@ -17,3 +17,4 @@ scikit-learn
 twilio
 jinja2
 deepdiff
+flask

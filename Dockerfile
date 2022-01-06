@@ -15,4 +15,4 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 # Run the application:
-CMD [ "python", "-m" , "automation.run_analysis"]
+CMD [ "python", "-m" , "automation.run_server"]

@@ -16,7 +16,7 @@ from src.lib import print_table as pt
 
 LOGGER_NAME = "invst.run_analysis"
 
-if __name__ == "__main__":
+def run_analysis():
 
     # --------------------------------------------------------------------------
     #   Defines the logger configuration and start the logger. Add a few
@@ -199,3 +199,6 @@ if __name__ == "__main__":
 
     logger.info(
         "======================= COMPLETED RUN =======================")
+
+if __name__ == "__main__":
+    run_analysis()
