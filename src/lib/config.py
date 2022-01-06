@@ -76,6 +76,7 @@ class Config:
 
         # ---------------- Execution Block -------------------------------------
         self.time_sleep = None
+        self.lstm_model_age = None
         self.display_analysis = None
         self.save_analysis = None
 
@@ -97,6 +98,9 @@ class Config:
         self.stoploss = None
         self.operation_cost = None
         self.tax_percentage = None
+
+        # ---------------- Report Block ----------------------------------------
+        self.filter_in_analysis = None
 
         # ----------------------------------------------------------------------
         #   Defines the logger to output the information and also
@@ -233,6 +237,7 @@ class Config:
 
             # ---------------- Execution Block ---------------------------------
             self.time_sleep = self.parameters["execution"]["time_sleep"]["value"]
+            self.lstm_model_age = self.parameters["execution"]["lstm_model_age"]["value"]
             self.display_analysis = self.parameters["execution"]["display_analysis"]["value"]
             self.save_analysis = self.parameters["execution"]["save_analysis"]["value"]
 
@@ -256,6 +261,9 @@ class Config:
             self.stoploss = self.parameters["simulation"]["stoploss"]["value"]
             self.operation_cost = self.parameters["simulation"]["operation_cost"]["value"]
             self.tax_percentage = self.parameters["simulation"]["tax_percentage"]["value"]
+
+            # ---------------- Report Block ------------------------------------
+            self.filter_in_analysis = self.parameters["report"]["filter_in_analysis"]["value"]
 
         else:
             result = None
