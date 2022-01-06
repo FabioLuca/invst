@@ -412,7 +412,7 @@ class LSTM (Basic):
 
             time_difference = (datetime.today() - last_change).days
 
-            if time_difference < 7:
+            if time_difference < self.config.lstm_model_age:
 
                 with open(parameters_path) as json_file:
                     stored_parameters = json.load(json_file)
