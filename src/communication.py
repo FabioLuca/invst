@@ -1,5 +1,7 @@
 """Module for managing the communication to the user."""
 import logging
+from pathlib import Path
+from src.lib.config import Config
 from src.lib.communication.mail import Mail
 from src.lib.communication.mail_formatter import MailFormatter
 from src.lib.communication.whatsapp import Whatsapp
@@ -11,6 +13,17 @@ class Communication (Whatsapp, Mail, MailFormatter):
 
         self.access_config = access_config
         self.access_userdata = access_userdata
+
+        # ----------------------------------------------------------------------
+        #   Defines the location of the files with configurations and load them.
+        # ----------------------------------------------------------------------
+        config_base_path = Path.cwd().resolve() / "cfg"
+        config_local_file = config_base_path / "local.json"
+        config_parameters_file = config_base_path / "parameters.json"
+
+        self.config = Config(logger_name=logger_name)
+        self.config.load_config(filename=config_local_file)
+        self.config.load_config(filename=config_parameters_file)
 
         self.wapp_account_sid = self.access_userdata["whatsapp"]["account_sid"]
         self.wapp_auth_token = self.access_userdata["whatsapp"]["auth_token"]

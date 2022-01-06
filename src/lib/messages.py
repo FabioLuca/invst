@@ -49,6 +49,12 @@ MESSAGE = {
         "Level": C.ERROR,
         "Message": "Negative response for ticker %s from API. Code: %s. Text: %s"
     },
+    "API_429_ToManyRequests": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "Negative response for ticker %s from API. Limit of requests "
+                   "already reached."
+    },
     "API_ParamCheck_General": {
         "Flag": C.FAIL,
         "Level": C.ERROR,
@@ -163,7 +169,7 @@ MESSAGE = {
     "Fetch_Convert_Success": {
         "Flag": C.SUCCESS,
         "Level": C.INFO,
-        "Message": "Successful fetch of dataframe from AlphaVantage "
+        "Message": "Successful fetch of dataframe from the API "
                    "for ticker %s."
     },
     "Config_Load_Config": {

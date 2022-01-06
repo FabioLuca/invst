@@ -86,36 +86,41 @@ if __name__ == "__main__":
     # --------------------------------------------------------------------------
     symbols = [
         {"name": "Daimler AG", "symbol": "DAI.DE"},
-        # {"name": "Siemens AG", "symbol": "SIE.DE"},
-        # {"name": "Coca-Cola Co.", "symbol": "KO"},
-        # {"name": "Alphabet Inc.", "symbol": "GOOG"},
-        # {"name": "Tesla, Inc.", "symbol": "TSLA"},
-        # {"name": "Boeing Co.", "symbol": "BA"},
-        # {"name": "Apple", "symbol": "AAPL"},
-        # {"name": "Amazon", "symbol": "AMZN"},
-        # {"name": "Bristol-Meyers Squibb", "symbol": "BMY"},
-        # {"name": "General Motors", "symbol": "GM"},
-        # {"name": "AbbVie Inc.", "symbol": "ABBV"},
-        # {"name": "American Express CO.", "symbol": "AXP"},
-        # {"name": "3M CO.", "symbol": "MMM"},
-        # {"name": "CISCO INC.", "symbol": "CSCO"},
-        # {"name": "IBM CORP.", "symbol": "IBM"},
-        # {"name": "The Walt Disney Co.", "symbol": "DIS"},
-        # {"name": "Johnson & Johnson", "symbol": "JNJ"},
-        # {"name": "IDEX", "symbol": "IEX"},
-        # {"name": "Akamai Technologies, Inc.", "symbol": "AKAM"},
-        # {"name": "Telefonaktiebolaget LM Ericsson", "symbol": "ERIC"},
-        # {"name": "Thermo Fisher Scientific Inc.", "symbol": "TMO"},
-        # {"name": "Zscaler, Inc.", "symbol": "ZS"},
-        # {"name": "Meta", "symbol": "FB"},
+        {"name": "Siemens AG", "symbol": "SIE.DE"},
+        {"name": "Coca-Cola Co.", "symbol": "KO"},
+        {"name": "Alphabet Inc.", "symbol": "GOOG"},
+        {"name": "Tesla, Inc.", "symbol": "TSLA"},
+        {"name": "Boeing Co.", "symbol": "BA"},
+        {"name": "Apple", "symbol": "AAPL"},
+        {"name": "Amazon", "symbol": "AMZN"},
+        {"name": "Bristol-Meyers Squibb", "symbol": "BMY"},
+        {"name": "General Motors", "symbol": "GM"},
+        {"name": "AbbVie Inc.", "symbol": "ABBV"},
+        {"name": "American Express CO.", "symbol": "AXP"},
+        {"name": "3M CO.", "symbol": "MMM"},
+        {"name": "CISCO INC.", "symbol": "CSCO"},
+        {"name": "IBM CORP.", "symbol": "IBM"},
+        {"name": "The Walt Disney Co.", "symbol": "DIS"},
+        {"name": "Johnson & Johnson", "symbol": "JNJ"},
+        {"name": "IDEX", "symbol": "IEX"},
+        {"name": "Akamai Technologies, Inc.", "symbol": "AKAM"},
+        {"name": "Telefonaktiebolaget LM Ericsson", "symbol": "ERIC"},
+        {"name": "Thermo Fisher Scientific Inc.", "symbol": "TMO"},
+        {"name": "Zscaler, Inc.", "symbol": "ZS"},
+        {"name": "Meta", "symbol": "FB"},
     ]
     execution_data["execution"]["Symbols"] = symbols
+    execution_data["execution"]["Symbols count"] = len(symbols)
 
     results_data = []
     results_analysis = []
     results_summary = []
 
+    i = 1
     for symbol in symbols:
+
+        logger.info(f"---------- Analysis {i} from {len(symbols)} ----------")
+        i = i + 1
 
         # Short pause between requests to avoid over-request to AlphaVantage
         time.sleep(config.parameters["execution"]["time_sleep"]["value"])

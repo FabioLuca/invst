@@ -9,6 +9,13 @@ from pathlib import Path
 class MailFormatter:
 
     def create_agenda(self, dataframe: pd.DataFrame):
+        """Creates a calendar-like table to be displayed on the report (e-mail).
+        The calendar table is populated with the events from the day and any
+        predictions available for the next days.
+
+        The analysis methods to be displyes in thei calendar can be filtered by
+        using the parameter ``filter_in_analysis`` from the configuration file.
+        """
 
         date_today = datetime.today()
         date_today = date_today.replace(
@@ -17,6 +24,15 @@ class MailFormatter:
         list_events = []
         list_days = []
 
+        # ----------------------------------------------------------------------
+        #   Filter in the chosen methods to be displayed.
+        # ----------------------------------------------------------------------
+        dataframe = dataframe[dataframe['Method'].isin(
+            self.config.filter_in_analysis)]
+
+        # ----------------------------------------------------------------------
+        #   Builds the calendar dates and key parameters.
+        # ----------------------------------------------------------------------
         dates = pd.to_datetime(dataframe["Day Next Event"], errors="coerce")
         max_date = dates.max()
         first_weekday = date_today.weekday()
@@ -109,13 +125,19 @@ class MailFormatter:
             params = dict_parameters[group]
             for param in params:
                 item = params[param]
+                if isinstance(item["value"], list):
+                    value_display = ', '.join([str(elem)
+                                               for elem in item["value"]])
+                else:
+                    value_display = item["value"]
+
                 if "unit" in item:
                     if item["unit"] != "unitless" and item["unit"] != "":
-                        new_item = f"{param}: {item['value']} {item['unit']}"
+                        new_item = f"{param}: {value_display} {item['unit']}"
                     else:
-                        new_item = f"{param}: {item['value']}"
+                        new_item = f"{param}: {value_display}"
                 else:
-                    new_item = f"{param}: {item['value']}"
+                    new_item = f"{param}: {value_display}"
 
                 list_item_parameter.append(new_item)
             list_parameters[group] = list_item_parameter
