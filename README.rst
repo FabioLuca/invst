@@ -374,6 +374,14 @@ The to run the image::
 
     docker run invst-docker
 
+To list the running containers::
+
+    docker ps
+
+From this list, the container name can be checked. To terminate the running
+ones::
+
+    docker stop [CONTAINER_NAME]
 
 Unit testing
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

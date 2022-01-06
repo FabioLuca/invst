@@ -16,6 +16,7 @@ from src.lib import print_table as pt
 
 LOGGER_NAME = "invst.run_analysis"
 
+
 def run_analysis():
 
     # --------------------------------------------------------------------------
@@ -199,6 +200,9 @@ def run_analysis():
 
     logger.info(
         "======================= COMPLETED RUN =======================")
+
+    return "Completed run"
+
 
 if __name__ == "__main__":
     run_analysis()
