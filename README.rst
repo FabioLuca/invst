@@ -360,6 +360,21 @@ In case of Windows with Powershell, the proper command is::
 The resulting documentation (`index.html`) is available in the folder
 `docs/build/html`.
 
+Docker
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To support cloud operation, for example, Google Cloud, the project is
+containerized in Docker for supporting deployment.
+
+To build the Docker image, the following command can be used::
+
+    docker build --tag invst-docker .
+
+The to run the image::
+
+    docker run invst-docker
+
+
 Unit testing
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
