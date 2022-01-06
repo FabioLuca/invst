@@ -110,12 +110,17 @@ if __name__ == "__main__":
         {"name": "Meta", "symbol": "FB"},
     ]
     execution_data["execution"]["Symbols"] = symbols
+    execution_data["execution"]["Symbols count"] = len(symbols)
 
     results_data = []
     results_analysis = []
     results_summary = []
 
+    i = 1
     for symbol in symbols:
+
+        logger.info(f"---------- Analysis {i} from {len(symbols)} ----------")
+        i = i + 1
 
         # Short pause between requests to avoid over-request to AlphaVantage
         time.sleep(config.parameters["execution"]["time_sleep"]["value"])
