@@ -4,7 +4,7 @@ import logging
 import requests
 import pandas as pd
 import matplotlib.dates as mdates
-from src.lib.invst_const import constants as C
+from src.lib import constants as C
 from src.lib import messages as M
 
 

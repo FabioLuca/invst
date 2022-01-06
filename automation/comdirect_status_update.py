@@ -9,7 +9,7 @@ import pandas as pd
 from src.lib.config import Config
 from src.session import Session
 from src.communication import Communication
-from src.lib.invst_const import constants as C
+from src.lib import constants as C
 
 LOGGER_NAME = "invst.comdirect_status_update"
 

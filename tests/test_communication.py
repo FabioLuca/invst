@@ -4,7 +4,7 @@ import time
 from datetime import datetime
 from pathlib import Path
 from src.lib.config import Config
-from src.lib.invst_const import constants as C
+from src.lib import constants as C
 from src.lib import messages as M
 from src.data_access import DataAccess
 

@@ -14,11 +14,11 @@ from src.lib.data_access.yahoofinance import YahooFinance
 # ------------------------------------------------------------------------------
 #   Conflicts with the importing: For pytest, the be able to succesful import
 #   the following files, they must be defined as reçatove paths:
-#       from .lib.invst_const import constants as C
+#       from .lib import constants as C
 #       from .lib import messages as M
 #   On the other hand, for Sphinx to be able to work with them, it must be
 #   defined as aboslute paths:
-#       from lib.invst_const import constants as C
+#       from lib import constants as C
 #       from lib import messages as M
 # ------------------------------------------------------------------------------
 

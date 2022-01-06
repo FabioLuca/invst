@@ -7,7 +7,7 @@ import inspect
 # import glob
 from pathlib import Path
 from src.lib import messages as M
-# from .invst_const import constants as C
+# from src.lib import constants as C
 
 
 class Config:
