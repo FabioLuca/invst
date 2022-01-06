@@ -5,6 +5,10 @@
             "unit": "seconds",
             "comment": "Sleeping time between runs (tickers)."
         },
+        "lstm_model_age": {
+            "value": 15,
+            "unit": "days"
+        },
         "display_analysis": {
             "value": false,
             "unit": "unitless"
@@ -76,6 +80,15 @@
         "tax_percentage": {
             "value": 0.1,
             "unit": "factor"
+        }
+    },
+    "report": {
+        "filter_in_analysis": {
+            "value": [
+                "BBANDS"
+            ],
+            "unit": "",
+            "comment": "Possible choices are: BBANDS, MACD"
         }
     }
 }
