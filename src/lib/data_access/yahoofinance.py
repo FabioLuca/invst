@@ -47,7 +47,14 @@ class YahooFinance:
         # ----------------------------------------------------------------------
         #   Treats the response for errors.
         # ----------------------------------------------------------------------
-        if r.status_code == 200:
+        if r.status_code == 429:
+            result = r.text
+            flag, level, message = M.get_status(
+                self.logger_name, "API_429_ToManyRequests", self.ticker)
+
+            return result, flag, level, message
+
+        elif r.status_code == 200:
 
             response = json.loads(r.text)
 
