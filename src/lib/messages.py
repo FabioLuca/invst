@@ -3,7 +3,7 @@
 
 import pathlib
 import logging
-from .invst_const import constants as C
+from src.lib import constants as C
 
 MESSAGE = {
     "General_Error": {

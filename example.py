@@ -34,7 +34,7 @@ from src.analysis import Analysis
 from src.session import Session
 
 from src.lib import print_table as pt
-from src.lib.invst_const import constants as C
+from src.lib import constants as C
 
 LOGGER_NAME = "invst"
 

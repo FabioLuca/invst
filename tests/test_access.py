@@ -3,11 +3,12 @@ import pytest
 import time
 from pathlib import Path
 from src.lib.config import Config
-from src.lib.invst_const import constants as C
+from src.lib import constants as C
 from src.lib import messages as M
 from src.data_access import DataAccess
 
 LOGGER_NAME = None
+
 
 @pytest.fixture(autouse=True)
 def slow_down_tests():
@@ -15,6 +16,7 @@ def slow_down_tests():
     overloading the API and having wrong responses."""
     yield
     time.sleep(15)
+
 
 def data_access_preparation(ticker):
 
@@ -33,51 +35,68 @@ def data_access_preparation(ticker):
         config_access_userdata_file = Path.cwd().resolve()
 
     config_access_file = config_access_file / "cfg" / "api-cfg.json"
-    config_access_userdata_file = config_access_userdata_file / "cfg" / "api-cfg-access.json"
+    config_access_userdata_file = config_access_userdata_file / \
+        "cfg" / "api-cfg-access.json"
 
     config = Config(logger_name=LOGGER_NAME)
     config_dictionary = config.load_config(filename=config_access_file)
-    config_access_userdata = config.load_config(filename=config_access_userdata_file)
+    config_access_userdata = config.load_config(
+        filename=config_access_userdata_file)
 
     # --------------------------------------------------------------------------
     #   ACT
     # --------------------------------------------------------------------------
     test_instance = DataAccess(
-                        ticker=ticker,
-                        source=config.data_source_name,
-                        access_config=config.data_source_access_data,    #config_dictionary, #config.data_source_access_data,
-                        access_userdata=config.data_source_user_data,   #config_access_userdata, #config.data_source_user_data,
-                        logger_name=LOGGER_NAME)
+        ticker=ticker,
+        source=config.data_source_name,
+        # config_dictionary, #config.data_source_access_data,
+        access_config=config.data_source_access_data,
+        # config_access_userdata, #config.data_source_user_data,
+        access_userdata=config.data_source_user_data,
+        logger_name=LOGGER_NAME)
 
     return test_instance
+
 
 def test_valid_ticker():
     ticker = "GOOG"
     test_instance = data_access_preparation(ticker)
     result, flag, level, message = test_instance.update_values()
-    flag_expected, level_expected, message_expected = M.get_status("Fetch_Convert_Success", ticker)
-    assert (flag == flag_expected and level == level_expected and message == message_expected)
+    flag_expected, level_expected, message_expected = M.get_status(
+        "Fetch_Convert_Success", ticker)
+    assert (flag == flag_expected and level ==
+            level_expected and message == message_expected)
+
 
 def test_invalid_ticker():
     ticker = "GOOG#"
     test_instance = data_access_preparation(ticker)
     result, flag, level, message = test_instance.update_values()
-    flag_expected, level_expected, message_expected = M.get_status("API_200_Msg_Err")
-    assert (flag == flag_expected and level == level_expected and message == message_expected)
+    flag_expected, level_expected, message_expected = M.get_status(
+        "API_200_Msg_Err")
+    assert (flag == flag_expected and level ==
+            level_expected and message == message_expected)
+
 
 def test_invalid_type_series_parameter():
     ticker = "GOOG"
     test_instance = data_access_preparation(ticker)
-    result, flag, level, message = test_instance.update_values(type_series="TIME")
-    flag_expected, level_expected, message_expected = M.get_status("API_ParamCheck_TypeSeries", ticker)
-    assert (flag == flag_expected and level == level_expected and message == message_expected)
+    result, flag, level, message = test_instance.update_values(
+        type_series="TIME")
+    flag_expected, level_expected, message_expected = M.get_status(
+        "API_ParamCheck_TypeSeries", ticker)
+    assert (flag == flag_expected and level ==
+            level_expected and message == message_expected)
+
 
 def test_invalid_period_parameter():
     ticker = "GOOG"
     test_instance = data_access_preparation(ticker)
     result, flag, level, message = test_instance.update_values(period="DAY")
-    flag_expected, level_expected, message_expected = M.get_status("API_ParamCheck_Period", ticker)
-    assert (flag == flag_expected and level == level_expected and message == message_expected)
+    flag_expected, level_expected, message_expected = M.get_status(
+        "API_ParamCheck_Period", ticker)
+    assert (flag == flag_expected and level ==
+            level_expected and message == message_expected)
 
 # def test_valid_ticker():
 #     """Verifies the case of proper confgiuration"""
@@ -178,7 +197,6 @@ def test_invalid_period_parameter():
 #     config = Config(logger_name=LOGGER_NAME)
 #     config_dictionary = config.load_config(filename=config_access_file)
 #     config_access_userdata = config.load_config(filename=config_access_userdata_file)
-
 
 
 #     test_instance = DataAccess(

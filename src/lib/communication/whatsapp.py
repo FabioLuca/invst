@@ -3,7 +3,7 @@ import logging
 import time
 import re
 from twilio.rest import Client
-from src.lib.invst_const import constants as C
+from src.lib import constants as C
 from src.lib import messages as M
 
 

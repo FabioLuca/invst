@@ -22,7 +22,7 @@ from src.lib.data_access.yahoofinance import YahooFinance
 #       from lib import messages as M
 # ------------------------------------------------------------------------------
 
-from src.lib.invst_const import constants as C
+from src.lib import constants as C
 from src.lib import messages as M
 
 
