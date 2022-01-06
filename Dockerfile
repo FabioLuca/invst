@@ -2,6 +2,8 @@ FROM python:3
 
 LABEL maintainer="pantano@gmail.com"
 
+EXPOSE 8080
+
 COPY . .
 
 ENV VIRTUAL_ENV=/opt/venv
