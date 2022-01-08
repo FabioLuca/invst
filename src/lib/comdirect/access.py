@@ -220,7 +220,6 @@ class Access:
                 self.logger_name, "API_Trade_Activate_TAN_Success")
         else:
             result = response
-            print(response_body_json)
             flag, level, message = M.get_status(
                 self.logger_name,
                 "API_Trade_Activate_TAN_Error",
