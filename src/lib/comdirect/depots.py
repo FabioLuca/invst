@@ -2,8 +2,8 @@ from datetime import datetime
 import json
 import requests
 import pandas as pd
-
 from src.lib import messages as M
+from src.lib import constants as C
 
 
 class Depots:
@@ -26,57 +26,15 @@ class Depots:
         # ----------------------------------------------------------------------
         #   Executes the command to the API.
         # ----------------------------------------------------------------------
-        url = self.access_config["url_depots"]
+        (result, response_body_json, response_headers_json), flag, level, message = self.basic_request(
+            type_req="GET",
+            url=self.access_config["url_depots"],
+            payload={},
+            header_type="Standard",
+            request_name="Depots",
+            url_replacements=None)
 
-        payload = {}
-        headers = {
-            'Accept': 'application/json',
-            'Authorization': f'Bearer {self.access_token}',
-            'x-http-request-info': (f'{{"clientRequestId":'
-                                    f'{{"sessionId":"{self.session_id}",'
-                                    f'"requestId":"{self.request_id}"}}}}'),
-            'Content-Type': 'application/json',
-        }
-
-        response = requests.request(
-            "GET", url, headers=headers, data=payload)
-
-        if response.status_code in [500]:
-            result = response
-            flag, level, message = M.get_status(
-                self.logger_name, "API_500_Msg_Err")
-            return result, flag, level, message
-
-        if response.text == "":
-            response_body_json = {}
-        else:
-            response_body_json = json.loads(response.text)
-        response_headers_json = dict(response.headers)
-
-        if self.logger is not None:
-            self.logger.debug(
-                "############# Depots #############")
-            self.logger.debug("URL: %s", url)
-            self.logger.debug("Payload: %s", json.dumps(
-                payload, indent=4, sort_keys=True))
-            self.logger.debug("Headers: %s", json.dumps(
-                headers, indent=4, sort_keys=True))
-            self.logger.debug("Status code: %s", response.status_code)
-            self.logger.debug("Response body: %s", json.dumps(
-                response_body_json, indent=4, sort_keys=True))
-            self.logger.debug("Response headers: %s", json.dumps(
-                response_headers_json, indent=4, sort_keys=True))
-
-        if response.status_code in [200, 201]:
-            result = response
-            flag, level, message = M.get_status(
-                self.logger_name, "API_Trade_Depots_Success")
-        else:
-            result = response
-            flag, level, message = M.get_status(
-                self.logger_name, "API_Trade_Depots_Error",
-                (str(response.status_code),
-                 response_body_json["messages"]["message"]))
+        if flag != C.SUCCESS:
             return result, flag, level, message
 
         # ----------------------------------------------------------------------
@@ -128,6 +86,8 @@ class Depots:
             ],
         )
 
+        self.depot_id = list_depot_id[0]
+
         data_output["Date"] = today_string
 
         return data_output, flag, level, message
@@ -150,58 +110,15 @@ class Depots:
         # ----------------------------------------------------------------------
         #   Executes the command to the API.
         # ----------------------------------------------------------------------
-        url = self.access_config["url_depot_position"]
-        url = url.replace("[DEPOT_ID]", depot_id)
+        (result, response_body_json, response_headers_json), flag, level, message = self.basic_request(
+            type_req="GET",
+            url=self.access_config["url_depot_position"],
+            payload={},
+            header_type="Standard",
+            request_name="Depot Position",
+            url_replacements={"DEPOT_ID": depot_id})
 
-        payload = {}
-        headers = {
-            'Accept': 'application/json',
-            'Authorization': f'Bearer {self.access_token}',
-            'x-http-request-info': (f'{{"clientRequestId":'
-                                    f'{{"sessionId":"{self.session_id}",'
-                                    f'"requestId":"{self.request_id}"}}}}'),
-            'Content-Type': 'application/json',
-        }
-
-        response = requests.request(
-            "GET", url, headers=headers, data=payload)
-
-        if response.status_code in [500]:
-            result = response
-            flag, level, message = M.get_status(
-                self.logger_name, "API_500_Msg_Err")
-            return result, flag, level, message
-
-        if response.text == "":
-            response_body_json = {}
-        else:
-            response_body_json = json.loads(response.text)
-        response_headers_json = dict(response.headers)
-
-        if self.logger is not None:
-            self.logger.debug(
-                "############# Depot Position #############")
-            self.logger.debug("URL: %s", url)
-            self.logger.debug("Payload: %s", json.dumps(
-                payload, indent=4, sort_keys=True))
-            self.logger.debug("Headers: %s", json.dumps(
-                headers, indent=4, sort_keys=True))
-            self.logger.debug("Status code: %s", response.status_code)
-            self.logger.debug("Response body: %s", json.dumps(
-                response_body_json, indent=4, sort_keys=True))
-            self.logger.debug("Response headers: %s", json.dumps(
-                response_headers_json, indent=4, sort_keys=True))
-
-        if response.status_code in [200, 201]:
-            result = response
-            flag, level, message = M.get_status(
-                self.logger_name, "API_Trade_Depots_Success")
-        else:
-            result = response
-            flag, level, message = M.get_status(
-                self.logger_name, "API_Trade_Depots_Error",
-                (str(response.status_code),
-                 response_body_json["messages"]["message"]))
+        if flag != C.SUCCESS:
             return result, flag, level, message
 
         # ----------------------------------------------------------------------
