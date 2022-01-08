@@ -20,8 +20,11 @@ def run_update():
     #   Defines the logger configuration and start the logger. Add a few
     #   message to mark the start of the execution.
     # --------------------------------------------------------------------------
+    logs_folder = Path.cwd().resolve() / "logs"
+    logs_folder.mkdir(parents=True, exist_ok=True)
+
     logging.basicConfig(
-        filename=Path.cwd().resolve() / "logs" / "logs.log",
+        filename=(logs_folder / "logs.log"),
         filemode="a",
         datefmt="%Y.%m.%d %I:%M:%S %p",
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
