@@ -10,7 +10,10 @@ class PerformanceSimulation:
                              initial_value: float,
                              stopgain: float,
                              stoploss: float,
-                             operation_cost: float,
+                             operation_cost_fix: float,
+                             operation_cost_proportional: float,
+                             operation_cost_min: float,
+                             operation_cost_max: float,
                              tax_percentage: float,
                              result_column: str = "",
                              result_dataframe: pd.DataFrame = None):
@@ -65,8 +68,13 @@ class PerformanceSimulation:
                 #   account for the cost of operation. Also resets the cycle
                 #   gain.
                 # --------------------------------------------------------------
-                if event == "BUY" and pre_first_buy == False:
-                    operation_cost_value = operation_cost
+                if (event == "BUY" or event == "SELL") and pre_first_buy == False:
+                    operation_cost_value = operation_cost_fix + \
+                        total_balance * operation_cost_proportional
+                    if operation_cost_value < operation_cost_min:
+                        operation_cost_value = operation_cost_min
+                    if operation_cost_value > operation_cost_max:
+                        operation_cost_value = operation_cost_max
                     cycle_balance = total_balance
                 else:
                     operation_cost_value = 0

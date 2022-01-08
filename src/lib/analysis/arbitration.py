@@ -244,7 +244,10 @@ class Arbitration:
                                   initial_value=self.initial_value,
                                   stopgain=self.stopgain,
                                   stoploss=self.stoploss,
-                                  operation_cost=self.operation_cost,
+                                  operation_cost_fix=self.operation_cost_fix,
+                                  operation_cost_proportional=self.operation_cost_proportional,
+                                  operation_cost_min=self.operation_cost_min,
+                                  operation_cost_max=self.operation_cost_max,
                                   tax_percentage=self.tax_percentage,
                                   result_column="Combined Simulation")
         self.calculate_reference(source_column_close="Close Final",

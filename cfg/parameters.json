@@ -73,8 +73,20 @@
             "value": 0.85,
             "unit": "factor"
         },
-        "operation_cost": {
-            "value": 5,
+        "operation_cost_fix": {
+            "value": 4.90,
+            "unit": "money"
+        },
+        "operation_cost_proportional": {
+            "value": 0.0025,
+            "unit": "factor"
+        },
+        "operation_cost_min": {
+            "value": 9.90,
+            "unit": "money"
+        },
+        "operation_cost_max": {
+            "value": 59.90,
             "unit": "money"
         },
         "tax_percentage": {
@@ -85,7 +97,9 @@
     "report": {
         "filter_in_analysis": {
             "value": [
-                "BBANDS"
+                "BBANDS",
+                "MACD",
+                "Crash"
             ],
             "unit": "",
             "comment": "Possible choices are: BBANDS, MACD"

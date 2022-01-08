@@ -96,7 +96,10 @@ class Config:
         self.initial_value = None
         self.stopgain = None
         self.stoploss = None
-        self.operation_cost = None
+        self.operation_cost_fix = None
+        self.operation_cost_proportional = None
+        self.operation_cost_min = None
+        self.operation_cost_max = None
         self.tax_percentage = None
 
         # ---------------- Report Block ----------------------------------------
@@ -259,7 +262,11 @@ class Config:
             self.initial_value = self.parameters["simulation"]["starting_value"]["value"]
             self.stopgain = self.parameters["simulation"]["stopgain"]["value"]
             self.stoploss = self.parameters["simulation"]["stoploss"]["value"]
-            self.operation_cost = self.parameters["simulation"]["operation_cost"]["value"]
+            self.operation_cost_fix = self.parameters["simulation"]["operation_cost_fix"]["value"]
+            self.operation_cost_proportional = self.parameters[
+                "simulation"]["operation_cost_proportional"]["value"]
+            self.operation_cost_min = self.parameters["simulation"]["operation_cost_min"]["value"]
+            self.operation_cost_max = self.parameters["simulation"]["operation_cost_max"]["value"]
             self.tax_percentage = self.parameters["simulation"]["tax_percentage"]["value"]
 
             # ---------------- Report Block ------------------------------------

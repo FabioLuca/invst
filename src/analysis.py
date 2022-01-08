@@ -114,7 +114,10 @@ class Analysis(Crash, MACD, RSI_SMA, RSI_EMA, BOLLINGER_BANDS, CombinedStrategy,
         self.initial_value = self.config.initial_value
         self.stopgain = self.config.stopgain
         self.stoploss = self.config.stoploss
-        self.operation_cost = self.config.operation_cost
+        self.operation_cost_fix = self.config.operation_cost_fix
+        self.operation_cost_proportional = self.config.operation_cost_proportional
+        self.operation_cost_min = self.config.operation_cost_min
+        self.operation_cost_max = self.config.operation_cost_max
         self.tax_percentage = self.config.tax_percentage
 
         # ----------------------------------------------------------------------
