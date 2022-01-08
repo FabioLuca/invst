@@ -7,7 +7,7 @@ from src.lib import constants as C
 from src.lib import messages as M
 from src.data_access import DataAccess
 
-LOGGER_NAME = "test_access"
+LOGGER_NAME = "invst.test_access"
 
 
 @pytest.fixture(autouse=True)
