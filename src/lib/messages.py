@@ -16,6 +16,35 @@ MESSAGE = {
         "Level": C.DEBUG,
         "Message": "Method initialization.",
     },
+    "API_401_Msg_Err": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "Unauthorized access to the server: 401",
+    },
+    "API_422_Msg_Err": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "The server could understand the request, but was unable "
+                   "to process it. Error 422. See content: %s"
+    },
+    "API_422_Msg_Err_NoFundsAvailable": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "The server could understand the request, but was unable "
+                   "to process it due to unavailable enough funds. Error 422."
+    },
+    "API_422_Msg_Err_NoTradingValues": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "The chosen supplier didn't provide a value. Try again "
+                   "later. Error 422."
+    },
+    "API_422_Msg_Err_UnsupportedOrderType": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "The Order Type is not supported by this supplier. "
+                   "Error 422."
+    },
     "API_500_Msg_Err": {
         "Flag": C.FAIL,
         "Level": C.ERROR,
@@ -39,10 +68,15 @@ MESSAGE = {
         "Message": "Positive response but the request demands a premium "
                    "account from Alpha Vantage."
     },
+    "API_Other_Errors": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "Unknown error from the API request."
+    },
     "API_200_Success": {
         "Flag": C.SUCCESS,
         "Level": C.INFO,
-        "Message": "Positive response for ticker from API."
+        "Message": "Positive response from API."
     },
     "API_Neg_Response": {
         "Flag": C.FAIL,
@@ -159,6 +193,14 @@ MESSAGE = {
         "Flag": C.FAIL,
         "Level": C.ERROR,
         "Message": "There are no active and valid session."
+    },
+    "No_Quotation_Available": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "There are no available quotations for the order to be "
+                   "based on. This means all the tried possible suppliers "
+                   "didn't respond with a value. This could be due to not an "
+                   "open market situation."
     },
     "Convertion_Success": {
         "Flag": C.SUCCESS,
