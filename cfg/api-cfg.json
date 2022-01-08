@@ -47,7 +47,21 @@
                     "url_session_revoke": "https://api.comdirect.de/oauth/revoke",
                     "url_accounts_balance": "https://api.comdirect.de/api/banking/clients/user/v2/accounts/balances",
                     "url_depots": "https://api.comdirect.de/api/brokerage/clients/user/v3/depots",
-                    "url_depot_position": "https://api.comdirect.de/api/brokerage/v3/depots/[DEPOT_ID]/positions"
+                    "url_depot_position": "https://api.comdirect.de/api/brokerage/v3/depots/[DEPOT_ID]/positions",
+                    "url_orders_dimensions": "https://api.comdirect.de/api/brokerage/v3/orders/dimensions?wkn=[WKN]&orderType=[TYPE]&side=[SIDE]",
+                    "url_orders_validation": "https://api.comdirect.de/api/brokerage/v3/orders/validation",
+                    "url_orders_costindicationexante": "https://api.comdirect.de/api/brokerage/v3/orders/costindicationexante",
+                    "url_orders": "https://api.comdirect.de/api/brokerage/v3/orders",
+                    "url_orderbook": "https://api.comdirect.de/api/brokerage/depots/[DEPOT_ID]/v3/orders",
+                    "url_quoteticket": "https://api.comdirect.de/api/brokerage/v3/quoteticket",
+                    "url_quotes": "https://api.comdirect.de/api/brokerage/v3/quotes",
+                    "possible_venues": [
+                        "Tradegate",
+                        "Quotrix",
+                        "gettex",
+                        "Xetra",
+                        "LS Exchange"
+                    ]
                 }
             }
         },

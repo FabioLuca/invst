@@ -45,15 +45,17 @@ if __name__ == "__main__":
     # --------------------------------------------------------------------------
     #   Defines the location of the files with configurations and load them.
     # --------------------------------------------------------------------------
-    config_access_file = Path.cwd().resolve() / "cfg" / "api-cfg.json"
-    config_access_userdata_file = Path.cwd().resolve() / "cfg" / \
-        "api-cfg-access.json"
-    config_local_file = Path.cwd().resolve() / "cfg" / "local.json"
+    config_base_path = Path.cwd().resolve() / "cfg"
+    config_access_file = config_base_path / "api-cfg.json"
+    config_access_userdata_file = config_base_path / "api-cfg-access.json"
+    config_local_file = config_base_path / "local.json"
+    config_parameters_file = config_base_path / "parameters.json"
 
     config = Config(logger_name=LOGGER_NAME)
     config.load_config(filename=config_access_file)
     config.load_config(filename=config_access_userdata_file)
     config.load_config(filename=config_local_file)
+    config.load_config(filename=config_parameters_file)
 
     # --------------------------------------------------------------------------
     #   Starts the communication and send a message to notify.
@@ -81,6 +83,15 @@ if __name__ == "__main__":
         for index, row in depots.iterrows():
             depot_position, flag, level, message = comdirect.get_depot_position(
                 row["Depot ID"])
+    orders_before, flag, level, message = comdirect.get_orders()
+    print(orders_before.T)
+    (results, a, b), flag, level, message = comdirect.make_order(wkn="A0RGCS",
+                                                                 type_order="LIMIT",
+                                                                 side_order="BUY",
+                                                                 quantity=4,
+                                                                 value_limit=85.00)
+    orders_after, flag, level, message = comdirect.get_orders()
+    print(orders_after.T)
     comdirect.revoke_token()
 
     # --------------------------------------------------------------------------
@@ -98,4 +109,6 @@ if __name__ == "__main__":
     depot_position[0].to_excel(
         writer_trade, sheet_name='Depot Positions Aggregated')
     depot_position[1].to_excel(writer_trade, sheet_name='Depot Positions')
+    orders_before.to_excel(writer_trade, sheet_name='Orders (Before)')
+    orders_after.to_excel(writer_trade, sheet_name='Orders (After)')
     writer_trade.save()
