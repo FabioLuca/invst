@@ -10,14 +10,21 @@ def basic():
     return "It's Running"
 
 
+@app.route("/test")
+def test():
+    return "It's Running a Test"
+
+
 @app.route("/analysis")
 def call_run_analysis():
-    return run_analysis.run_analysis()
+    run_analysis.run_analysis()
+    return "Running market analysis"
 
 
 @app.route("/update")
 def call_run_update():
-    return comdirect_status_update.run_update()
+    comdirect_status_update.run_update()
+    return "Running update from Comdirect"
 
 
 if __name__ == "__main__":
