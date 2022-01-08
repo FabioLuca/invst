@@ -16,7 +16,7 @@ def call_run_analysis():
 
 
 @app.route("/update")
-def call_run_analysis():
+def call_run_update():
     return comdirect_status_update.run_update()
 
 
