@@ -1,23 +1,20 @@
-import os
 from flask import Flask
 from automation import run_analysis
 
 app = Flask(__name__)
 
 
-@app.get("/")
+@app.route("/")
 def basic():
-    return "Running"
+    return "It's Running"
 
 
-@app.get("/run")
+@app.route("/run")
 def call_run_analysis():
     return run_analysis.run_analysis()
 
 
 if __name__ == "__main__":
-    app.run(debug=True,
-            host="localhost",
+    app.run(debug=False,
+            host="0.0.0.0",
             port=8080)
-
-    # port=int(os.environ.get("PORT", 8080)))
