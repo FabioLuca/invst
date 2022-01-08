@@ -13,7 +13,8 @@ from src.lib import constants as C
 
 LOGGER_NAME = "invst.comdirect_status_update"
 
-if __name__ == "__main__":
+
+def run_update():
 
     # --------------------------------------------------------------------------
     #   Defines the logger configuration and start the logger. Add a few
@@ -112,3 +113,7 @@ if __name__ == "__main__":
     orders_before.to_excel(writer_trade, sheet_name='Orders (Before)')
     orders_after.to_excel(writer_trade, sheet_name='Orders (After)')
     writer_trade.save()
+
+
+if __name__ == "__main__":
+    run_update()

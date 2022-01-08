@@ -2,9 +2,9 @@ FROM python:3
 
 LABEL maintainer="pantano@gmail.com"
 
-ENV VIRTUAL_ENV=/opt/venv
-RUN python3 -m venv $VIRTUAL_ENV
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+# ENV VIRTUAL_ENV=/opt/venv
+# RUN python3 -m venv $VIRTUAL_ENV
+# ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # Install dependencies:
 COPY requirements.txt .
@@ -16,7 +16,7 @@ COPY . .
 ENV PORT 8080
 ENV HOST 0.0.0.0
 
-# Open port 5000
+# Open port 8080
 EXPOSE 8080:8080
 
 # Run the application:

@@ -1,5 +1,6 @@
 from flask import Flask
 from automation import run_analysis
+from automation import comdirect_status_update
 
 app = Flask(__name__)
 
@@ -9,9 +10,14 @@ def basic():
     return "It's Running"
 
 
-@app.route("/run")
+@app.route("/analysis")
 def call_run_analysis():
     return run_analysis.run_analysis()
+
+
+@app.route("/update")
+def call_run_analysis():
+    return comdirect_status_update.run_update()
 
 
 if __name__ == "__main__":
