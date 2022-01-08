@@ -22,6 +22,9 @@ def run_update():
     # --------------------------------------------------------------------------
     logs_folder = Path.cwd().resolve() / "logs"
     logs_folder.mkdir(parents=True, exist_ok=True)
+    if not (logs_folder / "logs.log").exists():
+        with open((logs_folder / "logs.log"), 'w') as filelog:
+            pass
 
     logging.basicConfig(
         filename=(logs_folder / "logs.log"),
