@@ -1,4 +1,5 @@
 import dropbox
+from pathlib import Path
 
 
 class Dropbox:
@@ -6,12 +7,21 @@ class Dropbox:
     def connect(self):
         dbx = dropbox.Dropbox(self.access_token)
         result = dbx.files_list_folder(path="")
-        print(result)
 
-    def upload_file(self, file_from, file_to):
+    def upload_file(self, file: Path, destination_folder: str):
         """upload a file to Dropbox using API v2
         """
         dbx = dropbox.Dropbox(self.access_token)
 
-        with open(file_from, 'rb') as f:
-            dbx.files_upload(f.read(), file_to)
+        if destination_folder[0] != "/":
+            destination_folder = "/" + destination_folder
+
+        if destination_folder[-1] != "/":
+            destination_folder = destination_folder + "/"
+
+        destination = destination_folder + str(file.name)
+
+        with open(file, 'rb') as f:
+            response = dbx.files_upload(f.read(), destination)
+
+        return response

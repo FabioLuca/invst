@@ -65,6 +65,9 @@ class Config:
         self.data_source_comm_access_data = None
         self.data_source_comm_user_data = None
 
+        self.data_source_storage_access_data = None
+        self.data_source_storage_user_data = None
+
         self.local_config = None
 
         self.parameters = None
@@ -215,6 +218,8 @@ class Config:
                 "api"]["communicating"]["whatsapp"][self.data_source_wapp_name]["user_data"]
             self.data_source_mail_user_data = self.json_data[
                 "api"]["communicating"]["email"][self.data_source_mail_name]["user_data"]
+            self.data_source_storage_user_data = self.json_data[
+                "api"]["storage"]["Dropbox"]["user_data"]
 
             self.data_source_comm_user_data = {
                 "whatsapp": self.data_source_wapp_user_data,
