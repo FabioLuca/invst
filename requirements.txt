@@ -19,4 +19,4 @@ jinja2
 deepdiff
 flask
 gunicorn
-google-cloud-secret-manager
+dropbox
