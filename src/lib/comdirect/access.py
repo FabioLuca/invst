@@ -1,11 +1,12 @@
 import json
 import requests
+import time
 from src.lib import messages as M
 
 
 class Access:
 
-    def connect(self):
+    def connect(self, wait_time: int = 0):
 
         flag, level, message = M.get_status(
             self.logger_name, "API_Trade_Initialization")
@@ -164,7 +165,10 @@ class Access:
                 response.status_code), response_body_json["messages"]["message"]))
             return result, flag, level, message
 
-        sec = input('Tap enter after the TAN approval.\n')
+        if wait_time == 0:
+            sec = input('Tap enter after the TAN approval.\n')
+        else:
+            time.sleep(wait_time)
 
         # ----------------------------------------------------------------------
         #   2.4 Activation of a session TAN

@@ -83,7 +83,7 @@ def run_update():
                         access_userdata=config.data_source_trade_user_data,
                         logger_name=LOGGER_NAME,
                         )
-    comdirect.connect()
+    comdirect.connect(wait_time=20)
     balance, flag, level, message = comdirect.get_accounts_balance()
     depots, flag, level, message = comdirect.get_depots()
     if flag == C.SUCCESS:
