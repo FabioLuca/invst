@@ -26,7 +26,6 @@ def list_files():
     output_string = str(root_folder) + "<br>"
     output_string = output_string + "<br>--------------------<br><br>"
 
-    # list_files_folder = list(root_folder.glob("**/*"))
     list_files_folder = root_folder.glob("*")
     for item in list_files_folder:
         if item.is_dir():
@@ -42,29 +41,6 @@ def list_files():
         else:
             output_string = output_string + f"{item.name}<br>"
 
-    output_string = output_string + "<br>--------------------<br><br>"
-
-    with open(root_folder / "cfg" / "api-cfg.json") as f:
-        contents = f.read()
-
-    output_string = output_string + contents
-
-    output_string = output_string + "<br>--------------------<br><br>"
-
-    with open(root_folder / "cfg" / "user" / "api-cfg-access.json") as f:
-        contents = f.read()
-
-    output_string = output_string + contents
-
-    # list_files_folder = list(root_folder.glob("**/*"))
-    # # cfg_folder = Path.cwd().resolve() / "cfg"
-    # # list_files_folder = list(cfg_folder.glob("*"))
-    # list_files_names = [item.name for item in list_files_folder]
-    # list_files_names = "<br>".join(list_files_names)
-
-    # output_string = output_string + list_files_names
-    # output_string = output_string + "--------------------<br><br>"
-
     return output_string
 
 
@@ -76,7 +52,7 @@ def call_run_analysis():
 
 @ app.route("/update")
 def call_run_update():
-    comdirect_status_update.run_update()
+    comdirect_status_update.run_update(wait_time=20)
     return "Running update from Comdirect"
 
 
@@ -93,6 +69,6 @@ def call_run_update_part2():
 
 
 if __name__ == "__main__":
-    app.run(debug=True,
+    app.run(debug=False,
             host="0.0.0.0",
             port=8080)

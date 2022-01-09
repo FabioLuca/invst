@@ -14,7 +14,7 @@ from src.lib import constants as C
 LOGGER_NAME = "invst.comdirect_status_update"
 
 
-def run_update():
+def run_update(wait_time: int = 0):
 
     # --------------------------------------------------------------------------
     #   Defines the logger configuration and start the logger. Add a few
@@ -83,22 +83,23 @@ def run_update():
                         access_userdata=config.data_source_trade_user_data,
                         logger_name=LOGGER_NAME,
                         )
-    comdirect.connect(wait_time=20)
+    comdirect.connect(wait_time=wait_time)
     balance, flag, level, message = comdirect.get_accounts_balance()
     depots, flag, level, message = comdirect.get_depots()
     if flag == C.SUCCESS:
         for index, row in depots.iterrows():
             depot_position, flag, level, message = comdirect.get_depot_position(
                 row["Depot ID"])
-    orders_before, flag, level, message = comdirect.get_orders()
-    print(orders_before.T)
-    (results, a, b), flag, level, message = comdirect.make_order(wkn="A0RGCS",
-                                                                 type_order="LIMIT",
-                                                                 side_order="BUY",
-                                                                 quantity=4,
-                                                                 value_limit=85.00)
-    orders_after, flag, level, message = comdirect.get_orders()
-    print(orders_after.T)
+    orders, flag, level, message = comdirect.get_orders()
+    logger.info(orders.T)
+    # (results, a, b), flag, level, message = comdirect.make_order(wkn="A0RGCS",
+    #                                                              type_order="LIMIT",
+    #                                                              side_order="BUY",
+    #                                                              quantity=4,
+    #                                                              value_limit=85.00)
+    # orders_after, flag, level, message = comdirect.get_orders()
+    # print(orders_after.T)
+    # logger.info(orders_after.T)
     comdirect.revoke_token()
 
     # --------------------------------------------------------------------------
@@ -116,10 +117,9 @@ def run_update():
     depot_position[0].to_excel(
         writer_trade, sheet_name='Depot Positions Aggregated')
     depot_position[1].to_excel(writer_trade, sheet_name='Depot Positions')
-    orders_before.to_excel(writer_trade, sheet_name='Orders (Before)')
-    orders_after.to_excel(writer_trade, sheet_name='Orders (After)')
+    orders.to_excel(writer_trade, sheet_name='Orders')
     writer_trade.save()
 
 
 if __name__ == "__main__":
-    run_update()
+    run_update(wait_time=0)
