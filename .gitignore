@@ -131,10 +131,9 @@ dmypy.json
 .pyre/
 
 # User access
-/cfg/api-cfg-access.json
-/cfg/local.json
-/cfg/user/api-cfg-access.json
-/cfg/user/local.json
+**/credentials.json
+**/api-cfg-access.json
+**/local.json
 
 ### VisualStudioCode ###
 .vscode/*
