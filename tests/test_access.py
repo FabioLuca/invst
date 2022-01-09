@@ -36,7 +36,7 @@ def data_access_preparation(ticker):
 
     config_access_file = config_access_file / "cfg" / "api-cfg.json"
     config_access_userdata_file = config_access_userdata_file / \
-        "cfg" / "api-cfg-access.json"
+        "cfg" / "user" / "api-cfg-access.json"
 
     config = Config(logger_name=LOGGER_NAME)
     config_dictionary = config.load_config(filename=config_access_file)

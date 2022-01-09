@@ -18,13 +18,6 @@ def test():
     return "It's Running a Test"
 
 
-@app.route("/data")
-def show_data():
-    config = Config(logger_name="test_app")
-    valor = config.load_config_api()
-    return valor
-
-
 @app.route("/list")
 def list_files():
 
@@ -51,10 +44,17 @@ def list_files():
 
     output_string = output_string + "<br>--------------------<br><br>"
 
-    # with open(root_folder / "cfg" / "api-cfg.json") as f:
-    #     contents = f.read()
+    with open(root_folder / "cfg" / "api-cfg.json") as f:
+        contents = f.read()
 
-    # output_string = output_string + contents
+    output_string = output_string + contents
+
+    output_string = output_string + "<br>--------------------<br><br>"
+
+    with open(root_folder / "cfg" / "user" / "api-cfg-access.json") as f:
+        contents = f.read()
+
+    output_string = output_string + contents
 
     # list_files_folder = list(root_folder.glob("**/*"))
     # # cfg_folder = Path.cwd().resolve() / "cfg"

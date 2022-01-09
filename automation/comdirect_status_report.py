@@ -565,10 +565,12 @@ today_string = datetime.today().strftime('%Y-%m-%d')
 # --------------------------------------------------------------------------
 #   Defines the location of the files with configurations and load them.
 # --------------------------------------------------------------------------
-config_access_file = Path.cwd().resolve() / "cfg" / "api-cfg.json"
-config_access_userdata_file = Path.cwd().resolve() / "cfg" / \
-    "api-cfg-access.json"
-config_local_file = Path.cwd().resolve() / "cfg" / "local.json"
+config_base_path = Path.cwd().resolve() / "cfg"
+config_access_file = config_base_path / "api-cfg.json"
+config_access_userdata_file = config_base_path / "user" / "api-cfg-access.json"
+config_local_file = config_base_path / "user" / "local.json"
+config_parameters_file = config_base_path / "parameters.json"
+
 
 config = Config(logger_name=LOGGER_NAME)
 config.load_config(filename=config_access_file)
