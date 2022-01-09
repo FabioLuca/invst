@@ -19,7 +19,7 @@ def test():
 
 
 @app.route("/data")
-def list_files():
+def show_data():
     config = Config(logger_name="test_app")
     valor = config.load_config_api()
     return valor
