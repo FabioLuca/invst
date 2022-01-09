@@ -40,7 +40,7 @@ class ReportAnalysis:
         self.name = self.config_general["display_name"]
         self.savename = self.config_general["save_name"]
 
-        config_local_file = Path.cwd().resolve() / "cfg" / "local.json"
+        config_local_file = Path.cwd().resolve() / "cfg" / "local" / "local.json"
         config = Config(logger_name=LOGGER_NAME)
         config.load_config(filename=config_local_file)
         self.store_folder = Path(config.local_config["paths"]["data_storage"])

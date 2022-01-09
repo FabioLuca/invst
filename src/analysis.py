@@ -85,7 +85,7 @@ class Analysis(Crash, MACD, RSI_SMA, RSI_EMA, BOLLINGER_BANDS, CombinedStrategy,
         #   Defines the location of the files with configurations and load them.
         # ----------------------------------------------------------------------
         config_base_path = Path.cwd().resolve() / "cfg"
-        config_local_file = config_base_path / "local.json"
+        config_local_file = config_base_path / "local" / "local.json"
         config_parameters_file = config_base_path / "parameters.json"
 
         self.config = Config(logger_name=LOGGER_NAME)

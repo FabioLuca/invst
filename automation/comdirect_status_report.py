@@ -568,7 +568,7 @@ today_string = datetime.today().strftime('%Y-%m-%d')
 config_base_path = Path.cwd().resolve() / "cfg"
 config_access_file = config_base_path / "api-cfg.json"
 config_access_userdata_file = config_base_path / "user" / "api-cfg-access.json"
-config_local_file = config_base_path / "user" / "local.json"
+config_local_file = config_base_path / "local" / "local.json"
 config_parameters_file = config_base_path / "parameters.json"
 
 
