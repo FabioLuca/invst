@@ -65,6 +65,7 @@ class Config:
         self.data_source_comm_access_data = None
         self.data_source_comm_user_data = None
 
+        self.data_source_storage_name = None
         self.data_source_storage_access_data = None
         self.data_source_storage_user_data = None
 
@@ -171,18 +172,26 @@ class Config:
                 "api"]["fetching"]["selection"]
             self.data_source_fetch_access_data = self.json_data[
                 "api"]["fetching"][self.data_source_fetch_name]["access_data"]
+
             self.data_source_trade_name = self.json_data[
                 "api"]["trading"]["selection"]
             self.data_source_trade_access_data = self.json_data[
                 "api"]["trading"][self.data_source_trade_name]["access_data"]
+
             self.data_source_wapp_name = self.json_data[
                 "api"]["communicating"]["whatsapp"]["selection"]
             self.data_source_wapp_access_data = self.json_data[
                 "api"]["communicating"]["whatsapp"][self.data_source_wapp_name]["access_data"]
+
             self.data_source_mail_name = self.json_data[
                 "api"]["communicating"]["email"]["selection"]
             self.data_source_mail_access_data = self.json_data[
                 "api"]["communicating"]["email"][self.data_source_mail_name]["access_data"]
+
+            self.data_source_storage_name = self.json_data[
+                "api"]["storage"]["selection"]
+            self.data_source_storage_access_data = self.json_data[
+                "api"]["storage"][self.data_source_storage_name]["access_data"]
 
             self.data_source_comm_access_data = {
                 "whatsapp": self.data_source_wapp_access_data,
@@ -219,7 +228,7 @@ class Config:
             self.data_source_mail_user_data = self.json_data[
                 "api"]["communicating"]["email"][self.data_source_mail_name]["user_data"]
             self.data_source_storage_user_data = self.json_data[
-                "api"]["storage"]["Dropbox"]["user_data"]
+                "api"]["storage"][self.data_source_storage_name]["user_data"]
 
             self.data_source_comm_user_data = {
                 "whatsapp": self.data_source_wapp_user_data,

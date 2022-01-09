@@ -11,6 +11,8 @@ class Dropbox:
     def upload_file(self, file: Path, destination_folder: str):
         """upload a file to Dropbox using API v2
         """
+        self.logger.info(f"Copying file to Dropbox: {file.name}")
+
         dbx = dropbox.Dropbox(self.access_token)
 
         if destination_folder[0] != "/":

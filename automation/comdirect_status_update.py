@@ -10,6 +10,7 @@ from src.lib.config import Config
 from src.session import Session
 from src.communication import Communication
 from src.lib import constants as C
+from src.storage import Storage
 
 LOGGER_NAME = "invst.comdirect_status_update"
 
@@ -119,6 +120,11 @@ def run_update(wait_time: int = 0):
     depot_position[1].to_excel(writer_trade, sheet_name='Depot Positions')
     orders.to_excel(writer_trade, sheet_name='Orders')
     writer_trade.save()
+
+    if config.data_source_storage_access_data["copy"]:
+        destination = config.data_source_storage_access_data["path_balance"]
+        storage = Storage(logger_name=LOGGER_NAME)
+        storage.upload_file(file_export_trade, destination)
 
 
 if __name__ == "__main__":
