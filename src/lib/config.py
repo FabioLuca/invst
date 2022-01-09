@@ -5,6 +5,7 @@ import json
 import logging
 import inspect
 # import glob
+from google.cloud import secretmanager
 from pathlib import Path
 from src.lib import messages as M
 # from src.lib import constants as C
@@ -129,6 +130,17 @@ class Config:
                 break
             return foundfiles
         return filename
+
+    def load_config_api(self):
+        PROJECT_ID = "736795625733"
+        secret_id = "API_Info"
+        version_id = "latest"
+        client = secretmanager.SecretManagerServiceClient()
+        name = f"projects/{PROJECT_ID}/secrets/{secret_id}/versions/{version_id}"
+        response = client.access_secret_version(name=name)
+        print(response.payload.data.decode('UTF-8'))
+        response = response.payload.data.decode('UTF-8')
+        return response
 
     def load_config(self, filename):
         """Loads the content from the configuration file. The 

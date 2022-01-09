@@ -3,6 +3,7 @@ import glob
 from pathlib import Path
 from automation import run_analysis
 from automation import comdirect_status_update
+from src.lib.config import Config
 
 app = Flask(__name__)
 
@@ -15,6 +16,13 @@ def basic():
 @app.route("/test")
 def test():
     return "It's Running a Test"
+
+
+@app.route("/data")
+def list_files():
+    config = Config(logger_name="test_app")
+    valor = config.load_config_api()
+    return valor
 
 
 @app.route("/list")
