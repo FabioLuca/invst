@@ -54,16 +54,16 @@ def call_run_update():
     return "Running update from Comdirect"
 
 
-@ app.route("/update1")
-def call_run_update_part1():
-    comdirect_status_update.run_update()
-    return "Running update from Comdirect: Part 1"
+# @ app.route("/update1")
+# def call_run_update_part1():
+#     comdirect_status_update.run_update()
+#     return "Running update from Comdirect: Part 1"
 
 
-@ app.route("/update2")
-def call_run_update_part2():
-    comdirect_status_update.run_update()
-    return "Running update from Comdirect: Part 2"
+# @ app.route("/update2")
+# def call_run_update_part2():
+#     comdirect_status_update.run_update()
+#     return "Running update from Comdirect: Part 2"
 
 
 if __name__ == "__main__":
