@@ -1,9 +1,7 @@
 from flask import Flask
-import glob
 from pathlib import Path
 from automation import run_analysis
 from automation import comdirect_status_update
-from src.lib.config import Config
 
 app = Flask(__name__)
 
@@ -52,7 +50,7 @@ def call_run_analysis():
 
 @ app.route("/update")
 def call_run_update():
-    comdirect_status_update.run_update(wait_time=20)
+    comdirect_status_update.run_update(wait_time=30)
     return "Running update from Comdirect"
 
 
