@@ -1,10 +1,10 @@
 import logging
 from pathlib import Path
 from src.lib.config import Config
-from src.lib.storage.dropbox import Dropbox
+from src.lib.storage.dropbox import DropboxAPI
 
 
-class Storage(Dropbox):
+class Storage(DropboxAPI):
 
     def __init__(self, logger_name: str) -> None:
 
@@ -24,6 +24,8 @@ class Storage(Dropbox):
         self.config.load_config(filename=config_parameters_file)
 
         self.access_token = self.config.data_source_storage_user_data["TOKEN"]
+        self.app_key = self.config.data_source_storage_user_data["APPKEY"]
+        self.app_secret = self.config.data_source_storage_user_data["SECRET"]
 
         # ----------------------------------------------------------------------
         #   Defines the logger to output the information and also
