@@ -124,7 +124,11 @@ def run_update(wait_time: int = 0):
     if config.data_source_storage_access_data["copy"]:
         destination = config.data_source_storage_access_data["path_balance"]
         storage = Storage(logger_name=LOGGER_NAME)
-        storage.upload_file(file_export_trade, destination)
+        copy_resp = storage.upload_file(file_export_trade, destination)
+        if copy_resp is not None:
+            logger.info("Copied file!")
+
+    return "Finalized update!"
 
 
 if __name__ == "__main__":

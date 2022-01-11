@@ -50,8 +50,8 @@ def call_run_analysis():
 
 @ app.route("/update")
 def call_run_update():
-    comdirect_status_update.run_update(wait_time=30)
-    return "Running update from Comdirect"
+    return comdirect_status_update.run_update(wait_time=30)
+    # return "Running update from Comdirect"
 
 
 @ app.route("/update1")
