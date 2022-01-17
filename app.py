@@ -44,14 +44,12 @@ def list_files():
 
 @ app.route("/analysis")
 def call_run_analysis():
-    run_analysis.run_analysis()
-    return "Running market analysis"
+    return run_analysis.run_analysis()
 
 
 @ app.route("/update")
 def call_run_update():
     return comdirect_status_update.run_update(wait_time=30)
-    # return "Running update from Comdirect"
 
 
 @ app.route("/update1")
