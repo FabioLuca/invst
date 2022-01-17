@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request, render_template
 from pathlib import Path
 from automation import run_analysis
 from automation import comdirect_status_update
@@ -42,23 +42,43 @@ def list_files():
     return output_string
 
 
-@ app.route("/analysis")
-def call_run_analysis():
+html_analysis = """
+    <form action="analysis" method="post">
+    <p>Symbol <input type = "text" name = "symbolname" /></p>
+    <p><input type = "submit" value = "Submit" /></p>
+    """
+
+
+@app.route("/analysis_completa")
+def call_run_analysis_completa():
     return run_analysis.run_analysis()
 
 
-@ app.route("/update")
+@app.route("/analysis", methods=['POST', 'GET'])
+def call_run_analysis():
+
+    if request.method == 'GET':
+        return html_analysis
+
+    if request.method == 'POST':
+        name = request.form.get("symbolname")
+        print(name)
+        # name = request.args['s']
+        return run_analysis.run_analysis(ticker_input=name.upper())
+
+
+@app.route("/update")
 def call_run_update():
     return comdirect_status_update.run_update(wait_time=30)
 
 
-@ app.route("/update1")
+@app.route("/update1")
 def call_run_update_part1():
     comdirect_status_update.run_update()
     return "Running update from Comdirect: Part 1"
 
 
-@ app.route("/update2")
+@app.route("/update2")
 def call_run_update_part2():
     comdirect_status_update.run_update()
     return "Running update from Comdirect: Part 2"

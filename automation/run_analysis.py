@@ -18,7 +18,7 @@ from src.storage import Storage
 LOGGER_NAME = "invst.run_analysis"
 
 
-def run_analysis():
+def run_analysis(ticker_input: str = None):
 
     # --------------------------------------------------------------------------
     #   Defines the logger configuration and start the logger. Add a few
@@ -92,31 +92,37 @@ def run_analysis():
     # --------------------------------------------------------------------------
     #   List of tickers and sequence analysis.
     # --------------------------------------------------------------------------
-    symbols = [
-        {"name": "Daimler AG", "symbol": "DAI.DE"},
-        {"name": "Siemens AG", "symbol": "SIE.DE"},
-        {"name": "Coca-Cola Co.", "symbol": "KO"},
-        {"name": "Alphabet Inc.", "symbol": "GOOG"},
-        {"name": "Tesla, Inc.", "symbol": "TSLA"},
-        {"name": "Boeing Co.", "symbol": "BA"},
-        {"name": "Apple", "symbol": "AAPL"},
-        {"name": "Amazon", "symbol": "AMZN"},
-        {"name": "Bristol-Meyers Squibb", "symbol": "BMY"},
-        {"name": "General Motors", "symbol": "GM"},
-        {"name": "AbbVie Inc.", "symbol": "ABBV"},
-        {"name": "American Express CO.", "symbol": "AXP"},
-        {"name": "3M CO.", "symbol": "MMM"},
-        {"name": "CISCO INC.", "symbol": "CSCO"},
-        {"name": "IBM CORP.", "symbol": "IBM"},
-        {"name": "The Walt Disney Co.", "symbol": "DIS"},
-        {"name": "Johnson & Johnson", "symbol": "JNJ"},
-        {"name": "IDEX", "symbol": "IEX"},
-        {"name": "Akamai Technologies, Inc.", "symbol": "AKAM"},
-        {"name": "Telefonaktiebolaget LM Ericsson", "symbol": "ERIC"},
-        {"name": "Thermo Fisher Scientific Inc.", "symbol": "TMO"},
-        {"name": "Zscaler, Inc.", "symbol": "ZS"},
-        {"name": "Meta", "symbol": "FB"},
-    ]
+    if ticker_input is not None:
+        symbols = [
+            {"name": "", "symbol": ticker_input},
+        ]
+    else:
+        symbols = [
+            {"name": "Daimler AG", "symbol": "DAI.DE"},
+            {"name": "Siemens AG", "symbol": "SIE.DE"},
+            {"name": "Coca-Cola Co.", "symbol": "KO"},
+            {"name": "Alphabet Inc.", "symbol": "GOOG"},
+            {"name": "Tesla, Inc.", "symbol": "TSLA"},
+            {"name": "Boeing Co.", "symbol": "BA"},
+            {"name": "Apple", "symbol": "AAPL"},
+            {"name": "Amazon", "symbol": "AMZN"},
+            {"name": "Bristol-Meyers Squibb", "symbol": "BMY"},
+            {"name": "General Motors", "symbol": "GM"},
+            {"name": "AbbVie Inc.", "symbol": "ABBV"},
+            {"name": "American Express CO.", "symbol": "AXP"},
+            {"name": "3M CO.", "symbol": "MMM"},
+            {"name": "CISCO INC.", "symbol": "CSCO"},
+            {"name": "IBM CORP.", "symbol": "IBM"},
+            {"name": "The Walt Disney Co.", "symbol": "DIS"},
+            {"name": "Johnson & Johnson", "symbol": "JNJ"},
+            {"name": "IDEX", "symbol": "IEX"},
+            {"name": "Akamai Technologies, Inc.", "symbol": "AKAM"},
+            {"name": "Telefonaktiebolaget LM Ericsson", "symbol": "ERIC"},
+            {"name": "Thermo Fisher Scientific Inc.", "symbol": "TMO"},
+            {"name": "Zscaler, Inc.", "symbol": "ZS"},
+            {"name": "Meta", "symbol": "FB"},
+        ]
+
     execution_data["execution"]["Symbols"] = symbols
     execution_data["execution"]["Symbols count"] = len(symbols)
 
