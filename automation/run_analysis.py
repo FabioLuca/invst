@@ -13,6 +13,7 @@ from src.lib import constants as C
 from src.data_access import DataAccess
 from src.analysis import Analysis
 from src.lib import print_table as pt
+from src.storage import Storage
 
 LOGGER_NAME = "invst.run_analysis"
 
@@ -207,7 +208,7 @@ def run_analysis():
     logger.info(
         "======================= COMPLETED RUN =======================")
 
-    return "Completed run"
+    return "Completed analysis run"
 
 
 if __name__ == "__main__":
