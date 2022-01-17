@@ -56,27 +56,82 @@ class Orders (Quotes):
 
         for order_item in response_body_json["values"]:
 
-            order_id = order_item["orderId"]
-            instrument_id = order_item["instrumentId"]
-            venue_id = order_item["venueId"]
-            order_status = order_item["orderStatus"]
             order_type = order_item["orderType"]
-            order_side = order_item["side"]
-            validity_type = order_item["validityType"]
-            quantity = order_item["quantity"]["value"]
-            limit = order_item["limit"]["value"]
-            limit_unit = order_item["limit"]["unit"]
 
-            list_order_id.append(order_id)
-            list_instrument_id.append(instrument_id)
-            list_venue_id.append(venue_id)
-            list_order_status.append(order_status)
-            list_order_type.append(order_type)
-            list_order_side.append(order_side)
-            list_validity_type.append(validity_type)
-            list_quantity.append(quantity)
-            list_limit.append(limit)
-            list_limit_unit.append(limit_unit)
+            if order_type == "ONE_CANCELS_OTHER":
+
+                for suborder in order_item.get("subOrders", 0):
+
+                    suborder_type = suborder["orderType"]
+
+                    if suborder_type == "STOP_MARKET":
+
+                        order_id = suborder.get("orderId")
+                        instrument_id = suborder.get("instrumentId")
+                        venue_id = suborder.get("venueId")
+                        order_status = suborder["orderStatus"]
+                        order_side = suborder["side"]
+                        validity_type = suborder["validityType"]
+                        quantity = suborder["quantity"]["value"]
+                        limit = suborder["triggerLimit"]["value"]
+                        limit_unit = suborder["triggerLimit"]["unit"]
+
+                        list_order_id.append(order_id)
+                        list_instrument_id.append(instrument_id)
+                        list_venue_id.append(venue_id)
+                        list_order_status.append(order_status)
+                        list_order_type.append(order_type)
+                        list_order_side.append(order_side)
+                        list_validity_type.append(validity_type)
+                        list_quantity.append(quantity)
+                        list_limit.append(limit)
+                        list_limit_unit.append(limit_unit)
+
+                    elif suborder_type == "LIMIT":
+
+                        order_id = suborder.get("orderId")
+                        instrument_id = suborder.get("instrumentId")
+                        venue_id = suborder.get("venueId")
+                        order_status = suborder["orderStatus"]
+                        order_side = suborder["side"]
+                        validity_type = suborder["validityType"]
+                        quantity = suborder["quantity"]["value"]
+                        limit = suborder["limit"]["value"]
+                        limit_unit = suborder["limit"]["unit"]
+
+                        list_order_id.append(order_id)
+                        list_instrument_id.append(instrument_id)
+                        list_venue_id.append(venue_id)
+                        list_order_status.append(order_status)
+                        list_order_type.append(order_type)
+                        list_order_side.append(order_side)
+                        list_validity_type.append(validity_type)
+                        list_quantity.append(quantity)
+                        list_limit.append(limit)
+                        list_limit_unit.append(limit_unit)
+
+            elif order_type == "LIMIT":
+
+                order_id = order_item.get("orderId")
+                instrument_id = order_item.get("instrumentId")
+                venue_id = order_item["venueId"]
+                order_status = order_item["orderStatus"]
+                order_side = order_item["side"]
+                validity_type = order_item["validityType"]
+                quantity = order_item["quantity"]["value"]
+                limit = order_item["limit"]["value"]
+                limit_unit = order_item["limit"]["unit"]
+
+                list_order_id.append(order_id)
+                list_instrument_id.append(instrument_id)
+                list_venue_id.append(venue_id)
+                list_order_status.append(order_status)
+                list_order_type.append(order_type)
+                list_order_side.append(order_side)
+                list_validity_type.append(validity_type)
+                list_quantity.append(quantity)
+                list_limit.append(limit)
+                list_limit_unit.append(limit_unit)
 
         zippedList = list(
             zip(
