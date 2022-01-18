@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect, url_for
 from pathlib import Path
 from automation import run_analysis
 from automation import comdirect_status_update
@@ -6,9 +6,16 @@ from automation import comdirect_status_update
 app = Flask(__name__)
 
 
-@app.route("/")
+@app.route("/", methods=['POST', 'GET'])
 def basic():
-    return "It's Running"
+
+    if request.method == 'GET':
+        return render_template('app.html')
+
+    if request.method == 'POST':
+        analysis_symbol_name = request.form.get("analysis_symbol_name")
+        print(analysis_symbol_name)
+        return run_analysis.run_analysis(ticker_input=analysis_symbol_name.upper())
 
 
 @app.route("/test")
@@ -42,46 +49,38 @@ def list_files():
     return output_string
 
 
-html_analysis = """
-    <form action="analysis" method="post">
-    <p>Symbol <input type = "text" name = "symbolname" /></p>
-    <p><input type = "submit" value = "Submit" /></p>
-    """
+@app.route("/analysiscomplete", methods=['POST'])
+def call_run_analysis_complete():
+    run_analysis.run_analysis()
+    return redirect(url_for('basic'))
 
 
-@app.route("/analysis_completa")
-def call_run_analysis_completa():
-    return run_analysis.run_analysis()
-
-
-@app.route("/analysis", methods=['POST', 'GET'])
+@app.route("/analysis", methods=['POST'])
 def call_run_analysis():
-
-    if request.method == 'GET':
-        return html_analysis
-
-    if request.method == 'POST':
-        name = request.form.get("symbolname")
-        print(name)
-        # name = request.args['s']
-        return run_analysis.run_analysis(ticker_input=name.upper())
+    analysis_symbol_name = request.form.get("analysis_symbol_name")
+    print(analysis_symbol_name)
+    # name = request.args['s']
+    if analysis_symbol_name != "":
+        run_analysis.run_analysis(ticker_input=analysis_symbol_name.upper())
+    return redirect(url_for('basic'))
 
 
-@app.route("/update")
+@app.route("/update", methods=['POST'])
 def call_run_update():
-    return comdirect_status_update.run_update(wait_time=30)
+    comdirect_status_update.run_update(wait_time=30)
+    return redirect(url_for('basic'))
 
 
-@app.route("/update1")
+@app.route("/update1", methods=['POST'])
 def call_run_update_part1():
     comdirect_status_update.run_update()
-    return "Running update from Comdirect: Part 1"
+    return redirect(url_for('basic'))
 
 
-@app.route("/update2")
+@app.route("/update2", methods=['POST'])
 def call_run_update_part2():
     comdirect_status_update.run_update()
-    return "Running update from Comdirect: Part 2"
+    return redirect(url_for('basic'))
 
 
 if __name__ == "__main__":

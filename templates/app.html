@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>FlaskApp</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/app.css') }}">
+</head>
+
+<body>
+    <h1>Invst Project</h1>
+
+    <div class="divTopic">
+        <div class="title">
+            <h2>Analysis</h2>
+        </div>
+        <div class="buttonsGroup elemCount2">
+            <form method="POST" action="{{url_for('call_run_analysis')}}">
+                <p>Symbol <input type="text" name="analysis_symbol_name" /></p>
+                <p><input class="actionButton" type="submit" name="run_analysis_button" value="Run analysis" /></p>
+            </form>
+        </div>
+        <div class="buttonsGroup elemCount2">
+            <form method="POST" action="{{url_for('call_run_analysis_complete')}}">
+                <input class="actionButton" type="submit" name="run_analysis_complete_button"
+                    value="Run analysis complete" />
+            </form>
+        </div>
+    </div>
+    <div class="divTopic">
+        <div class="title">
+            <h2>Update</h2>
+        </div>
+        <div class="buttonsGroup elemCount3">
+            <form method="POST" action="{{url_for('call_run_update_part1')}}">
+                <input class="actionButton" type="submit" name="watch1" value="Run Step 1" />
+            </form>
+        </div>
+        <div class="buttonsGroup elemCount3">
+            <form method="POST" action="{{url_for('call_run_update_part2')}}">
+                <p><input class="actionButton" type="submit" name="watch2" value="Run Step 2" /></p>
+            </form>
+        </div>
+        <div class="buttonsGroup elemCount3">
+            <form method="POST" action="{{url_for('call_run_update')}}">
+                <p><input class="actionButton" type="submit" name="watch2" value="Run based on timer" /></p>
+            </form>
+        </div>
+    </div>
+    <div class="divTopic">
+        <div class="title">
+            <h2>Display Report</h2>
+        </div>
+        <div class="buttonsGroup elemCount1">
+            <form action="run_report" method="post">
+                <p><input class="actionButton" type="submit" name="watch3" value="Display report" /></p>
+            </form>
+        </div>
+    </div>
+
+</body>
+
+</html>
+
+
+<!-- <form action="analysis" method="post">
+    <p>Symbol <input type="text" name="symbolname" /></p>
+    <p><input type="submit" value="Submit" /></p> -->
