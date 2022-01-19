@@ -224,11 +224,23 @@ MESSAGE = {
         "Level": C.INFO,
         "Message": "Successful loading the configuration from %s."
     },
+    "Config_Load_Fail_Find": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "Failure loading the configuration from %s. This file does "
+                   "not exist."
+    },
     "Config_Load_Fail": {
         "Flag": C.FAIL,
         "Level": C.ERROR,
         "Message": "Failure loading the configuration from %s. This file is "
                    "not supported."
+    },
+    "Config_Load_Fail_Key": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "Failure loading the configuration. The key %s is not "
+                   "available."
     },
     "Config_Error_No_Source_Fetching": {
         "Flag": C.FAIL,

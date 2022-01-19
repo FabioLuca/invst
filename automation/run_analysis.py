@@ -63,10 +63,14 @@ def run_analysis(ticker_input: str = None):
     config_parameters_file = config_base_path / "parameters.json"
 
     config = Config(logger_name=LOGGER_NAME)
-    config.load_config(filename=config_access_file)
-    config.load_config(filename=config_access_userdata_file)
-    config.load_config(filename=config_local_file)
-    config.load_config(filename=config_parameters_file)
+    re_load_config = config.load_config(filename=config_access_file)
+    re_load_user = config.load_config(filename=config_access_userdata_file)
+    re_load_local = config.load_config(filename=config_local_file)
+    re_load_param = config.load_config(filename=config_parameters_file)
+
+    if (re_load_config[1] != C.SUCCESS or re_load_user[1] != C.SUCCESS or
+            re_load_local[1] != C.SUCCESS or re_load_param[1] != C.SUCCESS):
+        return "Error loading files"
 
     # --------------------------------------------------------------------------
     #   Collects data about the execution.

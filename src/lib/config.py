@@ -117,7 +117,7 @@ class Config:
         self.logger = logging.getLogger(self.logger_name)
         self.logger.info("Initializing configuration.")
 
-    def assert_filename(self, filename):
+    def assert_filename(self, filename: Path):
         """Verifies if the file passed for the configuration exists. In case it
         doesn't exist, the application will search for a file with the same name
         and extension, starting from 1 folder above (not more). This is intended
@@ -125,20 +125,30 @@ class Config:
         folder is different from the main application, for example, creating
         docs in Sphinx.
         """
-
         foundfiles = None
         if not filename.exists():
+            self.logger.info(
+                f"File {filename} not found in the expected location! Searching for similar ones.")
             for path in Path('..').rglob(filename.name):
                 foundfiles = path
                 break
+            if foundfiles is None:
+                self.logger.info(f"File {filename} is not available!")
             return foundfiles
+        self.logger.info(f"Found {filename} in expected location.")
         return filename
 
-    def load_config(self, filename):
+    def load_config(self, filename: Path):
         """Loads the content from the configuration file. The 
         """
 
+        filename_original = filename
         filename = self.assert_filename(filename=filename)
+
+        if filename is None:
+            flag, level, message = M.get_status(
+                self.logger_name, "Config_Load_Fail_Find", filename_original)
+            return None, flag, level, message
 
         flag, level, message = M.get_status(
             self.logger_name, "Config_Load_Config", filename)
@@ -167,35 +177,42 @@ class Config:
             # ------------------------------------------------------------------
             #   Configuration related to the online data sources
             # ------------------------------------------------------------------
-            self.data_source_fetch_name = self.json_data[
-                "api"]["fetching"]["selection"]
-            self.data_source_fetch_access_data = self.json_data[
-                "api"]["fetching"][self.data_source_fetch_name]["access_data"]
+            try:
+                self.data_source_fetch_name = self.json_data[
+                    "api"]["fetching"]["selection"]
+                self.data_source_fetch_access_data = self.json_data[
+                    "api"]["fetching"][self.data_source_fetch_name]["access_data"]
 
-            self.data_source_trade_name = self.json_data[
-                "api"]["trading"]["selection"]
-            self.data_source_trade_access_data = self.json_data[
-                "api"]["trading"][self.data_source_trade_name]["access_data"]
+                self.data_source_trade_name = self.json_data[
+                    "api"]["trading"]["selection"]
+                self.data_source_trade_access_data = self.json_data[
+                    "api"]["trading"][self.data_source_trade_name]["access_data"]
 
-            self.data_source_wapp_name = self.json_data[
-                "api"]["communicating"]["whatsapp"]["selection"]
-            self.data_source_wapp_access_data = self.json_data[
-                "api"]["communicating"]["whatsapp"][self.data_source_wapp_name]["access_data"]
+                self.data_source_wapp_name = self.json_data[
+                    "api"]["communicating"]["whatsapp"]["selection"]
+                self.data_source_wapp_access_data = self.json_data[
+                    "api"]["communicating"]["whatsapp"][self.data_source_wapp_name]["access_data"]
 
-            self.data_source_mail_name = self.json_data[
-                "api"]["communicating"]["email"]["selection"]
-            self.data_source_mail_access_data = self.json_data[
-                "api"]["communicating"]["email"][self.data_source_mail_name]["access_data"]
+                self.data_source_mail_name = self.json_data[
+                    "api"]["communicating"]["email"]["selection"]
+                self.data_source_mail_access_data = self.json_data[
+                    "api"]["communicating"]["email"][self.data_source_mail_name]["access_data"]
 
-            self.data_source_storage_name = self.json_data[
-                "api"]["storage"]["selection"]
-            self.data_source_storage_access_data = self.json_data[
-                "api"]["storage"][self.data_source_storage_name]["access_data"]
+                self.data_source_storage_name = self.json_data[
+                    "api"]["storage"]["selection"]
+                self.data_source_storage_access_data = self.json_data[
+                    "api"]["storage"][self.data_source_storage_name]["access_data"]
 
-            self.data_source_comm_access_data = {
-                "whatsapp": self.data_source_wapp_access_data,
-                "email": self.data_source_mail_access_data
-            }
+                self.data_source_comm_access_data = {
+                    "whatsapp": self.data_source_wapp_access_data,
+                    "email": self.data_source_mail_access_data
+                }
+
+            except KeyError as dictkey:
+                result = None
+                flag, level, message = M.get_status(
+                    self.logger_name, "Config_Load_Fail_Key", str(dictkey))
+                return result, flag, level, message
 
         elif filename.stem == "api-cfg-access":
 
@@ -218,21 +235,28 @@ class Config:
             # ------------------------------------------------------------------
             #   Configuration related to the online data sources
             # ------------------------------------------------------------------
-            self.data_source_fetch_user_data = self.json_data[
-                "api"]["fetching"][self.data_source_fetch_name]["user_data"]
-            self.data_source_trade_user_data = self.json_data[
-                "api"]["trading"][self.data_source_trade_name]["user_data"]
-            self.data_source_wapp_user_data = self.json_data[
-                "api"]["communicating"]["whatsapp"][self.data_source_wapp_name]["user_data"]
-            self.data_source_mail_user_data = self.json_data[
-                "api"]["communicating"]["email"][self.data_source_mail_name]["user_data"]
-            self.data_source_storage_user_data = self.json_data[
-                "api"]["storage"][self.data_source_storage_name]["user_data"]
+            try:
+                self.data_source_fetch_user_data = self.json_data[
+                    "api"]["fetching"][self.data_source_fetch_name]["user_data"]
+                self.data_source_trade_user_data = self.json_data[
+                    "api"]["trading"][self.data_source_trade_name]["user_data"]
+                self.data_source_wapp_user_data = self.json_data[
+                    "api"]["communicating"]["whatsapp"][self.data_source_wapp_name]["user_data"]
+                self.data_source_mail_user_data = self.json_data[
+                    "api"]["communicating"]["email"][self.data_source_mail_name]["user_data"]
+                self.data_source_storage_user_data = self.json_data[
+                    "api"]["storage"][self.data_source_storage_name]["user_data"]
 
-            self.data_source_comm_user_data = {
-                "whatsapp": self.data_source_wapp_user_data,
-                "email": self.data_source_mail_user_data
-            }
+                self.data_source_comm_user_data = {
+                    "whatsapp": self.data_source_wapp_user_data,
+                    "email": self.data_source_mail_user_data
+                }
+
+            except KeyError as dictkey:
+                result = None
+                flag, level, message = M.get_status(
+                    self.logger_name, "Config_Load_Fail_Key", str(dictkey))
+                return result, flag, level, message
 
         elif filename.stem == "local":
             # ------------------------------------------------------------------
