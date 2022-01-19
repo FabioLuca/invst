@@ -156,7 +156,7 @@ and the value is updated after the call of the method <cite>load_config</cite>.<
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.lib.config.Config.assert_filename">
-<span class="sig-name descname"><span class="pre">assert_filename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.lib.config.Config.assert_filename" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">assert_filename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.lib.config.Config.assert_filename" title="Permalink to this definition">¶</a></dt>
 <dd><p>Verifies if the file passed for the configuration exists. In case it
 doesn’t exist, the application will search for a file with the same name
 and extension, starting from 1 folder above (not more). This is intended
@@ -173,8 +173,9 @@ docs in Sphinx.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.lib.config.Config.load_config">
-<span class="sig-name descname"><span class="pre">load_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.lib.config.Config.load_config" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">load_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.lib.config.Config.load_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads the content from the configuration file. The</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.lib.config.Config.load_config_file">

@@ -54,7 +54,7 @@
 
 <h3>Navigation</h3>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="modules.html">Core</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Core</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html#fetching-data">Fetching data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html#trading-analysis">Trading analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html#analysis-methods">Analysis methods</a></li>
@@ -68,8 +68,10 @@
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
   <li><a href="modules.html">Core</a><ul>
+  <li><a href="session.html">Order execution and account status (Comdirect)</a><ul>
       <li>Previous: <a href="depots.html" title="previous chapter">Depots</a></li>
       <li>Next: <a href="config.html" title="next chapter">Configuration management</a></li>
+  </ul></li>
   </ul></li>
   </ul></li>
 </ul>
@@ -100,8 +102,25 @@
 
           <div class="body" role="main">
             
-  <section id="orders">
-<h1>Orders<a class="headerlink" href="#orders" title="Permalink to this headline">¶</a></h1>
+  <section id="module-src.lib.comdirect.orders">
+<span id="orders"></span><h1>Orders<a class="headerlink" href="#module-src.lib.comdirect.orders" title="Permalink to this headline">¶</a></h1>
+<p>Module for the Section 7 from the Comdirect API documentation: ORDER</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.lib.comdirect.orders.Orders">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.lib.comdirect.orders.</span></span><span class="sig-name descname"><span class="pre">Orders</span></span><a class="headerlink" href="#src.lib.comdirect.orders.Orders" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.lib.comdirect.quotes.Quotes</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.lib.comdirect.orders.Orders.get_orders">
+<span class="sig-name descname"><span class="pre">get_orders</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.lib.comdirect.orders.Orders.get_orders" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.lib.comdirect.orders.Orders.make_order">
+<span class="sig-name descname"><span class="pre">make_order</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wkn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">side_order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quantity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validity_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'GFD'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.datetime</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.lib.comdirect.orders.Orders.make_order" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </section>
 
 

@@ -136,24 +136,26 @@ responded.</p>
 <li><p><a class="reference internal" href="#to-do-s-and-future-work" id="id9">To do’s and future work</a></p></li>
 <li><p><a class="reference internal" href="#setup-and-operations" id="id10">Setup and operations</a></p>
 <ul>
-<li><p><a class="reference internal" href="#virtual-environment" id="id11">Virtual Environment</a></p></li>
-<li><p><a class="reference internal" href="#accessing-the-documentation" id="id12">Accessing the documentation</a></p></li>
-<li><p><a class="reference internal" href="#unit-testing" id="id13">Unit testing</a></p></li>
+<li><p><a class="reference internal" href="#user-configuration" id="id11">User configuration</a></p></li>
+<li><p><a class="reference internal" href="#virtual-environment" id="id12">Virtual Environment</a></p></li>
+<li><p><a class="reference internal" href="#accessing-the-documentation" id="id13">Accessing the documentation</a></p></li>
+<li><p><a class="reference internal" href="#docker" id="id14">Docker</a></p></li>
+<li><p><a class="reference internal" href="#unit-testing" id="id15">Unit testing</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#use-examples" id="id14">Use examples</a></p>
+<li><p><a class="reference internal" href="#use-examples" id="id16">Use examples</a></p>
 <ul>
-<li><p><a class="reference internal" href="#example-py" id="id15">example.py</a></p></li>
+<li><p><a class="reference internal" href="#module-example" id="id17">example.py</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#automation" id="id16">Automation</a></p>
+<li><p><a class="reference internal" href="#automation" id="id18">Automation</a></p>
 <ul>
-<li><p><a class="reference internal" href="#module-automation.comdirect_status_report" id="id17">comdirect_status_report.py</a></p></li>
-<li><p><a class="reference internal" href="#comdirect-status-update-py" id="id18">comdirect_status_update.py</a></p></li>
-<li><p><a class="reference internal" href="#module-automation.run_analysis" id="id19">run_analysis.py</a></p></li>
+<li><p><a class="reference internal" href="#module-automation.comdirect_status_report" id="id19">comdirect_status_report.py</a></p></li>
+<li><p><a class="reference internal" href="#module-automation.comdirect_status_update" id="id20">comdirect_status_update.py</a></p></li>
+<li><p><a class="reference internal" href="#module-automation.run_analysis" id="id21">run_analysis.py</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#indices-and-tables" id="id20">Indices and tables</a></p></li>
+<li><p><a class="reference internal" href="#indices-and-tables" id="id22">Indices and tables</a></p></li>
 </ul>
 </div>
 <section id="project-goals">
@@ -222,9 +224,9 @@ necessary the project application.</p></li>
 <p>The API’s applied in the project will need authentication. For that, an account
 must be created. Please follow the instructions from the chosen provider on
 their respective website to acquire one. Once available, a file named
-<code class="docutils literal notranslate"><span class="pre">api-cfg-access.json</span></code> need to be placed directly in the <code class="docutils literal notranslate"><span class="pre">cfg</span></code> folder. The
-structure of the JSON data follows the template below, where <cite>&lt;YOUR API KEY&gt;</cite>
-needs to be replaced by the string provided as API key:</p>
+<code class="docutils literal notranslate"><span class="pre">api-cfg-access.json</span></code> need to be placed directly in the <code class="docutils literal notranslate"><span class="pre">cfg\user</span></code> folder.
+The structure of the JSON data follows the template below, where
+<cite>&lt;YOUR API KEY&gt;</cite> needs to be replaced by the string provided as API key:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="s2">&quot;api&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;fetching&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -790,6 +792,22 @@ Currently only the fetching of account and depot information is implemented.</p>
 </section>
 <section id="setup-and-operations">
 <h2>Setup and operations<a class="headerlink" href="#setup-and-operations" title="Permalink to this headline">¶</a></h2>
+<section id="user-configuration">
+<h3>User configuration<a class="headerlink" href="#user-configuration" title="Permalink to this headline">¶</a></h3>
+<p>As mentioned above, some files are necessary for operation of the project. The
+final structure of files must follow the below description:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;Project folder&gt;
+├── ...Other files...
+├── cfg
+│   ├── local
+│   │   └─ local.json
+│   ├── user
+│   │   └─ api-cfg-access.json
+│   ├─ api-cfg.json
+│   └─ parameters.json
+</pre></div>
+</div>
+</section>
 <section id="virtual-environment">
 <h3>Virtual Environment<a class="headerlink" href="#virtual-environment" title="Permalink to this headline">¶</a></h3>
 <p>It is recommended to run the project with a Virtual Environment. To do so,
@@ -848,6 +866,28 @@ the command below. This is valid for Linux or Windows when using its terminal:</
 <p>The resulting documentation (<cite>index.html</cite>) is available in the folder
 <cite>docs/build/html</cite>.</p>
 </section>
+<section id="docker">
+<h3>Docker<a class="headerlink" href="#docker" title="Permalink to this headline">¶</a></h3>
+<p>To support cloud operation, for example, Google Cloud, the project is
+containerized in Docker for supporting deployment.</p>
+<p>To build the Docker image, the following command can be used:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">build</span> <span class="o">--</span><span class="n">tag</span> <span class="n">invst</span><span class="o">-</span><span class="n">docker</span> <span class="o">.</span>
+</pre></div>
+</div>
+<p>The to run the image:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="n">invst</span><span class="o">-</span><span class="n">docker</span>
+</pre></div>
+</div>
+<p>To list the running containers:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">ps</span>
+</pre></div>
+</div>
+<p>From this list, the container name can be checked. To terminate the running
+ones:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">stop</span> <span class="p">[</span><span class="n">CONTAINER_NAME</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
 <section id="unit-testing">
 <h3>Unit testing<a class="headerlink" href="#unit-testing" title="Permalink to this headline">¶</a></h3>
 <p>Unit test cases are available in the <cite>tests</cite> folder. The tests are based in the
@@ -865,8 +905,31 @@ the command:</p>
 </section>
 <section id="use-examples">
 <h2>Use examples<a class="headerlink" href="#use-examples" title="Permalink to this headline">¶</a></h2>
-<section id="example-py">
-<h3>example.py<a class="headerlink" href="#example-py" title="Permalink to this headline">¶</a></h3>
+<section id="module-example">
+<span id="example-py"></span><h3>example.py<a class="headerlink" href="#module-example" title="Permalink to this headline">¶</a></h3>
+<p>Example for the use of the project. The following steps are taken:</p>
+<ol class="arabic simple">
+<li><p><strong>Create a logger</strong>, so all the steps during the execution are presented,
+either to have information of the current status to the user, or to support
+debugging. By default, the display to the user is done with <cite>info</cite> level,
+whilst the storrage in the log files are done with <cite>debug</cite> level.</p></li>
+<li><p><strong>Load the configurations</strong>, since the project depends on configuration
+input for the access of the API’s, the <cite>.json</cite> files are loaded and the
+content stored in dictionaries to be used by the next steps.</p></li>
+<li><p><strong>Fetch ticker data</strong> from AlphaVantage API. For example purpose, two cases
+are done, first trying to fetch from an invalid ticker (<cite>GOOG2</cite>) and then
+in sequence trying to fetch for a list of valid symbols.</p></li>
+<li><p><strong>Perform analysis</strong> per symbol, producing a result for each one. See the
+documentation for the strategy analysis for more details.</p></li>
+<li><p><strong>Display</strong> on the console an overview of the results.</p></li>
+<li><p><strong>Fetch depot status</strong> from Comdirect account, where for each available
+element in the depot account, its values (e.g. current price, purchase price)
+are returned to be used for performance tracking.</p></li>
+<li><p><strong>Store the results</strong> in Microsoft Excel files, saving a different file per
+day (current date is used in the filename), and each data having a separate
+sheet in the <cite>.xlsx</cite> file.</p></li>
+</ol>
+<p>Other files in the automation folder can be used as examples.</p>
 </section>
 </section>
 <section id="automation">
@@ -905,13 +968,25 @@ timespam for analysis.</p></li>
 server which can be accessed by the addressed informed on the console, for
 example: <a class="reference external" href="http://127.0.0.1:8050/">http://127.0.0.1:8050/</a></p>
 </section>
-<section id="comdirect-status-update-py">
-<h3>comdirect_status_update.py<a class="headerlink" href="#comdirect-status-update-py" title="Permalink to this headline">¶</a></h3>
+<section id="module-automation.comdirect_status_update">
+<span id="comdirect-status-update-py"></span><h3>comdirect_status_update.py<a class="headerlink" href="#module-automation.comdirect_status_update" title="Permalink to this headline">¶</a></h3>
+<p>Script for getting the current values from Comdirect and storing into Excel
+files, to be used as a tracker.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="automation.comdirect_status_update.run_update">
+<span class="sig-prename descclassname"><span class="pre">automation.comdirect_status_update.</span></span><span class="sig-name descname"><span class="pre">run_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wait_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#automation.comdirect_status_update.run_update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </section>
 <section id="module-automation.run_analysis">
 <span id="run-analysis-py"></span><h3>run_analysis.py<a class="headerlink" href="#module-automation.run_analysis" title="Permalink to this headline">¶</a></h3>
 <p>Script for sequence analysis of a list of symbols / tickers and providing
 a report of the overall results for performance evaluation.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="automation.run_analysis.run_analysis">
+<span class="sig-prename descclassname"><span class="pre">automation.run_analysis.</span></span><span class="sig-name descname"><span class="pre">run_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ticker_input</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#automation.run_analysis.run_analysis" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </section>
 </section>
 <section id="indices-and-tables">

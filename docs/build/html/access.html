@@ -54,7 +54,7 @@
 
 <h3>Navigation</h3>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="modules.html">Core</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Core</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html#fetching-data">Fetching data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html#trading-analysis">Trading analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html#analysis-methods">Analysis methods</a></li>
@@ -68,8 +68,10 @@
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
   <li><a href="modules.html">Core</a><ul>
+  <li><a href="session.html">Order execution and account status (Comdirect)</a><ul>
       <li>Previous: <a href="session.html" title="previous chapter">Order execution and account status (Comdirect)</a></li>
       <li>Next: <a href="accounts.html" title="next chapter">Accounts</a></li>
+  </ul></li>
   </ul></li>
   </ul></li>
 </ul>
@@ -100,8 +102,25 @@
 
           <div class="body" role="main">
             
-  <section id="session-access">
-<h1>Session access<a class="headerlink" href="#session-access" title="Permalink to this headline">¶</a></h1>
+  <section id="module-src.lib.comdirect.access">
+<span id="session-access"></span><h1>Session access<a class="headerlink" href="#module-src.lib.comdirect.access" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.lib.comdirect.access.Access">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.lib.comdirect.access.</span></span><span class="sig-name descname"><span class="pre">Access</span></span><a class="headerlink" href="#src.lib.comdirect.access.Access" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.lib.comdirect.access.Access.connect">
+<span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wait_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.lib.comdirect.access.Access.connect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.lib.comdirect.access.Access.revoke_token">
+<span class="sig-name descname"><span class="pre">revoke_token</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.lib.comdirect.access.Access.revoke_token" title="Permalink to this definition">¶</a></dt>
+<dd><p>Revoke the current token (session).</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 

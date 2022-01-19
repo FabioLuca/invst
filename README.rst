@@ -93,9 +93,9 @@ the columns in the dataframe are:
 The API's applied in the project will need authentication. For that, an account
 must be created. Please follow the instructions from the chosen provider on
 their respective website to acquire one. Once available, a file named
-``api-cfg-access.json`` need to be placed directly in the ``cfg`` folder. The
-structure of the JSON data follows the template below, where `<YOUR API KEY>`
-needs to be replaced by the string provided as API key::
+``api-cfg-access.json`` need to be placed directly in the ``cfg\user`` folder.
+The structure of the JSON data follows the template below, where
+`<YOUR API KEY>` needs to be replaced by the string provided as API key::
 
     {
         "api": {
@@ -299,6 +299,22 @@ To do's and future work
 
 Setup and operations
 --------------------------------------------------------------------------------
+
+User configuration
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+As mentioned above, some files are necessary for operation of the project. The
+final structure of files must follow the below description::
+
+    <Project folder>
+    ├── ...Other files...
+    ├── cfg
+    │   ├── local
+    │   │   └─ local.json
+    │   ├── user
+    │   │   └─ api-cfg-access.json
+    │   ├─ api-cfg.json
+    │   └─ parameters.json
 
 Virtual Environment
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
