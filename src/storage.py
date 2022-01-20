@@ -34,3 +34,15 @@ class Storage(DropboxAPI):
         self.logger_name = logger_name + ".storage"
         self.logger = logging.getLogger(self.logger_name)
         self.logger.info("Initializing storage.")
+
+    def save_file(self, filepath: Path, save_dropbox: bool):
+
+        if save_dropbox:
+            destination = self.config.data_source_storage_access_data["path_balance"]
+            copy_resp = self.upload_file(filepath, destination)
+            if copy_resp is not None:
+                self.logger.info("File copied to Dropbox!")
+
+    def load_file(self, filepath: Path):
+
+        self.download_file()
