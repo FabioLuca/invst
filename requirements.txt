@@ -20,3 +20,4 @@ deepdiff
 flask
 gunicorn
 dropbox
+Werkzeug
