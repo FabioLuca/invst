@@ -158,3 +158,5 @@ models/
 
 # Remove the saved html for debugging
 content.html
+
+temp.json

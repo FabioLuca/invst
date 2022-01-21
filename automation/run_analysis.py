@@ -68,8 +68,10 @@ def run_analysis(ticker_input: str = None):
     re_load_local = config.load_config(filename=config_local_file)
     re_load_param = config.load_config(filename=config_parameters_file)
 
-    if (re_load_config[1] != C.SUCCESS or re_load_user[1] != C.SUCCESS or
-            re_load_local[1] != C.SUCCESS or re_load_param[1] != C.SUCCESS):
+    if (re_load_config[1] != C.SUCCESS or
+            re_load_user[1] != C.SUCCESS or
+            re_load_local[1] != C.SUCCESS or
+            re_load_param[1] != C.SUCCESS):
         return "Error loading files"
 
     # --------------------------------------------------------------------------

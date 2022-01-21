@@ -12,7 +12,7 @@ from src.lib.comdirect.orders import Orders
 
 class Session (Access, Accounts, Depots, Orders):
 
-    def __init__(self, access_config, access_userdata, logger_name) -> None:
+    def __init__(self, access_config, access_userdata, logger_name, session_info: dict = None) -> None:
 
         self.session_connected = False
 
@@ -37,6 +37,16 @@ class Session (Access, Accounts, Depots, Orders):
         self.depot_id = None
 
         self.access_config = access_config
+
+        if session_info is not None:
+            self.access_token = session_info["access_token"]
+            self.refresh_token = session_info["refresh_token"]
+            self.session_id = self.str_uuid(session_info["session_id"])
+            self.request_id = session_info["request_id"]
+            self.challenge_id = session_info["challenge_id"]
+            self.challenge_type = session_info["challenge_type"]
+            self.authentication_info = session_info["authentication_info"]
+            self.identifier = session_info["identifier"]
 
         # ----------------------------------------------------------------------
         #   Defines the logger to output the information and also
@@ -160,6 +170,12 @@ class Session (Access, Accounts, Depots, Orders):
 
     def get_session_id(self):
         return uuid.uuid4()
+
+    def uuid_str(self, uuid):
+        return str(uuid.urn)
+
+    def str_uuid(self, string):
+        return uuid.UUID(string).hex
 
     def get_request_id(self):
         time_miliseconds = int(round(time.time() * 1000))

@@ -134,6 +134,11 @@ MESSAGE = {
         "Level": C.ERROR,
         "Message": "Failure on the validation step. Error code: %s. Message: %s"
     },
+    "Comdirec_Connect_Step1_Success": {
+        "Flag": C.SUCCESS,
+        "Level": C.INFO,
+        "Message": "Success on the first step of the connection."
+    },
     "API_Trade_Validate_Success": {
         "Flag": C.SUCCESS,
         "Level": C.INFO,
