@@ -18,7 +18,7 @@ from src.storage import Storage
 LOGGER_NAME = "invst.run_analysis"
 
 
-def run_analysis(ticker_input: str = None):
+def run_analysis(ticker_input: list = None):
 
     # --------------------------------------------------------------------------
     #   Defines the logger configuration and start the logger. Add a few
@@ -99,9 +99,11 @@ def run_analysis(ticker_input: str = None):
     #   List of tickers and sequence analysis.
     # --------------------------------------------------------------------------
     if ticker_input is not None:
-        symbols = [
-            {"name": "", "symbol": ticker_input},
-        ]
+        symbols = []
+        for ticker_item in ticker_input:
+            symbols.append(
+                {"name": "", "symbol": ticker_item},
+            )
     else:
         symbols = [
             {"name": "Daimler AG", "symbol": "DAI.DE"},

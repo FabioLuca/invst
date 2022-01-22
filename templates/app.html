@@ -3,58 +3,113 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>FlaskApp</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Invst Project</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/app.css') }}">
 </head>
 
 <body>
-    <h1>Invst Project</h1>
+    <div class="pageTitle">
+        <h1>Invst Project</h1>
+    </div>
 
-    <div class="divTopic">
-        <div class="title">
-            <h2>Analysis</h2>
+    <div class="blockTopic">
+        <header class="titleTopic elem1of1">
+            Analysis
+        </header>
+        <div class="explanationTopic elem1of1">
+            <p>Executes the analysis for a define symbol or list of symbols. In
+                the Symbol input, the desired ticker for analysis needs to be
+                inserted. Alternatively a list can be passed, separating the
+                ticker by semicolon (";") symbol. The second button option is to
+                run a complete analysis for a portfolio, using a pre-defined
+                list of tickers.
+            </p>
         </div>
-        <div class="buttonsGroup elemCount2">
-            <form method="POST" action="{{url_for('call_run_analysis')}}">
-                <p>Symbol <input type="text" name="analysis_symbol_name" /></p>
-                <p><input class="actionButton" type="submit" name="run_analysis_button" value="Run analysis" /></p>
-            </form>
+        <div class="elementTopic elem1of2">
+            <div class="elementTable">
+                <div class="elementTableCell">
+                    <form method="POST" action="{{url_for('call_run_analysis')}}">
+                        <p class="labelParagraph">Symbol <input class="inputText" type="text"
+                                name="analysis_symbol_name" />
+                        </p>
+                        <input class="actionButton" type="submit" name="run_analysis_button" value="Run analysis" />
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="buttonsGroup elemCount2">
-            <form method="POST" action="{{url_for('call_run_analysis_complete')}}">
-                <input class="actionButton" type="submit" name="run_analysis_complete_button"
-                    value="Run analysis complete" />
-            </form>
+        <div class="elementTopic elem2of2">
+            <div class="elementTable">
+                <div class="elementTableCell">
+                    <form method="GET" action="/analysis/complete">
+                        <input class="actionButton" type="submit" name="run_analysis_complete_button"
+                            value="Run analysis complete" />
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="divTopic">
-        <div class="title">
-            <h2>Update</h2>
+    <div class="blockTopic">
+        <header class="titleTopic elem1of1">
+            Update Comdirect
+        </header>
+        <div class="explanationTopic elem1of1">
+            <p>Collects the actual information for the Comdirect account. The
+                access to the Comdirect demands 2-factor authentication by the
+                TAN application. To proced there are 2 options available. The
+                first is by user input following the TAN response, and the
+                second is based on a timer of 30 seconds. For the first option,
+                after clicking on the "Run Step 1" button, the TAN request
+                push will be received by the account owner, and after acceptance
+                then the "Run Step 2" is to be clicked, where the remaining of
+                the routine will be executed.
+            </p>
         </div>
-        <div class="buttonsGroup elemCount3">
-            <form method="POST" action="{{url_for('call_run_update_part1')}}">
-                <input class="actionButton" type="submit" name="watch1" value="Run Step 1" />
-            </form>
+        <div class="elementTopic elem1of3">
+            <div class="elementTable">
+                <div class="elementTableCell">
+                    <form method="POST" action="{{url_for('call_run_update_part1')}}">
+                        <input class="actionButton" type="submit" name="watch1" value="Run Step 1" />
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="buttonsGroup elemCount3">
-            <form method="POST" action="{{url_for('call_run_update_part2')}}">
-                <p><input class="actionButton" type="submit" name="watch2" value="Run Step 2" /></p>
-            </form>
+        <div class="elementTopic elem2of3">
+            <div class="elementTable">
+                <div class="elementTableCell">
+                    <form method="POST" action="{{url_for('call_run_update_part2')}}">
+                        <input class="actionButton" type="submit" name="watch2" value="Run Step 2" />
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="buttonsGroup elemCount3">
-            <form method="POST" action="{{url_for('call_run_update')}}">
-                <p><input class="actionButton" type="submit" name="watch2" value="Run based on timer" /></p>
-            </form>
+        <div class="elementTopic elem3of3">
+            <div class="elementTable">
+                <div class="elementTableCell">
+                    <form method="POST" action="{{url_for('call_run_update')}}">
+                        <input class="actionButton" type="submit" name="watch2" value="Run based on timer" />
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="divTopic">
-        <div class="title">
-            <h2>Display Report</h2>
+    <div class="blockTopic">
+        <header class="titleTopic elem1of1">
+            Display Report
+        </header>
+        <div class="explanationTopic elem1of1">
+            <p>Opens a report page from the Comdirect stored data.
+            </p>
         </div>
-        <div class="buttonsGroup elemCount1">
-            <form method="POST" action="{{url_for('render_report')}}">
-                <p><input class="actionButton" type="submit" name="watch3" value="Display report" /></p>
-            </form>
+        <div class="elementTopic elem1of1">
+            <div class="elementTable">
+                <div class="elementTableCell">
+                    <form method="POST" action="{{url_for('render_report')}}">
+                        <input class="actionButton" type="submit" name="watch3" value="Display report" />
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 

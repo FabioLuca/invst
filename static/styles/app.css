@@ -1,68 +1,137 @@
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
 body {
-    background-color: rgb(109, 221, 167);
+    margin: 0px 20px;
+    background-color: rgb(40, 40, 40);
+    font-family: "Lucida Console", "Courier New", monospace;
+    color: rgb(255, 255, 255);
   }
 
 h1 {
-    color: #000000;
-    font-family: "Lucida Console", "Courier New", monospace;
+    color: rgb(241, 207, 10);
+    font-size: 28px;
 }
 
-h2 {
-    color: #000000;
-    font-family: "Lucida Console", "Courier New", monospace;
+h2, header {
+    color: rgba(200, 200, 200, 255);
+    font-weight: bold;
+    font-size: 22px;
+    margin: 15px 0px 5px;
 }
 
 p {
-    font-family: "Lucida Console", "Courier New", monospace;
+    font-size: 12px;
+    color: rgba(150, 150, 150, 255);
+    margin: 5px 0px 5px;
 }
 
-div.title {
-    width: 100%;
-    display:table-row; 
+.pageTitle {
+    max-width: 800px;
+    display: grid;
+    grid-gap: 10px;
+    margin: 0 auto;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-top: 15px;
+    margin-bottom: 15px;
 }
 
-div.divTopic {
-    width: 50%;
-    margin:0 auto;
+.blockTopic {
+    max-width: 800px;
+    display: grid;
+    grid-gap: 10px;
+    margin: 0 auto;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: auto auto minmax(30px, auto);
     padding-top: 8px;
     padding-bottom: 8px;
     padding-left: 20px;
     padding-right: 20px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    border-top: 2px solid rgb(42, 100, 72);
-    border-bottom: 2px solid rgb(42, 100, 72);
-    background-color: rgb(66, 155, 112);
-    display:table;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    background-color: rgba(50, 50, 50, 255);
 }
 
-div.buttonsGroup{
-    border: 1px solid rgb(42, 100, 72);
-    display: table-cell;
+.titleTopic {
+    grid-row:    1;
+}
+
+.explanationTopic {
+    grid-row:    2;
+}
+
+.elementTopic{
+    border: 1px solid rgba(40, 40, 40, 255);
+    background-color: rgba(50, 50, 50, 255);
+    border-radius: 5px;
     text-align: center;
-
+    grid-row:    3;
 }
 
-div.elemCount1 {
+.elementTable{
+    display: table;
     width: 100%;
+    height: 100%;
+    /* height: 400px; */
+    overflow:hidden;
 }
 
-div.elemCount2 {
-    width: 50%;
+.elementTableCell{
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    /* min-height: 30px; */
 }
 
-div.elemCount3 {
-    width: 33%;
+.elem1of1 {
+    grid-column-start: 1;
+    grid-column-end:   13
+}
+.elem1of2 {
+    grid-column-start: 1;
+    grid-column-end:   7
+}
+.elem2of2 {
+    grid-column-start: 7;
+    grid-column-end:   13
+}
+.elem1of3 {
+    grid-column-start: 1;
+    grid-column-end:   5
+}
+.elem2of3 {
+    grid-column-start: 5;
+    grid-column-end:   9
+}
+.elem3of3 {
+    grid-column-start: 9;
+    grid-column-end:   13
 }
 
-input.actionButton{
-    background-color: rgb(22, 58, 40);
-    border: none;
-    color: white;
+.inputText{
+    margin: 10px 0px;
+}
+
+.actionButton{
+    background-color: rgba(60, 60, 60, 255);
+    border: 1px solid rgb(226, 213, 32);
+    /* ); */
+    /* border: none; */
+    white-space: normal;
+    word-wrap: break-word;
+    color: rgb(255, 248, 154);
     padding: 10px 20px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    width: 200px;
+    max-width: 200px;
+    margin: 10px 0px;
+    box-shadow: 3px 3px 3px 3px rgba(40, 40, 40, 90);
   }

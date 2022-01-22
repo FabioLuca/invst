@@ -58,19 +58,62 @@ def list_files():
     return output_string
 
 
-@server.route("/analysiscomplete", methods=['POST'])
-def call_run_analysis_complete():
-    run_analysis.run_analysis()
-    return redirect(url_for('basic'))
+@server.route("/analysis/<symbol>", methods=['GET', 'POST'])
+def call_run_analysis_list(symbol: str):
+    """Method for processing an analysis for a defined symbol, passing the
+    symbols as part of the URL. This is intended to be used for automation
+    tasks, such as by schedulers. For passing a list of symbols the values need
+    to be separated by semicolon (";"). Additionally, passing the keyword
+    ``complete`` will trigger the function using the internally defined list of
+    symbols.
+
+    Example
+    -------
+
+    As example of usage for a single value, where the Amazon stock is
+    evaluated::
+
+        <base_url>/analysis/AMZN
+
+    As example of usage for a list of values, where the Amazon, Google and 3D
+    stocks are evaluated::
+
+        <base_url>/analysis/AMZN;GOOG;MMM
+
+    As example of usage for the internal list::
+
+        <base_url>/analysis/complete
+
+    """
+    if request.method == 'GET':
+
+        symbol = symbol.upper()
+
+        if symbol == "COMPLETE":
+            run_analysis.run_analysis()
+        else:
+            if ";" in symbol:
+                symbol_list = symbol.split(";")
+            else:
+                symbol_list = [symbol]
+            run_analysis.run_analysis(ticker_input=symbol_list)
+
+        return redirect(url_for('basic'))
 
 
 @server.route("/analysis", methods=['POST'])
 def call_run_analysis():
     analysis_symbol_name = request.form.get("analysis_symbol_name")
-    print(analysis_symbol_name)
-    # name = request.args['s']
+    analysis_symbol_name = analysis_symbol_name.upper()
     if analysis_symbol_name != "":
-        run_analysis.run_analysis(ticker_input=analysis_symbol_name.upper())
+        analysis_symbol_name = analysis_symbol_name.replace(" ", "")
+        analysis_symbol_name = analysis_symbol_name.replace(",", ";")
+        if ";" in analysis_symbol_name:
+            symbol_list = analysis_symbol_name.split(";")
+        else:
+            symbol_list = [analysis_symbol_name]
+        run_analysis.run_analysis(ticker_input=symbol_list)
+
     return redirect(url_for('basic'))
 
 
