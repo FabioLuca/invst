@@ -177,20 +177,6 @@ def run_update(mode: int = 0, wait_time: int = 0):
             filename=file_export_trade
         )
 
-        # if not folder.exists():
-        #     folder.mkdir(parents=True, exist_ok=True)
-        # writer_trade = pd.ExcelWriter(file_export_trade, engine='xlsxwriter')
-        # balance.to_excel(writer_trade, sheet_name='Balance')
-        # depots.to_excel(writer_trade, sheet_name='Depots')
-        # depot_position[0].to_excel(
-        #     writer_trade, sheet_name='Depot Positions Aggregated')
-        # depot_position[1].to_excel(writer_trade, sheet_name='Depot Positions')
-        # orders.to_excel(writer_trade, sheet_name='Orders')
-        # writer_trade.save()
-
-        # storage.save_file(filepath=file_export_trade,
-        #                   save_dropbox=config.data_source_storage_access_data["copy"])
-
     return "Finalized update!"
 
 

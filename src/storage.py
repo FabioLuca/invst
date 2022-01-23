@@ -15,23 +15,8 @@ class Storage(DropboxAPI):
         # ----------------------------------------------------------------------
         self.config = config
 
-        # config_base_path = Path.cwd().resolve() / "cfg"
-        # config_access_file = config_base_path / "api-cfg.json"
-        # config_access_userdata_file = config_base_path / "user" / "api-cfg-access.json"
-        # config_local_file = config_base_path / "local" / "local.json"
-        # config_parameters_file = config_base_path / "parameters.json"
-
-        # self.config = Config(logger_name=logger_name)
-        # self.config.load_config(filename=config_access_file)
-        # self.config.load_config(filename=config_access_userdata_file)
-        # self.config.load_config(filename=config_local_file)
-        # self.config.load_config(filename=config_parameters_file)
-
         self.save_dropbox = self.config.local_config.get(
             'storage', {}).get('save_dropbox')
-        # self.save_dropbox = self.config.local_config["storage"]["save_dropbox"]
-
-        print(self.save_dropbox)
 
         self.access_token = self.config.data_source_storage_user_data["TOKEN"]
         self.app_key = self.config.data_source_storage_user_data["APPKEY"]
