@@ -292,7 +292,26 @@ MESSAGE = {
         "Level": C.INFO,
         "Message": "Success to send email."
     },
-
+    "Storage_Success": {
+        "Flag": C.SUCCESS,
+        "Level": C.INFO,
+        "Message": "Success to save the file %s"
+    },
+    "Storage_Success_Dropbox": {
+        "Flag": C.SUCCESS,
+        "Level": C.INFO,
+        "Message": "Success to save the file on Dropbox at %s"
+    },
+    "Storage_Error_BadExtension": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "Error saving file due to the invalid extension."
+    },
+    "Storage_Error_BadListSizes": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "Error saving data in Excel due to invalid data lengths."
+    },
 }
 
 

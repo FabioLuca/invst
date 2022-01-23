@@ -160,20 +160,36 @@ def run_update(mode: int = 0, wait_time: int = 0):
         file_export_trade = f"Export_Comdirect_{today_string}.xlsx"
         folder = Path(config.local_config["paths"]["data_storage"])
         file_export_trade = folder / file_export_trade
-        if not folder.exists():
-            folder.mkdir(parents=True, exist_ok=True)
-        writer_trade = pd.ExcelWriter(file_export_trade, engine='xlsxwriter')
-        balance.to_excel(writer_trade, sheet_name='Balance')
-        depots.to_excel(writer_trade, sheet_name='Depots')
-        depot_position[0].to_excel(
-            writer_trade, sheet_name='Depot Positions Aggregated')
-        depot_position[1].to_excel(writer_trade, sheet_name='Depot Positions')
-        orders.to_excel(writer_trade, sheet_name='Orders')
-        writer_trade.save()
 
-        storage = Storage(logger_name=LOGGER_NAME)
-        storage.save_file(filepath=file_export_trade,
-                          save_dropbox=config.data_source_storage_access_data["copy"])
+        storage = Storage(config=config, logger_name=LOGGER_NAME)
+        storage.save_pandas_as_excel(
+            dataframes=[balance,
+                        depots,
+                        depot_position[0],
+                        depot_position[1],
+                        orders
+                        ],
+            sheetsnames=['Balance',
+                         'Depots',
+                         'Depot Positions Aggregated',
+                         'Depot Positions',
+                         'Orders'],
+            filename=file_export_trade
+        )
+
+        # if not folder.exists():
+        #     folder.mkdir(parents=True, exist_ok=True)
+        # writer_trade = pd.ExcelWriter(file_export_trade, engine='xlsxwriter')
+        # balance.to_excel(writer_trade, sheet_name='Balance')
+        # depots.to_excel(writer_trade, sheet_name='Depots')
+        # depot_position[0].to_excel(
+        #     writer_trade, sheet_name='Depot Positions Aggregated')
+        # depot_position[1].to_excel(writer_trade, sheet_name='Depot Positions')
+        # orders.to_excel(writer_trade, sheet_name='Orders')
+        # writer_trade.save()
+
+        # storage.save_file(filepath=file_export_trade,
+        #                   save_dropbox=config.data_source_storage_access_data["copy"])
 
     return "Finalized update!"
 
