@@ -47,7 +47,7 @@ p {
     display: grid;
     grid-gap: 10px;
     margin: 0 auto;
-    grid-template-columns: repeat(12, 1fr);
+    grid-template-columns: 1fr;
     grid-template-rows: auto auto minmax(30px, auto);
     padding-top: 8px;
     padding-bottom: 8px;
@@ -66,56 +66,55 @@ p {
     grid-row:    2;
 }
 
+.topicsGrid {
+    grid-row:    3;
+    display: grid;
+    grid-gap: 10px;
+    grid-auto-rows: minmax(100px, auto);
+
+}
+.countTopicsGrid1{
+    grid-template-columns: 1fr;
+}
+.countTopicsGrid2{
+    grid-template-columns: 1fr 1fr;
+}
+
+.countTopicsGrid3{
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+@media (max-width: 600px) { 
+    .countTopicsGrid2, .countTopicsGrid3 { 
+        grid-template-columns: 1fr; 
+    }
+}
+
 .elementTopic{
     border: 1px solid rgba(40, 40, 40, 255);
     background-color: rgba(50, 50, 50, 255);
     border-radius: 5px;
     text-align: center;
-    grid-row:    3;
 }
 
 .elementTable{
     display: table;
     width: 100%;
     height: 100%;
-    /* height: 400px; */
     overflow:hidden;
 }
 
 .elementTableCell{
+    width: 100%;
     display: table-cell;
     vertical-align: middle;
     text-align: center;
-    /* min-height: 30px; */
-}
-
-.elem1of1 {
-    grid-column-start: 1;
-    grid-column-end:   13
-}
-.elem1of2 {
-    grid-column-start: 1;
-    grid-column-end:   7
-}
-.elem2of2 {
-    grid-column-start: 7;
-    grid-column-end:   13
-}
-.elem1of3 {
-    grid-column-start: 1;
-    grid-column-end:   5
-}
-.elem2of3 {
-    grid-column-start: 5;
-    grid-column-end:   9
-}
-.elem3of3 {
-    grid-column-start: 9;
-    grid-column-end:   13
+    min-height: 30px;
 }
 
 .inputText{
     margin: 10px 0px;
+    width: 80%;
 }
 
 .actionButton{
@@ -130,8 +129,11 @@ p {
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
+    font-family: "Lucida Console", "Courier New", monospace;
+    font-size: 14px;
+    min-width: 50px;
     max-width: 200px;
-    margin: 10px 0px;
+    width: 80%;
+    margin: 10px 10px;
     box-shadow: 3px 3px 3px 3px rgba(40, 40, 40, 90);
   }

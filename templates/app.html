@@ -15,10 +15,10 @@
     </div>
 
     <div class="blockTopic">
-        <header class="titleTopic elem1of1">
+        <header class="titleTopic">
             Analysis
         </header>
-        <div class="explanationTopic elem1of1">
+        <div class="explanationTopic">
             <p>Executes the analysis for a define symbol or list of symbols. In
                 the Symbol input, the desired ticker for analysis needs to be
                 inserted. Alternatively a list can be passed, separating the
@@ -27,34 +27,35 @@
                 list of tickers.
             </p>
         </div>
-        <div class="elementTopic elem1of2">
-            <div class="elementTable">
-                <div class="elementTableCell">
-                    <form method="POST" action="{{url_for('call_run_analysis')}}">
-                        <p class="labelParagraph">Symbol <input class="inputText" type="text"
-                                name="analysis_symbol_name" />
-                        </p>
-                        <input class="actionButton" type="submit" name="run_analysis_button" value="Run analysis" />
-                    </form>
+        <div class="topicsGrid countTopicsGrid2">
+            <div class="elementTopic">
+                <div class="elementTable">
+                    <div class="elementTableCell">
+                        <form method="POST" action="{{url_for('call_run_analysis')}}">
+                            <p class="labelParagraph">Symbol</p>
+                            <input class="inputText" type="text" name="analysis_symbol_name" />
+                            <input class="actionButton" type="submit" name="run_analysis_button" value="Run analysis" />
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="elementTopic elem2of2">
-            <div class="elementTable">
-                <div class="elementTableCell">
-                    <form method="GET" action="/analysis/complete">
-                        <input class="actionButton" type="submit" name="run_analysis_complete_button"
-                            value="Run analysis complete" />
-                    </form>
+            <div class="elementTopic">
+                <div class="elementTable">
+                    <div class="elementTableCell">
+                        <form method="GET" action="/analysis/complete">
+                            <input class="actionButton" type="submit" name="run_analysis_complete_button"
+                                value="Run analysis complete" />
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="blockTopic">
-        <header class="titleTopic elem1of1">
+        <header class="titleTopic">
             Update Comdirect
         </header>
-        <div class="explanationTopic elem1of1">
+        <div class="explanationTopic">
             <p>Collects the actual information for the Comdirect account. The
                 access to the Comdirect demands 2-factor authentication by the
                 TAN application. To proced there are 2 options available. The
@@ -66,48 +67,52 @@
                 the routine will be executed.
             </p>
         </div>
-        <div class="elementTopic elem1of3">
-            <div class="elementTable">
-                <div class="elementTableCell">
-                    <form method="POST" action="{{url_for('call_run_update_part1')}}">
-                        <input class="actionButton" type="submit" name="watch1" value="Run Step 1" />
-                    </form>
+        <div class="topicsGrid countTopicsGrid3">
+            <div class="elementTopic">
+                <div class="elementTable">
+                    <div class="elementTableCell">
+                        <form method="POST" action="{{url_for('call_run_update_part1')}}">
+                            <input class="actionButton" type="submit" name="watch1" value="Run Step 1" />
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="elementTopic elem2of3">
-            <div class="elementTable">
-                <div class="elementTableCell">
-                    <form method="POST" action="{{url_for('call_run_update_part2')}}">
-                        <input class="actionButton" type="submit" name="watch2" value="Run Step 2" />
-                    </form>
+            <div class="elementTopic">
+                <div class="elementTable">
+                    <div class="elementTableCell">
+                        <form method="POST" action="{{url_for('call_run_update_part2')}}">
+                            <input class="actionButton" type="submit" name="watch2" value="Run Step 2" />
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="elementTopic elem3of3">
-            <div class="elementTable">
-                <div class="elementTableCell">
-                    <form method="POST" action="{{url_for('call_run_update')}}">
-                        <input class="actionButton" type="submit" name="watch2" value="Run based on timer" />
-                    </form>
+            <div class="elementTopic">
+                <div class="elementTable">
+                    <div class="elementTableCell">
+                        <form method="POST" action="{{url_for('call_run_update')}}">
+                            <input class="actionButton" type="submit" name="watch2" value="Run based on timer" />
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="blockTopic">
-        <header class="titleTopic elem1of1">
+        <header class="titleTopic">
             Display Report
         </header>
-        <div class="explanationTopic elem1of1">
+        <div class="explanationTopic">
             <p>Opens a report page from the Comdirect stored data.
             </p>
         </div>
-        <div class="elementTopic elem1of1">
-            <div class="elementTable">
-                <div class="elementTableCell">
-                    <form method="POST" action="{{url_for('render_report')}}">
-                        <input class="actionButton" type="submit" name="watch3" value="Display report" />
-                    </form>
+        <div class="topicsGrid countTopicsGrid1">
+            <div class="elementTopic">
+                <div class="elementTable">
+                    <div class="elementTableCell">
+                        <form method="POST" action="{{url_for('render_report')}}">
+                            <input class="actionButton" type="submit" name="watch3" value="Display report" />
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
