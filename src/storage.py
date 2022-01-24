@@ -44,12 +44,12 @@ class Storage(DropboxAPI):
         self.logger = logging.getLogger(self.logger_name)
         self.logger.info("Initializing storage.")
 
-    def list_files_folder(self, folderpath: Union[Path, str], regex: str):
+    def list_files_folder(self, folderpath: Union[Path, str], criteria: str):
         if self.load_dropbox:
-            files = self.list_files(folderpath=folderpath, regex=regex)
+            files = self.list_files(folderpath=folderpath, criteria=criteria)
         else:
             files = list(
-                filter(Path.is_file, folderpath.glob(f"**/{regex}*")))
+                filter(Path.is_file, folderpath.glob(f"**/{criteria}*")))
             if len(files) < 1:
                 return None, None, None, None
         return files, None, None, None

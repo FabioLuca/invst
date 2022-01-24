@@ -479,7 +479,7 @@ def create_combined_dataframes(folder: Union[Path, str], date_today: str):
 
     storage = Storage(config=config, logger_name=LOGGER_NAME)
     files, flag, level, message = storage.list_files_folder(
-        folder, regex='Export_Comdirect_')
+        folder, criteria='Export_Comdirect_')
 
     if len(files) < 1:
         return None
