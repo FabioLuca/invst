@@ -90,8 +90,7 @@
             "selection": "Dropbox",
             "Dropbox": {
                 "access_data": {
-                    "copy": true,
-                    "path_balance": "/Export"
+                    "path_export": "/Export"
                 }
             }
         }
