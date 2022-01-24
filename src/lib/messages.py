@@ -297,6 +297,11 @@ MESSAGE = {
         "Level": C.INFO,
         "Message": "Success to save the file %s"
     },
+    "Storage_LoadSuccess": {
+        "Flag": C.SUCCESS,
+        "Level": C.INFO,
+        "Message": "Success to load the file %s"
+    },
     "Storage_Success_Dropbox": {
         "Flag": C.SUCCESS,
         "Level": C.INFO,
@@ -311,6 +316,11 @@ MESSAGE = {
         "Flag": C.FAIL,
         "Level": C.ERROR,
         "Message": "Error saving data in Excel due to invalid data lengths."
+    },
+    "Storage_LoadError_BadExtension": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "Error loading file due to the invalid extension."
     },
 }
 
