@@ -34,6 +34,8 @@ from dash import dash_table
 from dash.dependencies import Input, Output
 from dash.dash_table.Format import Format, Group, Prefix, Scheme, Symbol, Align, Sign
 from PIL import ImageColor
+from src.storage import Storage
+from typing import Union
 import dash
 import pandas as pd
 import numpy as np
@@ -381,7 +383,7 @@ def create_filtered_depots_dataframe(timespam: str):
     return df_depots_filter
 
 
-def create_historical_aggregated_dataframe(folder: Path):
+def create_historical_aggregated_dataframe(folder: Union[Path, str]):
     # --------------------------------------------------------------------------
     #   Loads first any historical data which was stored before the scripts /
     #   project to be available. For the historical data, information is
@@ -389,100 +391,125 @@ def create_historical_aggregated_dataframe(folder: Path):
     #   supported for it. The cav file must be named "History_Aggregated" and
     #   also be located in the "Export" folder.
     # --------------------------------------------------------------------------
-    historical_file = folder / "History_Aggregated.csv"
-    if historical_file.is_file():
-        df_aggregated_history = pd.read_csv(historical_file,
-                                            header=0,
-                                            quotechar='"',
-                                            skipinitialspace=True,
-                                            decimal=",",
-                                            delimiter=';',
-                                            thousands='.',
-                                            parse_dates=[1],
-                                            )
-
-        df_aggregated_history["Date"] = pd.to_datetime(
-            df_aggregated_history["Date"], format="%d-%m-%Y")
-        df_aggregated_history["Date"] = df_aggregated_history["Date"].dt.date
-
-        df_aggregated_history["Account Total Value"] = df_aggregated_history["Value Depot"] + \
-            df_aggregated_history["Value Account"]
-
-        df_aggregated_history["Account Total Value Unit"] = "EUR"
-
-        # df_aggregated_history.drop(columns=["Value Depot", "Value Account"],
-        #                            inplace=True)
-
-        df_aggregated_history.rename(
-            columns={
-                "Depot ID": "Depot Aggregated ID",
-                "Unit": "Depot Aggregated Current Value Unit"
-            },
-            inplace=True
-        )
-
-        if 'Depot Aggregated Purchase Value' not in df_aggregated_history.columns:
-            df_aggregated_history['Depot Aggregated Purchase Value'] = np.nan
-
-        if 'Depot Aggregated Purchase Value Unit' not in df_aggregated_history.columns:
-            df_aggregated_history['Depot Aggregated Purchase Value Unit'] = "EUR"
-
-        if 'Depot Aggregated Current Value' not in df_aggregated_history.columns:
-            df_aggregated_history['Depot Aggregated Current Value'] = np.nan
-
-        if 'Depot Aggregated Current Value Unit' not in df_aggregated_history.columns:
-            df_aggregated_history['Depot Aggregated Current Value Unit'] = "EUR"
-
-        if 'Depot Aggregated Profit/Loss Purchase Absolute Value' not in df_aggregated_history.columns:
-            df_aggregated_history['Depot Aggregated Profit/Loss Purchase Absolute Value'] = np.nan
-
-        if 'Depot Aggregated Profit/Loss Purchase Absolute Unit' not in df_aggregated_history.columns:
-            df_aggregated_history['Depot Aggregated Profit/Loss Purchase Absolute Unit'] = "EUR"
-
-        if 'Depot Aggregated Profit/Loss Purchase Relative' not in df_aggregated_history.columns:
-            df_aggregated_history['Depot Aggregated Profit/Loss Purchase Relative'] = np.nan
-
-        if 'Depot Aggregated Profit/Loss Previous Day Absolute Value' not in df_aggregated_history.columns:
-            df_aggregated_history['Depot Aggregated Profit/Loss Previous Day Absolute Value'] = np.nan
-
-        if 'Depot Aggregated Profit/Loss Previous Day Absolute Unit' not in df_aggregated_history.columns:
-            df_aggregated_history['Depot Aggregated Profit/Loss Previous Day Absolute Unit'] = "EUR"
-
-        if 'Depot Aggregated Profit/Loss Previous Day Relative' not in df_aggregated_history.columns:
-            df_aggregated_history['Depot Aggregated Profit/Loss Previous Day Relative'] = np.nan
-
+    if load_dropbox:
+        historical_file = folder + "History_Aggregated.csv"
     else:
-        df_aggregated_history = None
+        historical_file = folder / "History_Aggregated.csv"
+
+    if isinstance(historical_file, Path):
+        if not historical_file.is_file():
+            df_aggregated_history = None
+            return df_aggregated_history
+
+    print(historical_file)
+
+    storage = Storage(config=config, logger_name=LOGGER_NAME)
+    df_aggregated_history, flag, level, message = storage.load_pandas_from_csv(
+        relative_path=historical_file)
+
+    # df_aggregated_history = pd.read_csv(historical_file,
+    #                                     header=0,
+    #                                     quotechar='"',
+    #                                     skipinitialspace=True,
+    #                                     decimal=",",
+    #                                     delimiter=';',
+    #                                     thousands='.',
+    #                                     parse_dates=[1],
+    #                                     )
+
+    df_aggregated_history["Date"] = pd.to_datetime(
+        df_aggregated_history["Date"], format="%d-%m-%Y")
+    df_aggregated_history["Date"] = df_aggregated_history["Date"].dt.date
+
+    df_aggregated_history["Account Total Value"] = df_aggregated_history["Value Depot"] + \
+        df_aggregated_history["Value Account"]
+
+    df_aggregated_history["Account Total Value Unit"] = "EUR"
+
+    # df_aggregated_history.drop(columns=["Value Depot", "Value Account"],
+    #                            inplace=True)
+
+    df_aggregated_history.rename(
+        columns={
+            "Depot ID": "Depot Aggregated ID",
+            "Unit": "Depot Aggregated Current Value Unit"
+        },
+        inplace=True
+    )
+
+    if 'Depot Aggregated Purchase Value' not in df_aggregated_history.columns:
+        df_aggregated_history['Depot Aggregated Purchase Value'] = np.nan
+
+    if 'Depot Aggregated Purchase Value Unit' not in df_aggregated_history.columns:
+        df_aggregated_history['Depot Aggregated Purchase Value Unit'] = "EUR"
+
+    if 'Depot Aggregated Current Value' not in df_aggregated_history.columns:
+        df_aggregated_history['Depot Aggregated Current Value'] = np.nan
+
+    if 'Depot Aggregated Current Value Unit' not in df_aggregated_history.columns:
+        df_aggregated_history['Depot Aggregated Current Value Unit'] = "EUR"
+
+    if 'Depot Aggregated Profit/Loss Purchase Absolute Value' not in df_aggregated_history.columns:
+        df_aggregated_history['Depot Aggregated Profit/Loss Purchase Absolute Value'] = np.nan
+
+    if 'Depot Aggregated Profit/Loss Purchase Absolute Unit' not in df_aggregated_history.columns:
+        df_aggregated_history['Depot Aggregated Profit/Loss Purchase Absolute Unit'] = "EUR"
+
+    if 'Depot Aggregated Profit/Loss Purchase Relative' not in df_aggregated_history.columns:
+        df_aggregated_history['Depot Aggregated Profit/Loss Purchase Relative'] = np.nan
+
+    if 'Depot Aggregated Profit/Loss Previous Day Absolute Value' not in df_aggregated_history.columns:
+        df_aggregated_history['Depot Aggregated Profit/Loss Previous Day Absolute Value'] = np.nan
+
+    if 'Depot Aggregated Profit/Loss Previous Day Absolute Unit' not in df_aggregated_history.columns:
+        df_aggregated_history['Depot Aggregated Profit/Loss Previous Day Absolute Unit'] = "EUR"
+
+    if 'Depot Aggregated Profit/Loss Previous Day Relative' not in df_aggregated_history.columns:
+        df_aggregated_history['Depot Aggregated Profit/Loss Previous Day Relative'] = np.nan
 
     return df_aggregated_history
 
 
-def create_combined_dataframes(folder: Path, date_today: str):
+def create_combined_dataframes(folder: Union[Path, str], date_today: str):
     # --------------------------------------------------------------------------
     #   Get all the files which contain data to be displayed. The files must be
     #   all in the "export" folder, and named with the pattern
     #   "Export_Comdirect_" to be included in the analysis.
     # --------------------------------------------------------------------------
-    files = list(filter(Path.is_file, folder.glob('**/Export_Comdirect_*')))
+
+    storage = Storage(config=config, logger_name=LOGGER_NAME)
+    files, flag, level, message = storage.list_files_folder(
+        folder, regex='Export_Comdirect_')
+
     if len(files) < 1:
-        return None, None, None, None
+        return None
 
     df_depots = pd.DataFrame()
     df_balances = pd.DataFrame()
     df_aggregated = pd.DataFrame()
 
-    df_file_aggregated = pd.read_excel(
-        files[0], sheet_name="Depot Positions Aggregated")
+    df_file_aggregated, flag, level, message = storage.load_pandas_from_excel(
+        files[0], sheetname="Depot Positions Aggregated")
+
+    # df_file_aggregated = pd.read_excel(
+    #     files[0], sheet_name="Depot Positions Aggregated")
 
     i = 0
     for file in files:
-
-        df_file_aggregated = pd.read_excel(
-            file, sheet_name="Depot Positions Aggregated")
-        df_file_balance = pd.read_excel(
-            file, sheet_name="Balance")
-        df_file_depots = pd.read_excel(
-            file, sheet_name="Depot Positions")
+        df_file_aggregated, flag, level, message = storage.load_pandas_from_excel(
+            file, sheetname="Depot Positions Aggregated")
+        df_file_balance, flag, level, message = storage.load_pandas_from_excel(
+            file, sheetname="Balance")
+        df_file_depots, flag, level, message = storage.load_pandas_from_excel(
+            file, sheetname="Depot Positions")
+        # df_aggregated_history, flag, level, message = storage.load_pandas_from_csv(
+        #     relative_path=str(historical_file))
+        # df_file_aggregated = pd.read_excel(
+        #     file, sheet_name="Depot Positions Aggregated")
+        # df_file_balance = pd.read_excel(
+        #     file, sheet_name="Balance")
+        # df_file_depots = pd.read_excel(
+        #     file, sheet_name="Depot Positions")
 
         df_file_aggregated["Account Total Value"] = df_file_aggregated["Depot Aggregated Current Value"] + \
             df_file_balance["Balance Value"].iloc[-1]
@@ -576,8 +603,15 @@ config = Config(logger_name=LOGGER_NAME)
 config.load_config(filename=config_access_file)
 config.load_config(filename=config_access_userdata_file)
 config.load_config(filename=config_local_file)
-folder = Path(config.local_config["paths"]["data_storage"])
+folder_local = Path(config.local_config["paths"]["data_storage"])
+folder_dropbox = config.data_source_storage_access_data["path_export"]
+load_dropbox = config.local_config["storage"]["load_dropbox"]
 # folder = Path.cwd().resolve() / "export"
+
+if load_dropbox:
+    folder = ""  # folder_dropbox
+else:
+    folder = folder_local
 
 df_aggregated_history = create_historical_aggregated_dataframe(
     folder=folder)
@@ -1256,5 +1290,6 @@ def make_report(app):
 
 
 if __name__ == "__main__":
-
+    app = dash.Dash(__name__)
+    make_report(app)
     app.run_server()
