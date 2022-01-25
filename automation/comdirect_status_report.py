@@ -28,6 +28,7 @@ example: http://127.0.0.1:8050/
 """
 from datetime import datetime
 from pathlib import Path
+from dash import Dash
 from dash import html
 from dash import dcc
 from dash import dash_table
@@ -36,11 +37,11 @@ from dash.dash_table.Format import Format, Group, Prefix, Scheme, Symbol, Align,
 from PIL import ImageColor
 from src.storage import Storage
 from typing import Union
-import dash
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 from src.lib.config import Config
+from src import server
 
 
 def create_chart_account_aggregated_values():
@@ -401,21 +402,9 @@ def create_historical_aggregated_dataframe(folder: Union[Path, str]):
             df_aggregated_history = None
             return df_aggregated_history
 
-    print(historical_file)
-
     storage = Storage(config=config, logger_name=LOGGER_NAME)
     df_aggregated_history, flag, level, message = storage.load_pandas_from_csv(
         relative_path=historical_file)
-
-    # df_aggregated_history = pd.read_csv(historical_file,
-    #                                     header=0,
-    #                                     quotechar='"',
-    #                                     skipinitialspace=True,
-    #                                     decimal=",",
-    #                                     delimiter=';',
-    #                                     thousands='.',
-    #                                     parse_dates=[1],
-    #                                     )
 
     df_aggregated_history["Date"] = pd.to_datetime(
         df_aggregated_history["Date"], format="%d-%m-%Y")
@@ -491,9 +480,6 @@ def create_combined_dataframes(folder: Union[Path, str], date_today: str):
     df_file_aggregated, flag, level, message = storage.load_pandas_from_excel(
         files[0], sheetname="Depot Positions Aggregated")
 
-    # df_file_aggregated = pd.read_excel(
-    #     files[0], sheet_name="Depot Positions Aggregated")
-
     i = 0
     for file in files:
         df_file_aggregated, flag, level, message = storage.load_pandas_from_excel(
@@ -502,14 +488,6 @@ def create_combined_dataframes(folder: Union[Path, str], date_today: str):
             file, sheetname="Balance")
         df_file_depots, flag, level, message = storage.load_pandas_from_excel(
             file, sheetname="Depot Positions")
-        # df_aggregated_history, flag, level, message = storage.load_pandas_from_csv(
-        #     relative_path=str(historical_file))
-        # df_file_aggregated = pd.read_excel(
-        #     file, sheet_name="Depot Positions Aggregated")
-        # df_file_balance = pd.read_excel(
-        #     file, sheet_name="Balance")
-        # df_file_depots = pd.read_excel(
-        #     file, sheet_name="Depot Positions")
 
         df_file_aggregated["Account Total Value"] = df_file_aggregated["Depot Aggregated Current Value"] + \
             df_file_balance["Balance Value"].iloc[-1]
@@ -580,13 +558,199 @@ def create_combined_dataframes(folder: Union[Path, str], date_today: str):
 
     return df_depots, df_balances, df_aggregated, df_depots_today
 
+
+def make_report(app):
+    # --------------------------------------------------------------------------
+    #   Make a Dash application for displaying the charts. Dash will
+    #   automatically load the .css which are in the assets folder, so there is
+    #   no need to pass them. For that, this method of calling the app is
+    #   necessary: app = dash.Dash(__name__)
+    # --------------------------------------------------------------------------
+
+    if (df_depots is not None) and (df_balances is not None) and (df_aggregated is not None) and (df_depots_today is not None):
+
+        fig_aggregated_current_value = \
+            create_chart_account_aggregated_values()
+
+        fig_depots_current_value = \
+            create_line_chart(dataframe=df_depots,
+                              group_by="WKN",
+                              x_column="Date",
+                              y_column="Current Value",
+                              color_lines=middle_tint,
+                              color_fills=color_sequence,
+                              opacity_lines=1,
+                              opacity_fills=0.6,
+                              line_width=1.5,
+                              x_label="Date",
+                              y_label="Value (EUR)",
+                              stack_group="one")
+
+        # ----------------------------------------------------------------------
+        #   Creation of the dashboard HTML.
+        # ----------------------------------------------------------------------
+        app.layout = html.Div(
+            children=[
+                html.H1(children='Results'),
+                ################ CHART 1 #######################################
+                html.Div(
+                    [
+                        html.H3(children='Total account balance',
+                                className="display_component_first"),
+                        dcc.Graph(
+                            id='fig_aggregated_current_value',
+                            figure=fig_aggregated_current_value
+                        )
+                    ]
+                ),
+                ################ CHART 2 #######################################
+                html.Div(
+                    [
+                        html.H3(children='Depots current values',
+                                className="display_component"),
+                        dcc.Graph(
+                            id='fig_depots_current_value',
+                            figure=fig_depots_current_value
+                        )
+                    ]
+                ),
+                ################ CHART 3 #######################################
+                html.Div(
+                    [
+                        html.Div(
+                            [
+                                html.H3(children='Depots relative gain',
+                                        className="display_component"),
+                            ],
+                            style={"width": "80%", 'display': 'inline-block'}
+                        ),
+                        html.Div(
+                            [
+                                dcc.Dropdown(
+                                    id='timespam-relative-dropdown',
+                                    options=[
+                                        {'label': 'Last 1 day', 'value': 'l1d'},
+                                        {'label': 'Last 3 days', 'value': 'l3d'},
+                                        {'label': 'Last 7 days', 'value': 'l7d'},
+                                        {'label': 'Last 15 days', 'value': 'l15d'},
+                                        {'label': 'Last 30 days', 'value': 'l30d'},
+                                        {'label': 'Last 60 days', 'value': 'l60d'},
+                                        {'label': 'Last 90 days', 'value': 'l90d'},
+                                        {'label': 'Last 180 days',
+                                            'value': 'l180d'},
+                                        {'label': 'Last 360 days',
+                                            'value': 'l360d'},
+                                        {'label': 'All time', 'value': 'all'},
+                                    ],
+                                    value='all'
+                                ),
+                            ],
+                            style={"width": "20%", 'display': 'inline-block'}
+                        ),
+                        dcc.Graph(
+                            # ------------------------------------------------------
+                            #   A important note here is that this chart is updates
+                            #   depending on the chosen value for the dropdown menu,
+                            #   so updated by the callback function. The figure is
+                            #   left open, diffent from the others.
+                            # ------------------------------------------------------
+                            id='fig_depots_relative_increment_value'
+                        )
+                    ]
+                ),
+                ################ TABLE 1 #######################################
+                html.Div(
+                    [
+                        html.H3(children='Aggregated values',
+                                className="display_component"),
+                        dash_table.DataTable(
+                            id='table_aggregated',
+                            filter_action='native',
+                            sort_action='native',
+                            # fixed_rows={'headers': True, 'data': 0},
+                            page_size=20,
+                            sort_mode='multi',
+                            sort_by=[{'column_id': 'Date', 'direction': 'desc'},
+                                     {'column_id': 'Depot Aggregated Profit/Loss Previous Day Absolute Value',
+                                     'direction': 'desc'}],
+                            columns=columns_aggregated,
+                            data=df_aggregated.to_dict('records'),
+                            style_cell=table_style_cell,
+                            style_header=table_style_header,
+                            style_data=table_style_data,
+                            style_table={'overflowX': 'auto'},
+                            style_cell_conditional=conditional_cell_aggregated,
+                            style_data_conditional=conditional_data_aggregated,
+                        )
+                    ]
+                ),
+                ################ TABLE 2 ###########################################
+                html.Div(
+                    [
+                        html.H3(children='Depots values: ' + today_string,
+                                className="display_component"),
+                        dash_table.DataTable(
+                            id='table_depots',
+                            filter_action='native',
+                            sort_action='native',
+                            # fixed_rows={'headers': True, 'data': 0},
+                            page_size=20,
+                            sort_mode='multi',
+                            sort_by=[{'column_id': 'Date', 'direction': 'desc'},
+                                     {'column_id': 'Profit/Loss Previous Day Absolute Value',
+                                     'direction': 'desc'},
+                                     {'column_id': 'WKN', 'direction': 'asc'}],
+                            columns=columns_depots,
+                            data=df_depots_today.to_dict('records'),
+                            style_cell=table_style_cell,
+                            style_header=table_style_header,
+                            style_data=table_style_data,
+                            style_table={'overflowX': 'auto'},
+                            style_cell_conditional=conditional_cell_depots,
+                            style_data_conditional=conditional_data_depots,
+                        )
+                    ]
+                ),
+                ################ TABLE 3 ###########################################
+                html.Div(
+                    [
+                        html.H3(children='Depots values: Complete series',
+                                className="display_component"),
+                        dash_table.DataTable(
+                            id='table_depots_all',
+                            filter_action='native',
+                            sort_action='native',
+                            page_size=20,
+                            sort_mode='multi',
+                            sort_by=[{'column_id': 'Date', 'direction': 'desc'},
+                                     {'column_id': 'Profit/Loss Previous Day Absolute Value',
+                                     'direction': 'desc'},
+                                     {'column_id': 'WKN', 'direction': 'asc'}],
+                            columns=columns_depots,
+                            data=df_depots.to_dict('records'),
+                            style_cell=table_style_cell,
+                            style_header=table_style_header,
+                            style_data=table_style_data,
+                            style_table={'overflowX': 'auto'},
+                            style_cell_conditional=conditional_cell_depots,
+                            style_data_conditional=conditional_data_depots,
+                        )
+                    ]
+                )
+                ################ END ###############################################
+            ]
+        )
+    else:
+        app.layout = html.Div("Report Dash Test")
+
+    app.css.append_css({"external_url": f"/static/styles/layout.css"})
+
+
 ################################################################################
 #   Main application
 ################################################################################
 
-
 LOGGER_NAME = "invst.comdirect_status_report"
-
 
 today_string = datetime.today().strftime('%Y-%m-%d')
 
@@ -1077,219 +1241,31 @@ layout_charts = go.Layout(
 )
 
 
-def make_report(app):
-    # ------------------------------------------------------------------------------
-    #   Make a Dash application for displaying the charts. Dash will
-    #   automatically load the .css which are in the assets folder, so there is
-    #   no need to pass them. For that, this method of calling the app is
-    #   necessary: app = dash.Dash(__name__)
-    # ------------------------------------------------------------------------------
-    # app = dash.Dash(__name__)
+@server.dash_app.callback(
+    Output('fig_depots_relative_increment_value',
+           'figure'),
+    [Input('timespam-relative-dropdown', 'value')]
+)
+def update_output(value):
 
-    if (df_depots is not None) and (df_balances is not None) and (df_aggregated is not None) and (df_depots_today is not None):
+    df_depots_filter = create_filtered_depots_dataframe(timespam=value)
 
-        fig_aggregated_current_value = \
-            create_chart_account_aggregated_values()
-
-        fig_depots_current_value = \
-            create_line_chart(dataframe=df_depots,
-                              group_by="WKN",
-                              x_column="Date",
-                              y_column="Current Value",
-                              color_lines=middle_tint,
-                              color_fills=color_sequence,
-                              opacity_lines=1,
-                              opacity_fills=0.6,
-                              line_width=1.5,
-                              x_label="Date",
-                              y_label="Value (EUR)",
-                              stack_group="one")
-
-        # --------------------------------------------------------------------------
-        #   Creation of the dashboard HTML.
-        # --------------------------------------------------------------------------
-        app.layout = html.Div(
-            children=[
-                html.H1(children='Results'),
-                ################ CHART 1 ###########################################
-                html.Div(
-                    [
-                        html.H3(children='Total account balance',
-                                className="display_component_first"),
-                        dcc.Graph(
-                            id='fig_aggregated_current_value',
-                            figure=fig_aggregated_current_value
-                        )
-                    ]
-                ),
-                ################ CHART 2 ###########################################
-                html.Div(
-                    [
-                        html.H3(children='Depots current values',
-                                className="display_component"),
-                        dcc.Graph(
-                            id='fig_depots_current_value',
-                            figure=fig_depots_current_value
-                        )
-                    ]
-                ),
-                ################ CHART 3 ###########################################
-                html.Div(
-                    [
-                        html.Div(
-                            [
-                                html.H3(children='Depots relative gain',
-                                        className="display_component"),
-                            ],
-                            style={"width": "80%", 'display': 'inline-block'}
-                        ),
-                        html.Div(
-                            [
-                                dcc.Dropdown(
-                                    id='timespam-relative-dropdown',
-                                    options=[
-                                        {'label': 'Last 1 day', 'value': 'l1d'},
-                                        {'label': 'Last 3 days', 'value': 'l3d'},
-                                        {'label': 'Last 7 days', 'value': 'l7d'},
-                                        {'label': 'Last 15 days', 'value': 'l15d'},
-                                        {'label': 'Last 30 days', 'value': 'l30d'},
-                                        {'label': 'Last 60 days', 'value': 'l60d'},
-                                        {'label': 'Last 90 days', 'value': 'l90d'},
-                                        {'label': 'Last 180 days',
-                                            'value': 'l180d'},
-                                        {'label': 'Last 360 days',
-                                            'value': 'l360d'},
-                                        {'label': 'All time', 'value': 'all'},
-                                    ],
-                                    value='all'
-                                ),
-                            ],
-                            style={"width": "20%", 'display': 'inline-block'}
-                        ),
-                        dcc.Graph(
-                            # ------------------------------------------------------
-                            #   A important note here is that this chart is updates
-                            #   depending on the chosen value for the dropdown menu,
-                            #   so updated by the callback function. The figure is
-                            #   left open, diffent from the others.
-                            # ------------------------------------------------------
-                            id='fig_depots_relative_increment_value'
-                        )
-                    ]
-                ),
-                ################ TABLE 1 ###########################################
-                html.Div(
-                    [
-                        html.H3(children='Aggregated values',
-                                className="display_component"),
-                        dash_table.DataTable(
-                            id='table_aggregated',
-                            filter_action='native',
-                            sort_action='native',
-                            # fixed_rows={'headers': True, 'data': 0},
-                            page_size=20,
-                            sort_mode='multi',
-                            sort_by=[{'column_id': 'Date', 'direction': 'desc'},
-                                     {'column_id': 'Depot Aggregated Profit/Loss Previous Day Absolute Value',
-                                     'direction': 'desc'}],
-                            columns=columns_aggregated,
-                            data=df_aggregated.to_dict('records'),
-                            style_cell=table_style_cell,
-                            style_header=table_style_header,
-                            style_data=table_style_data,
-                            style_table={'overflowX': 'auto'},
-                            style_cell_conditional=conditional_cell_aggregated,
-                            style_data_conditional=conditional_data_aggregated,
-                        )
-                    ]
-                ),
-                ################ TABLE 2 ###########################################
-                html.Div(
-                    [
-                        html.H3(children='Depots values: ' + today_string,
-                                className="display_component"),
-                        dash_table.DataTable(
-                            id='table_depots',
-                            filter_action='native',
-                            sort_action='native',
-                            # fixed_rows={'headers': True, 'data': 0},
-                            page_size=20,
-                            sort_mode='multi',
-                            sort_by=[{'column_id': 'Date', 'direction': 'desc'},
-                                     {'column_id': 'Profit/Loss Previous Day Absolute Value',
-                                     'direction': 'desc'},
-                                     {'column_id': 'WKN', 'direction': 'asc'}],
-                            columns=columns_depots,
-                            data=df_depots_today.to_dict('records'),
-                            style_cell=table_style_cell,
-                            style_header=table_style_header,
-                            style_data=table_style_data,
-                            style_table={'overflowX': 'auto'},
-                            style_cell_conditional=conditional_cell_depots,
-                            style_data_conditional=conditional_data_depots,
-                        )
-                    ]
-                ),
-                ################ TABLE 3 ###########################################
-                html.Div(
-                    [
-                        html.H3(children='Depots values: Complete series',
-                                className="display_component"),
-                        dash_table.DataTable(
-                            id='table_depots_all',
-                            filter_action='native',
-                            sort_action='native',
-                            page_size=20,
-                            sort_mode='multi',
-                            sort_by=[{'column_id': 'Date', 'direction': 'desc'},
-                                     {'column_id': 'Profit/Loss Previous Day Absolute Value',
-                                     'direction': 'desc'},
-                                     {'column_id': 'WKN', 'direction': 'asc'}],
-                            columns=columns_depots,
-                            data=df_depots.to_dict('records'),
-                            style_cell=table_style_cell,
-                            style_header=table_style_header,
-                            style_data=table_style_data,
-                            style_table={'overflowX': 'auto'},
-                            style_cell_conditional=conditional_cell_depots,
-                            style_data_conditional=conditional_data_depots,
-                        )
-                    ]
-                )
-                ################ END ###############################################
-            ]
-        )
-    else:
-        app.layout = html.Div("Report Dash Test")
-
-    app.css.append_css({"external_url": f"/static/styles/layout.css"})
-
-
-# @app.callback(
-#     Output('fig_depots_relative_increment_value',
-#            'figure'),
-#     [Input('timespam-relative-dropdown', 'value')]
-# )
-# def update_output(value):
-
-#     df_depots_filter = create_filtered_depots_dataframe(timespam=value)
-
-#     figure = create_line_chart(dataframe=df_depots_filter,
-#                                group_by="WKN",
-#                                x_column="Date",
-#                                y_column="Cumulative Delta Profit/Loss Purchase Relative",
-#                                color_lines=color_sequence,
-#                                color_fills=color_sequence,
-#                                opacity_lines=1,
-#                                opacity_fills=1,
-#                                line_width=2.5,
-#                                x_label="Date",
-#                                y_label="Value (%)",
-#                                stack_group=None)
-#     return figure
+    figure = create_line_chart(dataframe=df_depots_filter,
+                               group_by="WKN",
+                               x_column="Date",
+                               y_column="Cumulative Delta Profit/Loss Purchase Relative",
+                               color_lines=color_sequence,
+                               color_fills=color_sequence,
+                               opacity_lines=1,
+                               opacity_fills=1,
+                               line_width=2.5,
+                               x_label="Date",
+                               y_label="Value (%)",
+                               stack_group=None)
+    return figure
 
 
 if __name__ == "__main__":
-    app = dash.Dash(__name__)
-    make_report(app)
-    app.run_server()
+    dash_local_app = Dash(__name__)
+    make_report(dash_local_app)
+    dash_local_app.run_server()
