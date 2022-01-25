@@ -95,7 +95,6 @@ class DropboxAPI:
                 if entry.is_downloadable:
                     if criteria is not None:
                         if criteria in entry.name:
-                            # print(entry.id, entry.is_downloadable, entry.name)
                             list_files.append(entry.name)
                             list_paths_display.append(entry.path_display)
                     else:
