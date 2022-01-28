@@ -42,9 +42,14 @@ import numpy as np
 import plotly.graph_objects as go
 from src.lib.config import Config
 from src import server
+from typing import Union
 
 
-def create_chart_account_aggregated_values():
+def create_chart_account_aggregated_values(
+    df_aggregated: pd.DataFrame,
+    df_balances: pd.DataFrame,
+    df_aggregated_history: pd.DataFrame
+):
     """Create a chart with all the account aggregated values. If the dataframe
     for the historical data is available (different from ``None``) it will also
     be plotted, otherwise it is not included.
@@ -560,6 +565,15 @@ def create_combined_dataframes(folder: Union[Path, str], date_today: str):
 
 
 def make_report(app):
+    """Make a Dash application for displaying the charts and tables. Dash will
+    automatically load the .css which are in the assets folder, so there is
+    no need to pass them. For that, this method of calling the app is
+    necessary: app = dash.Dash(__name__)
+    """
+
+    df_aggregated_history, df_depots, df_balances, df_aggregated, df_depots_today = load_data(
+        folder)
+
     # --------------------------------------------------------------------------
     #   Make a Dash application for displaying the charts. Dash will
     #   automatically load the .css which are in the assets folder, so there is
@@ -570,7 +584,11 @@ def make_report(app):
     if (df_depots is not None) and (df_balances is not None) and (df_aggregated is not None) and (df_depots_today is not None):
 
         fig_aggregated_current_value = \
-            create_chart_account_aggregated_values()
+            create_chart_account_aggregated_values(
+                df_aggregated=df_aggregated,
+                df_balances=df_balances,
+                df_aggregated_history=df_aggregated_history
+            )
 
         fig_depots_current_value = \
             create_line_chart(dataframe=df_depots,
@@ -746,9 +764,23 @@ def make_report(app):
     app.css.append_css({"external_url": f"/static/styles/layout.css"})
 
 
+def load_data(folder: Union[str, Path]):
+
+    df_aggregated_history = create_historical_aggregated_dataframe(
+        folder=folder)
+
+    (df_depots,
+        df_balances,
+        df_aggregated,
+        df_depots_today) = create_combined_dataframes(folder=folder,
+                                                      date_today=today_string)
+
+    return df_aggregated_history, df_depots, df_balances, df_aggregated, df_depots_today
+
 ################################################################################
 #   Main application
 ################################################################################
+
 
 LOGGER_NAME = "invst.comdirect_status_report"
 
@@ -777,14 +809,6 @@ if load_dropbox:
 else:
     folder = folder_local
 
-df_aggregated_history = create_historical_aggregated_dataframe(
-    folder=folder)
-
-(df_depots,
-    df_balances,
-    df_aggregated,
-    df_depots_today) = create_combined_dataframes(folder=folder,
-                                                  date_today=today_string)
 
 # ------------------------------------------------------------------------------
 #   Configuration definitions: Colors
