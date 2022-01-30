@@ -21,3 +21,4 @@ flask
 gunicorn
 dropbox
 Werkzeug
+mysql-connector-python

@@ -162,19 +162,25 @@ def run_update(mode: int = 0, wait_time: int = 0):
         file_export_trade = folder / file_export_trade
 
         storage = Storage(config=config, logger_name=LOGGER_NAME)
-        storage.save_pandas_as_excel(
-            dataframes=[balance,
-                        depots,
-                        depot_position[0],
-                        depot_position[1],
-                        orders
-                        ],
-            sheetsnames=['Balance',
-                         'Depots',
-                         'Depot Positions Aggregated',
-                         'Depot Positions',
-                         'Orders'],
-            filename=file_export_trade
+
+        database_name = "invst_db"
+        blocks = ['Balance',
+                  'Depots',
+                  'Depot Positions Aggregated',
+                  'Depot Positions',
+                  'Orders']
+
+        storage.store_pandas(
+            dataframe=[balance,
+                       depots,
+                       depot_position[0],
+                       depot_position[1],
+                       orders
+                       ],
+            sheetname=blocks,
+            filename=file_export_trade,
+            database_name=database_name,
+            table_name=blocks
         )
 
     return "Finalized update!"

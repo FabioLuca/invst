@@ -397,9 +397,9 @@ def create_historical_aggregated_dataframe(folder: Union[Path, str]):
     #   supported for it. The cav file must be named "History_Aggregated" and
     #   also be located in the "Export" folder.
     # --------------------------------------------------------------------------
-    if load_dropbox:
+    if load_source == "dropbox":
         historical_file = folder + "History_Aggregated.csv"
-    else:
+    elif load_source == "local":
         historical_file = folder / "History_Aggregated.csv"
 
     if isinstance(historical_file, Path):
@@ -801,12 +801,12 @@ config.load_config(filename=config_access_userdata_file)
 config.load_config(filename=config_local_file)
 folder_local = Path(config.local_config["paths"]["data_storage"])
 folder_dropbox = config.data_source_storage_access_data["path_export"]
-load_dropbox = config.local_config["storage"]["load_dropbox"]
+load_source = config.local_config["storage"]["load"]
 # folder = Path.cwd().resolve() / "export"
 
-if load_dropbox:
+if load_source == "dropbox":
     folder = ""  # folder_dropbox
-else:
+elif load_source == "local":
     folder = folder_local
 
 

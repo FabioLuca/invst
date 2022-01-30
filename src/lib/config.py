@@ -45,6 +45,9 @@ class Config:
 
         self.data = None
 
+        self.api_data = None
+        self.user_data = None
+
         self.data_source_fetch_name = None
         self.data_source_fetch_access_data = None
         self.data_source_fetch_user_data = None
@@ -178,6 +181,8 @@ class Config:
             #   Configuration related to the online data sources
             # ------------------------------------------------------------------
             try:
+                self.api_data = self.json_data["api"]
+
                 self.data_source_fetch_name = self.json_data[
                     "api"]["fetching"]["selection"]
                 self.data_source_fetch_access_data = self.json_data[
@@ -236,6 +241,8 @@ class Config:
             #   Configuration related to the online data sources
             # ------------------------------------------------------------------
             try:
+                self.user_data = self.json_data["api"]
+
                 self.data_source_fetch_user_data = self.json_data[
                     "api"]["fetching"][self.data_source_fetch_name]["user_data"]
                 self.data_source_trade_user_data = self.json_data[
@@ -330,3 +337,24 @@ class Config:
         the content in a dictionary format"""
         with open(self.filename, encoding="utf-8") as self.json_file:
             self.json_data = json.load(self.json_file)
+
+    def get_key(self, file, levels, backup):
+
+        if file == "local":
+            temp = self.local_config
+        elif file == "user":
+            temp = self.user_data
+        elif file == "parameters":
+            temp = self.parameters
+        elif file == "api-cfg":
+            temp = self.api_data
+        else:
+            return backup
+
+        for i in range(len(levels)):
+            if i == len(levels):
+                temp = temp.get(levels[i], backup)
+            else:
+                temp = temp.get(levels[i], {})
+
+        return temp

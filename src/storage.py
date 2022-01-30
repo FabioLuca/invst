@@ -3,23 +3,32 @@ import pandas as pd
 from pathlib import Path
 from src.lib import messages as M
 from src.lib.config import Config
-from src.lib.storage.dropbox import DropboxAPI
+from src.lib.storage.dropbox import DropboxAPI as Dropbox
+from src.lib.storage.googlecloud_mysql import GoogleCloudMySQL
 from typing import Union
 
 
-class Storage(DropboxAPI):
+class Storage(Dropbox, GoogleCloudMySQL):
 
     def __init__(self, config: Config, logger_name: str) -> None:
+
+        self.cnxn = None
+        self.cursor = None
+        self.config_db = None
 
         # ----------------------------------------------------------------------
         #   Defines the location of the files with configurations and load them.
         # ----------------------------------------------------------------------
         self.config = config
 
-        self.save_dropbox = self.config.local_config.get(
-            'storage', {}).get('save_dropbox')
-        self.load_dropbox = self.config.local_config.get(
-            'storage', {}).get('load_dropbox')
+        self.store_local = self.config.local_config.get(
+            'storage', {}).get('store', {}).get('local', False)
+        self.store_dropbox = self.config.local_config.get(
+            'storage', {}).get('store', {}).get('dropbox', False)
+        self.store_google_cloud_mysql = self.config.local_config.get(
+            'storage', {}).get('store', {}).get('google_cloud_mysql', False)
+        self.load = self.config.local_config.get(
+            'storage', {}).get('load')
         self.data_storage = self.config.local_config.get(
             "data_storage", None)
         if self.data_storage is not None:
@@ -45,14 +54,63 @@ class Storage(DropboxAPI):
         self.logger.info("Initializing storage.")
 
     def list_files_folder(self, folderpath: Union[Path, str], criteria: str):
-        if self.load_dropbox:
+        if self.load == "dropbox":
             files = self.list_files(folderpath=folderpath, criteria=criteria)
-        else:
+        elif self.load == "local":
             files = list(
                 filter(Path.is_file, folderpath.glob(f"**/{criteria}*")))
             if len(files) < 1:
                 return None, None, None, None
         return files, None, None, None
+
+    def store_pandas(self,
+                     dataframe: Union[pd.DataFrame, list[pd.DataFrame]],
+                     sheetname: Union[str, list[str]] = None,
+                     filename: Path = None,
+                     database_name: str = None,
+                     table_name: str = None):
+
+        self.logger.info("Storing dataframe")
+
+        # ----------------------------------------------------------------------
+        #   LOCAL FOLDER
+        # ----------------------------------------------------------------------
+        if self.store_local and not self.store_dropbox:
+            self.logger.info("Saving dataframe in Local")
+            if sheetname is not None and filename is not None:
+                self.save_pandas_as_excel(dataframe=dataframe,
+                                          sheetname=sheetname,
+                                          filename=filename)
+            else:
+                self.logger.error("Missing parameters for local storage")
+
+        # ----------------------------------------------------------------------
+        #   DROPBOX
+        #   Saving to Dropbox alone is not possible, since it needs a file to
+        #   be copied to the service, so this must always have the Local
+        #   storage as enabled.
+        # ----------------------------------------------------------------------
+        if self.store_local and self.store_dropbox:
+            self.logger.info("Saving dataframe in Local and Dropbox")
+            if sheetname is not None and filename is not None:
+                self.save_pandas_as_excel(dataframe=dataframe,
+                                          sheetname=sheetname,
+                                          filename=filename,
+                                          copy_dropbox=True)
+            else:
+                self.logger.error("Missing parameters for Dropbox storage")
+
+        # ----------------------------------------------------------------------
+        #   GOOGLE CLOUD MYSQL
+        # ----------------------------------------------------------------------
+        if self.store_google_cloud_mysql:
+            self.logger.info("Saving dataframe in Google Cloud MySQL")
+            if database_name is not None and table_name is not None:
+                self.save_pandas_as_db(database_name=database_name,
+                                       table_name=table_name,
+                                       dataframe=dataframe)
+            else:
+                self.logger.error("Missing parameters for database storage")
 
     def save_file(self, filepath: Path, save_dropbox: bool):
 
@@ -63,9 +121,10 @@ class Storage(DropboxAPI):
                 self.logger.info("File copied to Dropbox!")
 
     def save_pandas_as_excel(self,
-                             dataframes: list[pd.DataFrame],
-                             sheetsnames: list[str],
-                             filename: Path):
+                             dataframe: Union[pd.DataFrame, list[pd.DataFrame]],
+                             sheetname: Union[str, list[str]],
+                             filename: Path,
+                             copy_dropbox: bool = False):
         """
         """
         # ----------------------------------------------------------------------
@@ -77,7 +136,13 @@ class Storage(DropboxAPI):
                 self.logger_name, "Storage_Error_BadExtension")
             return result, flag, level, message
 
-        if len(dataframes) != len(sheetsnames):
+        if isinstance(dataframe, pd.DataFrame):
+            dataframe = [dataframe]
+
+        if isinstance(sheetname, str):
+            sheetname = [sheetname]
+
+        if len(dataframe) != len(sheetname):
             result = None
             flag, level, message = M.get_status(
                 self.logger_name, "Storage_Error_BadListSizes")
@@ -93,8 +158,8 @@ class Storage(DropboxAPI):
 
         excel_writer = pd.ExcelWriter(filename, engine='xlsxwriter')
 
-        for dataframe, sheetname in zip(dataframes, sheetsnames):
-            dataframe.to_excel(excel_writer, sheet_name=sheetname)
+        for dataframe_item, sheetname_item in zip(dataframe, sheetname):
+            dataframe_item.to_excel(excel_writer, sheet_name=sheetname_item)
 
         excel_writer.save()
 
@@ -102,7 +167,7 @@ class Storage(DropboxAPI):
         #   Saves a copy of the file into Dropbox. The operation is done by
         #   copying the local content to the remote one.
         # ----------------------------------------------------------------------
-        if self.save_dropbox:
+        if copy_dropbox:
             destination_dropbox = self.dropbox_path
             copy_resp = self.upload_file(filename, destination_dropbox)
             if copy_resp is not None:
@@ -126,7 +191,7 @@ class Storage(DropboxAPI):
         #   Defines the source of the file depending on the configuration from
         #   the user.
         # ----------------------------------------------------------------------
-        if self.load_dropbox:
+        if self.load == "dropbox":
             destination_folder = Path.cwd().resolve() / self.temp_folder
             self.download_file(file=relative_path,
                                destination_folder=destination_folder)
@@ -134,7 +199,7 @@ class Storage(DropboxAPI):
             if dropbox_path_rel[0] == "/" or dropbox_path_rel[0] == "\\":
                 dropbox_path_rel = dropbox_path_rel[1:]
             filename = destination_folder / dropbox_path_rel / relative_path
-        else:
+        elif self.load == "local":
             filename = relative_path
 
         # ----------------------------------------------------------------------
@@ -173,7 +238,7 @@ class Storage(DropboxAPI):
         #   Defines the source of the file depending on the configuration from
         #   the user.
         # ----------------------------------------------------------------------
-        if self.load_dropbox:
+        if self.load == "dropbox":
             destination_folder = Path.cwd().resolve() / self.temp_folder
             self.download_file(file=relative_path,
                                destination_folder=destination_folder)
@@ -181,7 +246,7 @@ class Storage(DropboxAPI):
             if dropbox_path_rel[0] == "/" or dropbox_path_rel[0] == "\\":
                 dropbox_path_rel = dropbox_path_rel[1:]
             filename = destination_folder / dropbox_path_rel / relative_path
-        else:
+        elif self.load == "local":
             filename = relative_path
 
         # ----------------------------------------------------------------------
