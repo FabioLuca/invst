@@ -408,7 +408,7 @@ def create_historical_aggregated_dataframe(folder: Union[Path, str]):
             return df_aggregated_history
 
     storage = Storage(config=config, logger_name=LOGGER_NAME)
-    df_aggregated_history, flag, level, message = storage.load_pandas_from_csv(
+    df_aggregated_history, flag, level, message = storage.load_pandas(
         relative_path=historical_file)
 
     df_aggregated_history["Date"] = pd.to_datetime(
@@ -482,16 +482,16 @@ def create_combined_dataframes(folder: Union[Path, str], date_today: str):
     df_balances = pd.DataFrame()
     df_aggregated = pd.DataFrame()
 
-    df_file_aggregated, flag, level, message = storage.load_pandas_from_excel(
+    df_file_aggregated, flag, level, message = storage.load_pandas(
         files[0], sheetname="Depot Positions Aggregated")
 
     i = 0
     for file in files:
-        df_file_aggregated, flag, level, message = storage.load_pandas_from_excel(
+        df_file_aggregated, flag, level, message = storage.load_pandas(
             file, sheetname="Depot Positions Aggregated")
-        df_file_balance, flag, level, message = storage.load_pandas_from_excel(
+        df_file_balance, flag, level, message = storage.load_pandas(
             file, sheetname="Balance")
-        df_file_depots, flag, level, message = storage.load_pandas_from_excel(
+        df_file_depots, flag, level, message = storage.load_pandas(
             file, sheetname="Depot Positions")
 
         df_file_aggregated["Account Total Value"] = df_file_aggregated["Depot Aggregated Current Value"] + \
