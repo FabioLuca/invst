@@ -134,6 +134,8 @@ dmypy.json
 **/credentials.json
 **/api-cfg-access.json
 **/local.json
+cfg/local/
+cfg/user/
 
 ### VisualStudioCode ###
 .vscode/*
