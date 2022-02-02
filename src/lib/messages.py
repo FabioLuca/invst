@@ -83,6 +83,16 @@ MESSAGE = {
         "Level": C.ERROR,
         "Message": "Negative response for ticker %s from API. Code: %s. Text: %s"
     },
+    "API_Error_EmptyResult": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "Error due to empty dictionary from the API."
+    },
+    "API_Error_NotFoundSymbol": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "The symbol %s was not found."
+    },
     "API_429_ToManyRequests": {
         "Flag": C.FAIL,
         "Level": C.ERROR,
