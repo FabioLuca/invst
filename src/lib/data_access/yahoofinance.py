@@ -106,6 +106,19 @@ class YahooFinance:
         # ----------------------------------------------------------------------
         data_output = self.data_json
 
+        if data_output is None:
+            result = None
+            flag, level, message = M.get_status(
+                self.logger_name, "API_Error_EmptyResult")
+            return result, flag, level, message
+
+        if data_output.get("chart", {}).get("error", {}) is not None:
+            if data_output.get("chart", {}).get("error", {}).get("code", None) == "Not Found":
+                result = None
+                flag, level, message = M.get_status(
+                    self.logger_name, "API_Error_NotFoundSymbol", (self.ticker))
+                return result, flag, level, message
+
         lista_tempo_number = data_output["chart"]["result"][0]["timestamp"]
         lista_tempo_time = [datetime.fromtimestamp(
             x) for x in lista_tempo_number]
