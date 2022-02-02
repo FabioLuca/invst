@@ -189,7 +189,7 @@ def run_analysis(ticker_input: list = None):
         communication.send_email(subject=email_subject, body_html=email_body)
         logger.info(
             "======================= COMPLETED RUN =======================")
-        sys.exit()
+        return "Completed with empty results"
 
     # --------------------------------------------------------------------------
     #   Builds up the final response to be presented to the user. Storing the
