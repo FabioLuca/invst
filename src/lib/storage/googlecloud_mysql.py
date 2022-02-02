@@ -178,22 +178,75 @@ class GoogleCloudMySQL:
                            query=sql_query, type_query="INSERT")
 
         # ----------------------------------------------------------------------
+        #   Add a primary key
+        # ----------------------------------------------------------------------
+        sql_query_index = f"""
+            ALTER TABLE `{table_name}` 
+            CHANGE COLUMN `index` `index` INT(11) NOT NULL AUTO_INCREMENT ,
+            ADD UNIQUE INDEX `index_UNIQUE` (`index` ASC),
+            ADD PRIMARY KEY (`index`);
+            ;
+            """
+        self.execute_query(database_name=database_name,
+                           query=sql_query_index, type_query="ALTER")
+
+        # ----------------------------------------------------------------------
         #   Corrects the datatypes so some text fields can be used later in
         #   Unique Keys
         # ----------------------------------------------------------------------
-        if "`Position ID`" in sql_query:
-            sql_query_alter = f"""
-                ALTER TABLE `{table_name}`
-                MODIFY `Position ID` VARCHAR(200)"""
-            self.execute_query(database_name=database_name,
-                               query=sql_query_alter, type_query="ALTER")
-
-        if "`Depot ID`" in sql_query:
-            sql_query_alter = f"""
-                ALTER TABLE `{table_name}`
-                MODIFY `Depot ID` VARCHAR(200)"""
-            self.execute_query(database_name=database_name,
-                               query=sql_query_alter, type_query="ALTER")
+        fields = {
+            "WKN": "VARCHAR(200)",
+            "Position ID": "VARCHAR(200)",
+            "Depot ID": "VARCHAR(200)",
+            "Depot Aggregated ID": "VARCHAR(200)",
+            "Order ID": "VARCHAR(200)",
+            "Venue ID": "VARCHAR(200)",
+            "Client ID": "VARCHAR(200)",
+            "Account ID": "VARCHAR(200)",
+            "Instrument ID": "VARCHAR(200)",
+            "Account Display ID": "VARCHAR(200)",
+            "Settlement account ID": "VARCHAR(200)",
+            "Balance Unit": "VARCHAR(10)",
+            "Balance Euro Unit": "VARCHAR(10)",
+            "Available Cash Unit": "VARCHAR(10)",
+            "Available Cash Euro Unit": "VARCHAR(10)",
+            "Purchase Value Unit": "VARCHAR(10)",
+            "Purchase Price Unit": "VARCHAR(10)",
+            "Current Value Unit": "VARCHAR(10)",
+            "Current Price Unit": "VARCHAR(10)",
+            "Limit Unit": "VARCHAR(10)",
+            "Hedgeability": "VARCHAR(30)",
+            "Profit/Loss Purchase Absolute Unit": "VARCHAR(10)",
+            "Profit/Loss Previous Day Absolute Unit": "VARCHAR(10)",
+            "Account Currency": "VARCHAR(10)",
+            "IBAN": "VARCHAR(200)",
+            "Quantity": "INT(10)",
+            "Available Cash Value": "DECIMAL(12, 2)",
+            "Available Cash Euro Value": "DECIMAL(12, 2)",
+            "Balance Value": "DECIMAL(12, 2)",
+            "Balance Euro Value": "DECIMAL(12, 2)",
+            "Depot Aggregated Purchase Value": "DECIMAL(12, 2)",
+            "Depot Aggregated Current Value": "DECIMAL(12, 3)",
+            "Depot Aggregated Profit/Loss Purchase Absolute Value": "DECIMAL(12, 3)",
+            "Depot Aggregated Profit/Loss Purchase Relative": "DECIMAL(12, 3)",
+            "Depot Aggregated Profit/Loss Previous Day Absolute Value": "DECIMAL(12, 3)",
+            "Depot Aggregated Profit/Loss Previous Day Relative": "DECIMAL(12, 3)",
+            "Purchase Value": "DECIMAL(12, 3)",
+            "Purchase Price": "DECIMAL(12, 5)",
+            "Current Value": "DECIMAL(12, 3)",
+            "Current Price": "DECIMAL(12, 3)",
+            "Profit/Loss Purchase Absolute Value": "DECIMAL(12, 3)",
+            "Profit/Loss Purchase Relative": "DECIMAL(12, 3)",
+            "Profit/Loss Previous Day Absolute Value": "DECIMAL(12, 3)",
+            "Profit/Loss Previous Day Relative": "DECIMAL(12, 3)",
+        }
+        for field, type_field in fields.items():
+            if f"`{field}`" in sql_query:
+                sql_query_alter = f"""
+                    ALTER TABLE `{table_name}`
+                    MODIFY `{field}` {type_field}"""
+                self.execute_query(database_name=database_name,
+                                   query=sql_query_alter, type_query="ALTER")
 
         # ----------------------------------------------------------------------
         #   Adds an Unique Key for the table
@@ -214,6 +267,15 @@ class GoogleCloudMySQL:
                     ALTER TABLE `{table_name}`
                     ADD CONSTRAINT unique_per_day 
                     UNIQUE (`Date`, `Depot ID`);
+                    """
+
+            elif "`Depot Aggregated ID`" in sql_query_alter and "`Date`" in sql_query:
+                self.logger.info(
+                    f"Adding constraint to table '{table_name}' for `Depot Aggregated ID`")
+                sql_query_alter = f"""
+                    ALTER TABLE `{table_name}`
+                    ADD CONSTRAINT unique_per_day 
+                    UNIQUE (`Date`, `Depot Aggregated ID`);
                     """
 
             self.execute_query(database_name=database_name,
@@ -239,21 +301,22 @@ class GoogleCloudMySQL:
         # ----------------------------------------------------------------------
         dataframe_storage = dataframe.copy()
 
-        dataframe_storage["Date"] = pd.to_datetime(
-            dataframe_storage["Date"], format="%Y-%m-%d", infer_datetime_format=True)
-        dataframe_storage["Date"] = dataframe_storage["Date"].dt.date
+        if "Date" in dataframe_storage.columns:
+            dataframe_storage["Date"] = pd.to_datetime(
+                dataframe_storage["Date"], format="%Y-%m-%d", infer_datetime_format=True)
+            dataframe_storage["Date"] = dataframe_storage["Date"].dt.date
 
-        dataframe_storage['Date'] = pd.to_datetime(
-            dataframe_storage['Date'], infer_datetime_format=True)
+            dataframe_storage['Date'] = pd.to_datetime(
+                dataframe_storage['Date'], infer_datetime_format=True)
 
         if "Unnamed: 0" in dataframe_storage.columns:
             dataframe_storage.drop(columns=["Unnamed: 0"], inplace=True)
         dataframe_storage.index = pd.RangeIndex(len(dataframe_storage.index))
         dataframe_storage.reset_index(inplace=True, drop=True)
-        if "WKN" in dataframe_storage.columns:
+        if "WKN" in dataframe_storage.columns and "Date" in dataframe_storage.columns:
             dataframe_storage.sort_values(
                 by=["WKN", "Date"], ignore_index=True, inplace=True)
-        else:
+        elif "Date" in dataframe_storage.columns:
             dataframe_storage.sort_values(
                 by=["Date"], ignore_index=True, inplace=True)
 
