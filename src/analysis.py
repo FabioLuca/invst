@@ -6,6 +6,7 @@ from datetime import datetime
 from pathlib import Path
 import pandas as pd
 from src.lib.config import Config
+from src.storage import Storage
 from src.lib.analysis.preprocessing import PreProcessing
 from src.lib.analysis.methods.crash import Crash
 from src.lib.analysis.methods.macd import MACD
@@ -85,12 +86,21 @@ class Analysis(Crash, MACD, RSI_SMA, RSI_EMA, BOLLINGER_BANDS, CombinedStrategy,
         #   Defines the location of the files with configurations and load them.
         # ----------------------------------------------------------------------
         config_base_path = Path.cwd().resolve() / "cfg"
+        config_access_file = config_base_path / "api-cfg.json"
+        config_access_userdata_file = config_base_path / "user" / "api-cfg-access.json"
         config_local_file = config_base_path / "local" / "local.json"
         config_parameters_file = config_base_path / "parameters.json"
 
         self.config = Config(logger_name=LOGGER_NAME)
+        self.config.load_config(filename=config_access_file)
+        self.config.load_config(filename=config_access_userdata_file)
         self.config.load_config(filename=config_local_file)
         self.config.load_config(filename=config_parameters_file)
+
+        # ----------------------------------------------------------------------
+        #   Add Storage support
+        # ----------------------------------------------------------------------
+        self.storage = Storage(config=self.config, logger_name=LOGGER_NAME)
 
         # ----------------------------------------------------------------------
         #   Analysis related attributes.
@@ -200,11 +210,21 @@ class Analysis(Crash, MACD, RSI_SMA, RSI_EMA, BOLLINGER_BANDS, CombinedStrategy,
         #   Export the dataframe for storage in an Excel file.
         # ----------------------------------------------------------------------
         if self.save_analysis:
+            self.ohlc_dataset["Symbol"] = self.symbol
+
             today_string = datetime.today().strftime('%Y-%m-%d')
             folder = Path(self.config.local_config["paths"]["data_storage"])
             file_export = f"Analysis data_{today_string}.xlsx"
             file_export = folder / "analysis" / today_string / file_export
-            self.ohlc_dataset.to_excel(file_export)
+            # self.ohlc_dataset.to_excel(file_export)
+            self.storage.store_pandas(
+                dataframe=[self.ohlc_dataset],
+                sheetname=["Analysis"],
+                filename=file_export,
+                database_name="invst_db",
+                table_name=["Analysis"],
+                ignores={"Database": True}
+            )
 
         return (self.decision, self.analysis_results, self.ohlc_dataset)
 
