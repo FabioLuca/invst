@@ -111,14 +111,15 @@ class Storage(Dropbox, GoogleCloudMySQL, PandasOperations):
                      sheetname: Union[str, list[str]] = None,
                      filename: Path = None,
                      database_name: str = None,
-                     table_name: str = None):
+                     table_name: str = None,
+                     ignores: dict = {}):
 
         self.logger.info("Storing dataframe")
 
         # ----------------------------------------------------------------------
         #   LOCAL FOLDER
         # ----------------------------------------------------------------------
-        if self.store_local and not self.store_dropbox:
+        if self.store_local and not self.store_dropbox and not ignores.get("local", False):
             self.logger.info("Saving dataframe in Local")
             if sheetname is not None and filename is not None:
                 self.save_pandas_as_excel(dataframe=dataframe,
@@ -133,7 +134,7 @@ class Storage(Dropbox, GoogleCloudMySQL, PandasOperations):
         #   be copied to the service, so this must always have the Local
         #   storage as enabled.
         # ----------------------------------------------------------------------
-        if self.store_local and self.store_dropbox:
+        if self.store_local and self.store_dropbox and not ignores.get("dropbox", False):
             self.logger.info("Saving dataframe in Local and Dropbox")
             if sheetname is not None and filename is not None:
                 self.save_pandas_as_excel(dataframe=dataframe,
@@ -146,7 +147,7 @@ class Storage(Dropbox, GoogleCloudMySQL, PandasOperations):
         # ----------------------------------------------------------------------
         #   GOOGLE CLOUD MYSQL
         # ----------------------------------------------------------------------
-        if self.store_google_cloud_mysql:
+        if self.store_google_cloud_mysql and not ignores.get("google_cloud_mysql", False):
             self.logger.info("Saving dataframe in Google Cloud MySQL")
             if database_name is not None and table_name is not None:
                 self.save_pandas_as_db(database_name=database_name,
