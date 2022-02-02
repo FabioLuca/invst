@@ -6,11 +6,14 @@
     :alt: Alternative text
 
 """
-import pandas as pd
-import numpy as np
-from pathlib import Path
-import matplotlib.pyplot as plt
+from datetime import datetime, timezone
+from deepdiff import DeepDiff
+from src.lib.analysis.basic import Basic
 import json
+import matplotlib.pyplot as plt
+from pathlib import Path
+import numpy as np
+import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 from tensorflow import keras
 from keras.models import Sequential
@@ -20,9 +23,10 @@ from keras.layers import Dense
 from keras.layers import RepeatVector
 from keras.layers import TimeDistributed
 from keras.layers import Activation
-from src.lib.analysis.basic import Basic
-from deepdiff import DeepDiff
-from datetime import datetime, timezone
+# import os
+# os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
+# os.environ["CUDA_VISIBLE_DEVICES"] = ""
+# os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 
 class LSTM (Basic):
