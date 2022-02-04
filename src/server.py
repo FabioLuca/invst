@@ -16,6 +16,7 @@ from dash import Dash
 from dash import html
 
 server = Flask(__name__)
+server.secret_key = "non-secret-key"
 dash_app = Dash(__name__,  server=server, url_base_pathname='/report1/')
 
 # ------------------------------------------------------------------------------

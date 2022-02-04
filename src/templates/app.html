@@ -96,6 +96,22 @@
                 </div>
             </div>
         </div>
+
+        {% with messages = get_flashed_messages(category_filter=["comdirect-status"]) %}
+        {% if messages %}
+        <div class="statusGrid">
+            <div class="elementTopic">
+                <div class="elementStatus">
+                    <p class="statusList">
+                        {% for message in messages %}
+                        {{ message }}<br>
+                        {% endfor %}
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endwith %}
     </div>
     <div class="blockTopic">
         <header class="titleTopic">

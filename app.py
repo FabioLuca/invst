@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request, render_template, redirect, url_for, flash
 from pathlib import Path
 from automation import run_analysis
 from automation import comdirect_status_update
@@ -116,6 +116,7 @@ def call_run_update():
 @server.server.route("/update1", methods=['POST', 'GET'])
 def call_run_update_part1():
     comdirect_status_update.run_update(mode=1)
+    flash("Waiting for the TAN authentication...", "comdirect-status")
     return redirect(url_for('basic'))
 
 

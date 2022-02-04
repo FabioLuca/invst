@@ -29,6 +29,12 @@ p {
     margin: 5px 0px 5px;
 }
 
+.statusList {
+    font-size: 12px;
+    color: rgb(241, 207, 10);
+    margin: 5px 0px 5px;
+}
+
 .pageTitle {
     max-width: 800px;
     display: grid;
@@ -97,6 +103,10 @@ p {
     text-align: center;
 }
 
+.elementStatus{
+    min-height: 15px;
+}
+
 .elementTable{
     display: table;
     width: 100%;
@@ -111,6 +121,8 @@ p {
     text-align: center;
     min-height: 30px;
 }
+
+
 
 .inputText{
     margin: 10px 0px;
