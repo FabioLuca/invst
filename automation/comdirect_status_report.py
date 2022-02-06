@@ -836,7 +836,6 @@ elif load_source == "local":
 elif load_source == "google_cloud_mysql":
     folder = ""
 
-
 # ------------------------------------------------------------------------------
 #   Configuration definitions: Colors
 # ------------------------------------------------------------------------------
@@ -1290,6 +1289,9 @@ layout_charts = go.Layout(
     },
     # paper_bgcolor="LightSteelBlue"
 )
+
+df_aggregated_history, df_depots, df_balances, df_aggregated, df_depots_today = load_data(
+    folder)
 
 
 @server.dash_app.callback(
