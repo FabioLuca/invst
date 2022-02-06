@@ -312,6 +312,26 @@ MESSAGE = {
         "Level": C.INFO,
         "Message": "Success to load the file %s"
     },
+    "Storage_LoadSuccess_Database": {
+        "Flag": C.SUCCESS,
+        "Level": C.INFO,
+        "Message": "Success to load from database."
+    },
+    "Storage_LoadError_MissingSheet": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "Missing sheet for loading."
+    },
+    "Storage_LoadError_Database": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "Error loading from database."
+    },
+    "Storage_Load_Error_Database_Parameters": {
+        "Flag": C.FAIL,
+        "Level": C.ERROR,
+        "Message": "Missing parameters for database loading."
+    },
     "Storage_Success_Dropbox": {
         "Flag": C.SUCCESS,
         "Level": C.INFO,

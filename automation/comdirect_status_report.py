@@ -401,6 +401,8 @@ def create_historical_aggregated_dataframe(folder: Union[Path, str]):
         historical_file = folder + "History_Aggregated.csv"
     elif load_source == "local":
         historical_file = folder / "History_Aggregated.csv"
+    elif load_source == "google_cloud_mysql":
+        historical_file = ""
 
     if isinstance(historical_file, Path):
         if not historical_file.is_file():
@@ -408,8 +410,11 @@ def create_historical_aggregated_dataframe(folder: Union[Path, str]):
             return df_aggregated_history
 
     storage = Storage(config=config, logger_name=LOGGER_NAME)
+    database_name = "invst_db"
     df_aggregated_history, flag, level, message = storage.load_pandas(
-        relative_path=historical_file)
+        relative_path=historical_file,
+        database_name=database_name,
+        table_name="History Aggregated")
 
     df_aggregated_history["Date"] = pd.to_datetime(
         df_aggregated_history["Date"], format="%d-%m-%Y")
@@ -472,30 +477,47 @@ def create_combined_dataframes(folder: Union[Path, str], date_today: str):
     # --------------------------------------------------------------------------
 
     storage = Storage(config=config, logger_name=LOGGER_NAME)
+    database_name = "invst_db"
     files, flag, level, message = storage.list_files_folder(
         folder, criteria='Export_Comdirect_')
 
-    if len(files) < 1:
-        return None
+    if storage.load != "google_cloud_mysql":
+        if len(files) < 1:
+            return None
+    else:
+        files = [None]
 
     df_depots = pd.DataFrame()
     df_balances = pd.DataFrame()
     df_aggregated = pd.DataFrame()
 
+    block = "Depot Positions Aggregated"
     df_file_aggregated, flag, level, message = storage.load_pandas(
-        files[0], sheetname="Depot Positions Aggregated")
+        files[0], sheetname=block, database_name=database_name,
+        table_name=block)
 
     i = 0
     for file in files:
+        block = "Depot Positions Aggregated"
         df_file_aggregated, flag, level, message = storage.load_pandas(
-            file, sheetname="Depot Positions Aggregated")
+            file, sheetname=block, database_name=database_name,
+            table_name=block)
+        block = "Balance"
         df_file_balance, flag, level, message = storage.load_pandas(
-            file, sheetname="Balance")
+            file, sheetname=block, database_name=database_name,
+            table_name=block)
+        block = "Depot Positions"
         df_file_depots, flag, level, message = storage.load_pandas(
-            file, sheetname="Depot Positions")
+            file, sheetname=block, database_name=database_name,
+            table_name=block)
 
-        df_file_aggregated["Account Total Value"] = df_file_aggregated["Depot Aggregated Current Value"] + \
-            df_file_balance["Balance Value"].iloc[-1]
+        if storage.load != "google_cloud_mysql":
+            df_file_aggregated["Account Total Value"] = df_file_aggregated["Depot Aggregated Current Value"] + \
+                df_file_balance["Balance Value"].iloc[-1]
+        else:
+            df_file_aggregated["Account Total Value"] = df_file_aggregated["Depot Aggregated Current Value"] + \
+                df_file_balance["Balance Value"]
+
         df_file_aggregated["Account Total Value Unit"] = "EUR"
 
         if i == 0:
@@ -546,17 +568,20 @@ def create_combined_dataframes(folder: Union[Path, str], date_today: str):
     #   from the previous part of the dataframes. Also eliminates unecessary
     #   columns.
     # --------------------------------------------------------------------------
-    df_aggregated.drop(columns=["Unnamed: 0"], inplace=True)
-    df_aggregated.index = pd.RangeIndex(len(df_aggregated.index))
-    df_aggregated.reset_index(inplace=True, drop=True)
+    if "Unnamed: 0" in df_aggregated.columns:
+        df_aggregated.drop(columns=["Unnamed: 0"], inplace=True)
+        df_aggregated.index = pd.RangeIndex(len(df_aggregated.index))
+        df_aggregated.reset_index(inplace=True, drop=True)
 
-    df_balances.drop(columns=["Unnamed: 0"], inplace=True)
-    df_balances.index = pd.RangeIndex(len(df_balances.index))
-    df_balances.reset_index(inplace=True, drop=True)
+    if "Unnamed: 0" in df_balances.columns:
+        df_balances.drop(columns=["Unnamed: 0"], inplace=True)
+        df_balances.index = pd.RangeIndex(len(df_balances.index))
+        df_balances.reset_index(inplace=True, drop=True)
 
-    df_depots.drop(columns=["Unnamed: 0"], inplace=True)
-    df_depots.index = pd.RangeIndex(len(df_depots.index))
-    df_depots.reset_index(inplace=True, drop=True)
+    if "Unnamed: 0" in df_depots.columns:
+        df_depots.drop(columns=["Unnamed: 0"], inplace=True)
+        df_depots.index = pd.RangeIndex(len(df_depots.index))
+        df_depots.reset_index(inplace=True, drop=True)
 
     df_depots.sort_values(
         by=["WKN", "Date"], ignore_index=True, inplace=True)
@@ -808,6 +833,8 @@ if load_source == "dropbox":
     folder = ""  # folder_dropbox
 elif load_source == "local":
     folder = folder_local
+elif load_source == "google_cloud_mysql":
+    folder = ""
 
 
 # ------------------------------------------------------------------------------

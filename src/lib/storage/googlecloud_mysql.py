@@ -3,6 +3,10 @@ from mysql.connector.constants import ClientFlag
 from pathlib import Path
 import pandas as pd
 from typing import List, Union
+from googleapiclient import discovery
+import google.auth
+from src.lib import messages as M
+from src.lib import constants as C
 
 
 class GoogleCloudMySQL:
@@ -251,37 +255,90 @@ class GoogleCloudMySQL:
         # ----------------------------------------------------------------------
         #   Adds an Unique Key for the table
         # ----------------------------------------------------------------------
-        if "`Position ID`" in sql_query or "`Depot ID`" in sql_query:
-            if "`Position ID`" in sql_query and "`Date`" in sql_query:
-                self.logger.info(
-                    f"Adding constraint to table '{table_name}' for `Position ID`")
-                sql_query_alter = f"""
-                    ALTER TABLE `{table_name}`
-                    ADD CONSTRAINT unique_per_day
-                    UNIQUE (`Date`, `Position ID`);
-                    """
-            elif "`Depot ID`" in sql_query_alter and "`Date`" in sql_query:
-                self.logger.info(
-                    f"Adding constraint to table '{table_name}' for `Depot ID`")
-                sql_query_alter = f"""
-                    ALTER TABLE `{table_name}`
-                    ADD CONSTRAINT unique_per_day 
-                    UNIQUE (`Date`, `Depot ID`);
-                    """
+        keys = ["Position ID",
+                "Depot ID",
+                "Depot Aggregated ID",
+                "Account ID"
+                ]
 
-            elif "`Depot Aggregated ID`" in sql_query_alter and "`Date`" in sql_query:
-                self.logger.info(
-                    f"Adding constraint to table '{table_name}' for `Depot Aggregated ID`")
-                sql_query_alter = f"""
-                    ALTER TABLE `{table_name}`
-                    ADD CONSTRAINT unique_per_day 
-                    UNIQUE (`Date`, `Depot Aggregated ID`);
-                    """
-
-            self.execute_query(database_name=database_name,
-                               query=sql_query_alter, type_query="ALTER")
+        if any(k in sql_query for k in keys):
+            for key in keys:
+                if key in sql_query and "`Date`" in sql_query:
+                    self.logger.info(
+                        f"Adding constraint to table '{table_name}' for '{key}'")
+                    sql_query_alter = f"""
+                        ALTER TABLE `{table_name}`
+                        ADD CONSTRAINT unique_per_day
+                        UNIQUE (`Date`,`{key}`);
+                        """
+                    self.execute_query(database_name=database_name,
+                                       query=sql_query_alter, type_query="ALTER")
+                    break
 
         return True
+
+    def load_pandas_from_db(self, database_name: str, table_name: Union[str, List[str]]):
+
+        if isinstance(table_name, str):
+            table_name = [table_name]
+
+        dataframes = []
+        flag_final, level_final, message_final = M.get_status(
+            self.logger_name, "Storage_LoadSuccess_Database")
+
+        for table_name_item in table_name:
+            dataframe, flag, level, message = self.load_pandas_from_db_item(database_name=database_name,
+                                                                            table_name=table_name_item)
+            dataframes.append(dataframe)
+            if flag != C.SUCCESS:
+                flag_final, level_final, message_final = M.get_status(
+                    self.logger_name, "Storage_LoadError_Database")
+
+        return dataframes, flag_final, level_final, message_final
+
+    def load_pandas_from_db_item(self, database_name: str, table_name: Union[str, List[str]]):
+
+        self.logger.info(
+            f"Loading data from table '{table_name}' into Dataframe")
+
+        # ----------------------------------------------------------------------
+        #   Gets the data from database, along with the columns structure, since
+        #   they are the same from the DataFrame, and convert the results in the
+        #   Dataframe.
+        # ----------------------------------------------------------------------
+        sql_query = f"""
+            DESCRIBE `{table_name}`;
+        """
+
+        result_columns = self.execute_query(database_name=database_name,
+                                            query=sql_query,
+                                            type_query="SELECT")
+
+        columns = []
+        for item in result_columns:
+            columns.append(item[0])
+
+        sql_query = f"""
+            SELECT * FROM `{table_name}`;
+            """
+
+        result = self.execute_query(database_name=database_name,
+                                    query=sql_query,
+                                    type_query="SELECT")
+
+        df = pd.DataFrame.from_records(result, columns=columns)
+
+        # ----------------------------------------------------------------------
+        #   Executes routine on the DataFrame to adequate the format and
+        #   content.
+        # ----------------------------------------------------------------------
+        if "index" in df.columns:
+            df.set_index('index', inplace=True)
+
+        flag, level, message = M.get_status(
+            self.logger_name, "Storage_LoadSuccess_Database")
+
+        return df, flag, level, message
 
     def save_pandas_as_db(self, database_name: str, table_name: Union[str, List[str]], dataframe: Union[pd.DataFrame, List[pd.DataFrame]]):
 
@@ -296,15 +353,18 @@ class GoogleCloudMySQL:
 
     def save_pandas_as_db_item(self, database_name: str, table_name: str, dataframe: pd.DataFrame):
 
+        self.logger.info(
+            f"Storing data from Dataframe to table '{table_name}'")
+
         # ----------------------------------------------------------------------
         # Prepare the Pandas dataframe for storage.
         # ----------------------------------------------------------------------
         dataframe_storage = dataframe.copy()
 
         if "Date" in dataframe_storage.columns:
-            dataframe_storage["Date"] = pd.to_datetime(
-                dataframe_storage["Date"], format="%Y-%m-%d", infer_datetime_format=True)
-            dataframe_storage["Date"] = dataframe_storage["Date"].dt.date
+            # dataframe_storage["Date"] = pd.to_datetime(
+            #     dataframe_storage["Date"], format="%Y-%m-%d", infer_datetime_format=True)
+            # dataframe_storage["Date"] = dataframe_storage["Date"].dt.date
 
             dataframe_storage['Date'] = pd.to_datetime(
                 dataframe_storage['Date'], infer_datetime_format=True)

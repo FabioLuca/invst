@@ -22,3 +22,5 @@ gunicorn
 dropbox
 Werkzeug
 mysql-connector-python
+google-api-python-client
+google-auth

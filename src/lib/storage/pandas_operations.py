@@ -79,6 +79,8 @@ class PandasOperations:
         #   Defines the source of the file depending on the configuration from
         #   the user.
         # ----------------------------------------------------------------------
+        filename = relative_path
+
         if load_dropbox:
             destination_folder = Path.cwd().resolve() / self.temp_folder
             self.download_file(file=relative_path,
@@ -87,8 +89,6 @@ class PandasOperations:
             if dropbox_path_rel[0] == "/" or dropbox_path_rel[0] == "\\":
                 dropbox_path_rel = dropbox_path_rel[1:]
             filename = destination_folder / dropbox_path_rel / relative_path
-        elif self.load == "local":
-            filename = relative_path
 
         # ----------------------------------------------------------------------
         #   Verifies that the necessary information for execution is valid.
@@ -127,6 +127,8 @@ class PandasOperations:
         #   Defines the source of the file depending on the configuration from
         #   the user.
         # ----------------------------------------------------------------------
+        filename = relative_path
+
         if load_dropbox:
             destination_folder = Path.cwd().resolve() / self.temp_folder
             self.download_file(file=relative_path,
@@ -135,8 +137,6 @@ class PandasOperations:
             if dropbox_path_rel[0] == "/" or dropbox_path_rel[0] == "\\":
                 dropbox_path_rel = dropbox_path_rel[1:]
             filename = destination_folder / dropbox_path_rel / relative_path
-        elif self.load == "local":
-            filename = relative_path
 
         # ----------------------------------------------------------------------
         #   Verifies that the necessary information for execution is valid.
@@ -148,10 +148,18 @@ class PandasOperations:
             return result, flag, level, message
 
         # ----------------------------------------------------------------------
-        #   Loads the
+        #   Loads the data. Checks first if the sheet is available, otherwise
+        #   returns an error.
         # ----------------------------------------------------------------------
-        dataframe = pd.read_excel(
-            filename, sheet_name=sheetname)
+        tabs = pd.ExcelFile(filename).sheet_names
+        if sheetname in tabs:
+            dataframe = pd.read_excel(
+                filename, sheet_name=sheetname)
+        else:
+            result = None
+            flag, level, message = M.get_status(
+                self.logger_name, "Storage_LoadError_MissingSheet")
+            return result, flag, level, message
 
         flag, level, message = M.get_status(
             self.logger_name, "Storage_LoadSuccess", filename)

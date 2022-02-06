@@ -54,21 +54,31 @@ class Storage(Dropbox, GoogleCloudMySQL, PandasOperations):
         self.logger = logging.getLogger(self.logger_name)
         self.logger.info("Initializing storage.")
 
-    def list_files_folder(self, folderpath: Union[Path, str], criteria: str):
+    def list_files_folder(self, folderpath: Union[Path, str], criteria: str, force_local: bool = False):
         if self.load == "dropbox":
             files = self.list_files(folderpath=folderpath, criteria=criteria)
-        elif self.load == "local":
+        elif self.load == "local" or force_local:
             files = list(
                 filter(Path.is_file, folderpath.glob(f"**/{criteria}*")))
             if len(files) < 1:
                 return None, None, None, None
+        elif self.load == "google_cloud_mysql":
+            files = None
         return files, None, None, None
 
-    def load_pandas(self, relative_path: Union[Path, str] = None, sheetname: str = None):
+    def load_pandas(self,
+                    relative_path: Union[Path, str] = None,
+                    sheetname: str = None,
+                    database_name: str = None,
+                    table_name: str = None,
+                    force_local: bool = False):
 
         self.logger.info("Loading dataframe")
 
-        if self.load == "local":
+        # ----------------------------------------------------------------------
+        #   LOCAL FOLDER
+        # ----------------------------------------------------------------------
+        if self.load == "local" or force_local:
             if isinstance(relative_path, Path) and relative_path is not None:
                 if relative_path.suffix == ".xlsx":
                     if sheetname is not None:
@@ -84,6 +94,9 @@ class Storage(Dropbox, GoogleCloudMySQL, PandasOperations):
             else:
                 self.logger.error("Missing parameters for loading local file")
 
+        # ----------------------------------------------------------------------
+        #   DROPBOX
+        # ----------------------------------------------------------------------
         elif self.load == "dropbox":
             if isinstance(relative_path, str) and relative_path is not None:
                 if relative_path[-5:] == ".xlsx":
@@ -101,8 +114,25 @@ class Storage(Dropbox, GoogleCloudMySQL, PandasOperations):
                 self.logger.error(
                     "Missing parameters for loading Dropbox file")
 
-        elif self.local == "google_cloud_mysql":
-            pass
+        # ----------------------------------------------------------------------
+        #   GOOGLE CLOUD MYSQL
+        # ----------------------------------------------------------------------
+        elif self.load == "google_cloud_mysql":
+            self.logger.info("Loading dataframe from Google Cloud MySQL")
+            if database_name is not None and table_name is not None:
+
+                dataframe, flag, level, message = self.load_pandas_from_db(database_name=database_name,
+                                                                           table_name=table_name)
+            else:
+                dataframe = None
+                flag, level, message = M.get_status(
+                    self.logger_name, "Storage_Load_Error_Database_Parameters")
+
+        # ----------------------------------------------------------------------
+        #   Unwrap the result in case of a single dataframe.
+        # ----------------------------------------------------------------------
+        if isinstance(dataframe, list) and len(dataframe) == 1:
+            dataframe = dataframe[0]
 
         return dataframe, flag, level, message
 
@@ -112,14 +142,15 @@ class Storage(Dropbox, GoogleCloudMySQL, PandasOperations):
                      filename: Path = None,
                      database_name: str = None,
                      table_name: str = None,
-                     ignores: dict = {}):
+                     ignores: dict = {},
+                     forces: dict = {}):
 
         self.logger.info("Storing dataframe")
 
         # ----------------------------------------------------------------------
         #   LOCAL FOLDER
         # ----------------------------------------------------------------------
-        if self.store_local and not self.store_dropbox and not ignores.get("local", False):
+        if (self.store_local and not self.store_dropbox and not ignores.get("local", False)) or forces.get("local", False):
             self.logger.info("Saving dataframe in Local")
             if sheetname is not None and filename is not None:
                 self.save_pandas_as_excel(dataframe=dataframe,
@@ -134,7 +165,7 @@ class Storage(Dropbox, GoogleCloudMySQL, PandasOperations):
         #   be copied to the service, so this must always have the Local
         #   storage as enabled.
         # ----------------------------------------------------------------------
-        if self.store_local and self.store_dropbox and not ignores.get("dropbox", False):
+        if (self.store_local and self.store_dropbox and not ignores.get("dropbox", False)) or forces.get("dropbox", False):
             self.logger.info("Saving dataframe in Local and Dropbox")
             if sheetname is not None and filename is not None:
                 self.save_pandas_as_excel(dataframe=dataframe,
@@ -147,7 +178,7 @@ class Storage(Dropbox, GoogleCloudMySQL, PandasOperations):
         # ----------------------------------------------------------------------
         #   GOOGLE CLOUD MYSQL
         # ----------------------------------------------------------------------
-        if self.store_google_cloud_mysql and not ignores.get("google_cloud_mysql", False):
+        if (self.store_google_cloud_mysql and not ignores.get("google_cloud_mysql", False)) or forces.get("google_cloud_mysql", False):
             self.logger.info("Saving dataframe in Google Cloud MySQL")
             if database_name is not None and table_name is not None:
                 self.save_pandas_as_db(database_name=database_name,
