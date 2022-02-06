@@ -318,8 +318,21 @@ class GoogleCloudMySQL:
         for item in result_columns:
             columns.append(item[0])
 
+        sort_list = []
+        if "WKN" in columns:
+            sort_list.append("`WKN` DESC")
+        if "Date" in columns:
+            sort_list.append("`Date` DESC")
+
+        if sort_list:
+            sort_list_string = ", ".join(sort_list)
+            sort_string = f"ORDER BY {sort_list_string}"
+        else:
+            sort_string = ""
+
         sql_query = f"""
-            SELECT * FROM `{table_name}`;
+            SELECT * FROM `{table_name}`
+            {sort_string};
             """
 
         result = self.execute_query(database_name=database_name,
