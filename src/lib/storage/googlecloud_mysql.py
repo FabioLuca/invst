@@ -7,6 +7,7 @@ from googleapiclient import discovery
 import google.auth
 from src.lib import messages as M
 from src.lib import constants as C
+import numpy as np
 
 
 class GoogleCloudMySQL:
@@ -420,7 +421,9 @@ class GoogleCloudMySQL:
 
         update_string = ", ".join(updates)
 
-        values = dataframe_storage.to_numpy().tolist()
+        dataframe_storage_clear = dataframe_storage.replace(np.NaN, pd.NA).where(
+            dataframe_storage.notnull(), None)
+        values = dataframe_storage_clear.to_numpy().tolist()
 
         sql_query = f"""
             INSERT INTO `{table_name}` ({pandas_columns_list})
