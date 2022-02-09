@@ -165,3 +165,6 @@ temp.json
 
 # SSL
 ssl/
+
+# Service account keys
+keys/
