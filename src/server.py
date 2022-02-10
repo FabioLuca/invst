@@ -14,6 +14,10 @@ The layout is defined as a dummy content, to be rendered later.
 from flask import Flask
 from dash import Dash
 from dash import html
+from pathlib import Path
+from src.lib.config import Config
+from src.storage import Storage
+
 
 server = Flask(__name__)
 server.secret_key = "non-secret-key"
@@ -28,3 +32,26 @@ dash_app = Dash(__name__,  server=server, url_base_pathname='/report1/')
 #       of your application before running the server.
 # ------------------------------------------------------------------------------
 dash_app.layout = html.Div("Empty")
+
+# ------------------------------------------------------------------------------
+#   Starts logger, config and storage
+# ------------------------------------------------------------------------------
+
+LOGGER_NAME = "invst.app"
+
+# --------------------------------------------------------------------------
+#   Defines the location of the files with configurations and load them.
+# --------------------------------------------------------------------------
+config_base_path = Path.cwd().resolve() / "cfg"
+config_access_file = config_base_path / "api-cfg.json"
+config_access_userdata_file = config_base_path / "user" / "api-cfg-access.json"
+config_local_file = config_base_path / "local" / "local.json"
+config_parameters_file = config_base_path / "parameters.json"
+
+config = Config(logger_name=LOGGER_NAME)
+config.load_config(filename=config_access_file)
+config.load_config(filename=config_access_userdata_file)
+config.load_config(filename=config_local_file)
+config.load_config(filename=config_parameters_file)
+
+storage = Storage(config=config, logger_name=LOGGER_NAME)

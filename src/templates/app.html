@@ -113,6 +113,7 @@
         {% endif %}
         {% endwith %}
     </div>
+
     <div class="blockTopic">
         <header class="titleTopic">
             Display Report
@@ -133,6 +134,31 @@
             </div>
         </div>
     </div>
+
+    <div class="blockTopic">
+        <header class="titleTopic">
+            Close Database
+        </header>
+        <div class="explanationTopic">
+            <p>Close the Cloud SQL database instance. This is a recommendation
+                step to avoid unecessary costs of operation on cloud. The
+                start operation of the instance is triggered automatically on
+                the loading of the server, and doesn't need manual operation.
+            </p>
+        </div>
+        <div class="topicsGrid countTopicsGrid1">
+            <div class="elementTopic">
+                <div class="elementTable">
+                    <div class="elementTableCell">
+                        <form method="POST" action="{{url_for('close_database')}}">
+                            <input class="actionButton" type="submit" name="watch3" value="Close Database" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 </body>
 

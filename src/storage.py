@@ -47,12 +47,33 @@ class Storage(Dropbox, GoogleCloudMySQL, PandasOperations):
         self.app_secret = self.config.data_source_storage_user_data["SECRET"]
 
         # ----------------------------------------------------------------------
+        #   Parameters for the Cloud operations.
+        # ----------------------------------------------------------------------
+        self.cloud_project = self.config.get_key(
+            "local", ["cloud", "project"], "")
+        self.service_acount_level = self.config.get_key(
+            "local", ["cloud", "service_acount", "level"], "")
+        self.cloud_sql_instance = self.config.get_key(
+            "local", ["cloud", "sql_db", "instance"], "")
+
+        # ----------------------------------------------------------------------
         #   Defines the logger to output the information and also
         #   add an entry for the start of the class
         # ----------------------------------------------------------------------
         self.logger_name = logger_name + ".storage"
         self.logger = logging.getLogger(self.logger_name)
         self.logger.info("Initializing storage.")
+
+        # ----------------------------------------------------------------------
+        #   Starts the Google Cloud SQL is this option is enabled.
+        # ----------------------------------------------------------------------
+        if self.store_google_cloud_mysql:
+            self.start_stop_instance(start_stop="START")
+
+    def close(self):
+
+        if self.store_google_cloud_mysql:
+            self.start_stop_instance(start_stop="STOP")
 
     def list_files_folder(self, folderpath: Union[Path, str], criteria: str, force_local: bool = False):
         if self.load == "dropbox":

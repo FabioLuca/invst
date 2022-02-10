@@ -8,9 +8,135 @@ import google.auth
 from src.lib import messages as M
 from src.lib import constants as C
 import numpy as np
+import base64
+import os
+import time
 
 
 class GoogleCloudMySQL:
+
+    def get_instance_status(self):
+        """Method to get the current status of a Cloud SQL instance.
+
+        See reference in https://cloud.google.com/sql/docs/mysql/admin-api/rest/v1beta4/instances/get
+        """
+        self.logger.info("Getting Google Cloud SQL instance status")
+
+        key_path = Path.cwd().resolve() / "keys" / "service-account.json"
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = str(key_path)
+
+        credentials, self.cloud_project = google.auth.default()
+        service = discovery.build(
+            'sqladmin', 'v1beta4', credentials=credentials, cache_discovery=False)
+
+        request = service.instances().get(project=self.cloud_project,
+                                          instance=self.cloud_sql_instance)
+        response = request.execute()
+
+        # print(response)
+
+        policy = response.get("settings", {}).get("activationPolicy", "")
+        state = response.get("state", "")
+
+        if policy == "ALWAYS":
+            policy = "RUNNING"
+        elif policy == "NEVER":
+            policy = "STOPPED"
+        else:
+            policy = "ERROR"
+
+        self.logger.info(
+            f"Google Cloud SQL instance is {policy} and state is {state}")
+
+        return policy, state, response
+
+    def start_stop_instance(self, start_stop: str = "START"):
+        """Method to start or stop a Cloud SQL instance. The purpose for
+        managing the status of the instance is to avoid unecessary costs with
+        the instance running without use.
+
+        See reference in https://cloud.google.com/sql/docs/mysql/admin-api/rest/v1beta4/instances/patch
+
+        Parameters
+        ----------
+            start_stop: str
+                Parameter to define the type of request:
+                *. ``START``: Starts the instance.
+                *. ``STOP``: Stops the instance.
+
+        Returns
+        -------
+            request result
+
+        """
+        self.logger.info(f"Google Cloud SQL instance operation: {start_stop}")
+
+        policy_result, state_result, response_result = self.get_instance_status()
+
+        if state_result != "RUNNABLE":
+            for i in range(1, 200):
+                policy_result, state_result, response_result = self.get_instance_status()
+                if (state_result == "RUNNABLE"):
+                    self.logger.info(
+                        "Google Cloud SQL has finalized previous operation.")
+                    break
+                self.logger.info(
+                    f"Waiting previous operation to finish. Try {i}")
+                time.sleep(10)
+
+        if policy_result == "ERROR":
+            return 0
+        elif policy_result == "RUNNING" and start_stop == "START":
+            self.logger.info(f"Google Cloud SQL is already running")
+            return 0
+        elif policy_result == "STOPPED" and start_stop == "STOP":
+            self.logger.info(f"Google Cloud SQL is already stopped")
+            return 0
+
+        policy = 'ALWAYS'
+        if start_stop == "START":
+            policy = 'ALWAYS'
+        elif start_stop == "STOP":
+            policy = 'NEVER'
+
+        key_path = Path.cwd().resolve() / "keys" / "service-account.json"
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = str(key_path)
+
+        credentials, self.cloud_project = google.auth.default()
+        service = discovery.build(
+            'sqladmin', 'v1beta4', credentials=credentials, cache_discovery=False)
+
+        dbinstancebody = {
+            "settings": {
+                "activationPolicy": policy
+            }
+        }
+
+        request = service.instances().patch(
+            project=self.cloud_project,
+            instance=self.cloud_sql_instance,
+            body=dbinstancebody).execute()
+
+        # ----------------------------------------------------------------------
+        #   Adds a sleep before checking for the status, since if the check is
+        #   done right after the start, the status seems to be delayed and
+        #   improper.
+        # ----------------------------------------------------------------------
+        time.sleep(15)
+
+        policy_result, state_result, response_result = self.get_instance_status()
+        if state_result != "RUNNABLE":
+            for i in range(1, 200):
+                policy_result, state_result, response_result = self.get_instance_status()
+                if (state_result == "RUNNABLE"):
+                    self.logger.info(
+                        "Google Cloud SQL has finalized current operation.")
+                    break
+                self.logger.info(
+                    f"Waiting current operation to finish. Try {i}")
+                time.sleep(10)
+
+        return request
 
     def create_connection_string(self):
         self.config_db = {
