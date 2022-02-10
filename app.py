@@ -132,6 +132,12 @@ def render_report():
     return redirect('/report1/')
 
 
+@server.server.route('/startdb', methods=['POST', 'GET'])
+def start_database():
+    server.storage.start_stop_instance(start_stop="START")
+    return redirect(url_for('basic'))
+
+
 @server.server.route('/close', methods=['POST', 'GET'])
 def close_database():
     server.storage.close()

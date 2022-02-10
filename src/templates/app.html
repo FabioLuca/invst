@@ -137,16 +137,26 @@
 
     <div class="blockTopic">
         <header class="titleTopic">
-            Close Database
+            Cloud SQL database operations
         </header>
         <div class="explanationTopic">
-            <p>Close the Cloud SQL database instance. This is a recommendation
-                step to avoid unecessary costs of operation on cloud. The
-                start operation of the instance is triggered automatically on
-                the loading of the server, and doesn't need manual operation.
+            <p>Starts or closes the Cloud SQL database instance. This is a
+                recommendation step to avoid unecessary costs of operation on
+                cloud. The start operation of the instance is triggered
+                automatically on the loading of the server, and doesn't need
+                manual operation.
             </p>
         </div>
-        <div class="topicsGrid countTopicsGrid1">
+        <div class="topicsGrid countTopicsGrid2">
+            <div class="elementTopic">
+                <div class="elementTable">
+                    <div class="elementTableCell">
+                        <form method="POST" action="{{url_for('start_database')}}">
+                            <input class="actionButton" type="submit" name="watch2" value="Start Database" />
+                        </form>
+                    </div>
+                </div>
+            </div>
             <div class="elementTopic">
                 <div class="elementTable">
                     <div class="elementTableCell">
