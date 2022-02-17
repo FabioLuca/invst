@@ -223,7 +223,7 @@ class Analysis(Crash, MACD, RSI_SMA, RSI_EMA, BOLLINGER_BANDS, CombinedStrategy,
                 filename=file_export,
                 database_name="invst_db",
                 table_name=["Analysis"],
-                ignores={"Database": True}
+                ignores={"google_cloud_mysql": True}
             )
 
         return (self.decision, self.analysis_results, self.ohlc_dataset)

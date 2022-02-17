@@ -204,8 +204,8 @@ def run_analysis(ticker_input: list = None):
     df_results_summary = pt.summary_table(
         results_summary, file_export_summary)
 
-    print(df_results_summary.columns)
-    print(df_results_summary["Last Day Event"])
+    # print(df_results_summary.columns)
+    # print(df_results_summary["Last Day Event"])
 
     execution_data["execution"]["Time end"] = datetime.now().strftime(
         '%Y.%m.%d %H:%M:%S')

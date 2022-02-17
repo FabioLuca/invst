@@ -547,8 +547,14 @@ class GoogleCloudMySQL:
 
         update_string = ", ".join(updates)
 
+        # ----------------------------------------------------------------------
+        #   Adequates the values in the dataframe for the SQL, since there are
+        #   different data representation.
+        # ----------------------------------------------------------------------
+        dataframe_storage.replace([np.inf, -np.inf], np.nan, inplace=True)
         dataframe_storage_clear = dataframe_storage.replace(np.NaN, pd.NA).where(
             dataframe_storage.notnull(), None)
+
         values = dataframe_storage_clear.to_numpy().tolist()
 
         sql_query = f"""
