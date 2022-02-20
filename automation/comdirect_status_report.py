@@ -634,7 +634,8 @@ def make_report(app):
         # ----------------------------------------------------------------------
         app.layout = html.Div(
             children=[
-                html.H1(children='Results'),
+                html.H1(children='Results',
+                        className="reportTitle"),
                 ################ CHART 1 #######################################
                 html.Div(
                     [
@@ -781,7 +782,8 @@ def make_report(app):
                     ]
                 )
                 ################ END ###############################################
-            ]
+            ],
+            className="basicBlock"
         )
     else:
         app.layout = html.Div("Report Dash Test")
